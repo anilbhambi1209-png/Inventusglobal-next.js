@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight, ArrowUpRight, BookOpen, Clock, Calendar, User } from "lucide-react";
 import { BlogPost } from "@/types/blog";
 
@@ -49,9 +50,11 @@ export default function FeaturedArticles({ blogs }: FeaturedArticlesProps) {
           {/* Main Featured Hero Article (Left) */}
           <Link href={`/blog/${featured.slug}`} className="articles-hero-card">
             <div className="articles-hero-image-wrap">
-              <img
+              <Image
                 src={featured.coverImage}
                 alt={featured.title}
+                width={700}
+                height={400}
                 className="articles-hero-img"
               />
               <div className="articles-hero-overlay" />
@@ -73,9 +76,11 @@ export default function FeaturedArticles({ blogs }: FeaturedArticlesProps) {
               <div className="articles-hero-footer">
                 <div className="articles-author-meta">
                   {featured.author?.avatar ? (
-                    <img
+                    <Image
                       src={featured.author.avatar}
                       alt={featured.author.name}
+                      width={38}
+                      height={38}
                       className="articles-author-avatar"
                     />
                   ) : (
@@ -109,7 +114,7 @@ export default function FeaturedArticles({ blogs }: FeaturedArticlesProps) {
                 className="articles-side-card"
               >
                 <div className="articles-side-thumb-wrap">
-                  <img src={b.coverImage} alt={b.title} className="articles-side-thumb" />
+                  <Image src={b.coverImage} alt={b.title} width={280} height={180} className="articles-side-thumb" />
                   <span className="articles-side-cat-pill">{b.category}</span>
                 </div>
 

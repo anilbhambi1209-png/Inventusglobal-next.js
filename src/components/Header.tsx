@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState, useRef, useEffect } from "react";
 import {
@@ -184,11 +185,12 @@ export default function Header() {
           <div className="header-inner">
             {/* Official Inventus Global Brand Logo */}
             <Link href="/" className="header-logo-link" aria-label="Inventus Global Homepage">
-              <img
+              <Image
                 src="/inventus-logo.png"
                 alt="Inventus Global Logo"
                 width={166}
                 height={32}
+                priority
                 className="header-logo-img"
                 style={{
                   height: "32px",

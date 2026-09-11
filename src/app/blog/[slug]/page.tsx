@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { getBlogBySlug, getAllBlogs, slugify } from "@/utils/blogStore";
 import ReadingProgress from "@/components/ReadingProgress";
@@ -9,6 +10,13 @@ import { ArrowLeft, Calendar, Clock, Sparkles } from "lucide-react";
 
 interface Props {
   params: Promise<{ slug: string }>;
+}
+
+export async function generateStaticParams() {
+  const blogs = getAllBlogs();
+  return blogs.map((blog) => ({
+    slug: blog.slug,
+  }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -172,9 +180,11 @@ export default async function BlogPostPage({ params }: Props) {
             {/* Author info */}
             <div className="article-author-info">
               {blog.author.avatar && (
-                <img
+                <Image
                   src={blog.author.avatar}
                   alt={blog.author.name}
+                  width={46}
+                  height={46}
                   className="author-avatar-large"
                 />
               )}
@@ -200,9 +210,12 @@ export default async function BlogPostPage({ params }: Props) {
 
           {/* Hero Cover Image */}
           <div className="article-hero-image-wrap">
-            <img
+            <Image
               src={blog.coverImage}
               alt={blog.title}
+              width={1200}
+              height={600}
+              priority
               className="article-hero-image"
             />
           </div>
@@ -314,11 +327,12 @@ export default async function BlogPostPage({ params }: Props) {
               {relatedBlogs.map((item) => (
                 <article key={item.id} className="blog-card">
                   <div className="blog-card-image-wrap">
-                    <img
+                    <Image
                       src={item.coverImage}
                       alt={item.title}
+                      width={400}
+                      height={220}
                       className="blog-card-image"
-                      loading="lazy"
                     />
                     <span className="blog-card-category">{item.category}</span>
                   </div>

@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import RoiCalculator from "@/components/RoiCalculator";
 import {
@@ -17,10 +18,7 @@ import {
   Layers,
 } from "lucide-react";
 
-export default function ServicesPage() {
-  const [activeTab, setActiveTab] = useState<number>(0);
-
-  const services = [
+const services = [
     {
       id: "ppc",
       title: "Paid Advertising (Google & Meta PPC)",
@@ -119,18 +117,19 @@ export default function ServicesPage() {
     },
   ];
 
+function ServicesContent() {
+  const searchParams = useSearchParams();
+  const serviceParam = searchParams.get("service");
+  const [activeTab, setActiveTab] = useState<number>(0);
+
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const params = new URLSearchParams(window.location.search);
-      const serviceParam = params.get("service");
-      if (serviceParam) {
-        const foundIdx = services.findIndex((s) => s.id === serviceParam);
-        if (foundIdx !== -1) {
-          setActiveTab(foundIdx);
-        }
+    if (serviceParam) {
+      const foundIdx = services.findIndex((s) => s.id === serviceParam);
+      if (foundIdx !== -1) {
+        setActiveTab(foundIdx);
       }
     }
-  }, []);
+  }, [serviceParam]);
 
   const current = services[activeTab];
 
@@ -260,5 +259,13 @@ export default function ServicesPage() {
         </div>
       </section>
     </div>
+  );
+}
+
+export default function ServicesPage() {
+  return (
+    <Suspense fallback={<div style={{ minHeight: "60vh", background: "#ffffff" }} />}>
+      <ServicesContent />
+    </Suspense>
   );
 }

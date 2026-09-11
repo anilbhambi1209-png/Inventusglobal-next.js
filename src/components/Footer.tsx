@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import {
   Mail,
   Phone,
@@ -88,7 +89,7 @@ export default function Footer() {
           <div className="footer-col-brand">
             <Link href="/" className="footer-logo-link" aria-label="Inventus Global">
               <div className="footer-logo-box">
-                <img
+                <Image
                   src="/inventus-logo.png"
                   alt="Inventus Global Logo"
                   width={116}
@@ -190,7 +191,7 @@ export default function Footer() {
                 <Link href="/contact">Free Growth Audit</Link>
               </li>
               <li>
-                <Link href="/admin" style={{ color: "#f16334" }}>Admin Portal</Link>
+                <Link href="/contact">Get in Touch</Link>
               </li>
             </ul>
           </div>
@@ -235,13 +236,11 @@ export default function Footer() {
             © {new Date().getFullYear()} <strong>Inventus Global</strong>. All rights reserved.
           </div>
           <div className="footer-legal-links">
-            <Link href="/contact">Privacy</Link>
+            <Link href="/contact">Privacy Policy</Link>
             <span>•</span>
-            <Link href="/contact">Terms</Link>
+            <Link href="/contact">Terms of Service</Link>
             <span>•</span>
             <Link href="/blog">Sitemap</Link>
-            <span>•</span>
-            <Link href="/admin" style={{ color: "#f16334" }}>Staff</Link>
           </div>
         </div>
       </div>

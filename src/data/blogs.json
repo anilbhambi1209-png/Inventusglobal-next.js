@@ -1,52 +1,5 @@
 [
   {
-    "title": "This is a dummy test blog getting added to the website",
-    "slug": "this-is-a-dummy-test-blog-getting-added-to-the-website",
-    "excerpt": "This is a best team strategy plan ",
-    "content": "## Overview of This Strategy\nProvide a clear introduction explaining the core problem and why this matters for brands.\n\n## Step 1: Research and Execution\nExplain the specific step-by-step tactics to achieve results.\n\n### Critical Factors to Consider\n* High-intent audience selection\n* Budget distribution\n* Continuous A/B testing\n\n## Step 2: Measuring ROI and Conversion\nTrack how many inquiries, leads, and sales were generated from the campaign.\n\n## Summary & Key Takeaways\nWrap up the article with practical, actionable advice for your readers.",
-    "coverImage": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80",
-    "category": "Web Development",
-    "tags": [
-      "Digital Marketing",
-      "Growth"
-    ],
-    "author": {
-      "name": "Inventus Team",
-      "role": "Growth Specialist",
-      "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80"
-    },
-    "readingTime": "1 min read",
-    "publishedAt": "2026-09-10",
-    "id": "blog-1789032044652",
-    "tableOfContents": [
-      {
-        "id": "overview-of-this-strategy",
-        "title": "Overview of This Strategy",
-        "level": 2
-      },
-      {
-        "id": "step-1-research-and-execution",
-        "title": "Step 1: Research and Execution",
-        "level": 2
-      },
-      {
-        "id": "critical-factors-to-consider",
-        "title": "Critical Factors to Consider",
-        "level": 3
-      },
-      {
-        "id": "step-2-measuring-roi-and-conversion",
-        "title": "Step 2: Measuring ROI and Conversion",
-        "level": 2
-      },
-      {
-        "id": "summary-key-takeaways",
-        "title": "Summary & Key Takeaways",
-        "level": 2
-      }
-    ]
-  },
-  {
     "id": "blog-1",
     "slug": "top-7-best-ppc-companies-in-navi-mumbai",
     "title": "Top 7 Best PPC Companies in Navi Mumbai for Maximum ROI in 2026",

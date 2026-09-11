@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { TrendingUp, Award, ArrowRight, CheckCircle2, DollarSign, Users, Target } from "lucide-react";
 
 export default function CaseStudiesPage() {
@@ -112,9 +113,12 @@ export default function CaseStudiesPage() {
               <div key={c.id} className="case-study-card">
                 {/* Cover Image & Tag */}
                 <div className="case-study-img-wrap">
-                  <img
+                  <Image
                     src={c.image}
                     alt={c.client}
+                    width={550}
+                    height={380}
+                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
                   />
                   <div
                     style={{

@@ -28,7 +28,7 @@ export default function RootLayout({
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
     name: "Inventus Global",
-    image: "https://inventusglobal.com/wp-content/uploads/2024/09/inventus-global-logo.png",
+    image: "https://inventusglobal.com/inventus-logo.png",
     "@id": "https://inventusglobal.com",
     url: "https://inventusglobal.com",
     telephone: "+91 99876 82853",

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { Award, Target, Users, MapPin, CheckCircle2, ArrowRight, ShieldCheck, HeartHandshake } from "lucide-react";
 
 export const metadata: Metadata = {
@@ -154,10 +155,12 @@ export default function AboutPage() {
                   transition: "all 0.2s ease",
                 }}
               >
-                <div style={{ height: "240px", overflow: "hidden", background: "#f3f4f6" }}>
-                  <img
+                <div style={{ height: "240px", overflow: "hidden", background: "#f3f4f6", position: "relative" }}>
+                  <Image
                     src={member.image}
                     alt={member.name}
+                    width={400}
+                    height={240}
                     style={{ width: "100%", height: "100%", objectFit: "cover" }}
                   />
                 </div>

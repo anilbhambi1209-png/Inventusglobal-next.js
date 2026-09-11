@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import {
   TrendingUp,
   ArrowRight,
@@ -318,10 +319,13 @@ export default function CaseStudySpotlight() {
             {/* Right Media Column */}
             <div className="spotlight-media-side">
               <div className="spotlight-img-frame">
-                <img
+                <Image
                   src={current.image}
                   alt={current.title}
+                  width={600}
+                  height={450}
                   className="spotlight-main-img"
+                  style={{ objectFit: "cover" }}
                 />
                 <div className="spotlight-img-gradient-overlay" />
 
