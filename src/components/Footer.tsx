@@ -13,6 +13,7 @@ import {
   MessageCircle,
   Clock,
 } from "lucide-react";
+import { siteConfig } from "@/config/site";
 
 export default function Footer() {
   const [email, setEmail] = useState("");
@@ -110,7 +111,7 @@ export default function Footer() {
             </p>
             <div className="footer-social-row">
               <a
-                href="https://www.instagram.com/globalinventus/"
+                href={siteConfig.socials.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="footer-social-btn"
@@ -120,7 +121,7 @@ export default function Footer() {
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
               </a>
               <a
-                href="https://www.facebook.com/people/Inventus-Global/61591748107195/"
+                href={siteConfig.socials.facebook}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="footer-social-btn"
@@ -130,7 +131,7 @@ export default function Footer() {
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
               </a>
               <a
-                href="https://www.linkedin.com/company/inventusglobal"
+                href={siteConfig.socials.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="footer-social-btn"
@@ -140,7 +141,7 @@ export default function Footer() {
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
               </a>
               <a
-                href="https://api.whatsapp.com/send?phone=919987682853&text=Hi%20Inventus%20Global,%20I%20would%20like%20to%20connect%20with%20your%20growth%20team."
+                href={siteConfig.contact.whatsappLink()}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="footer-social-btn footer-social-wa"
@@ -157,19 +158,22 @@ export default function Footer() {
             <div className="footer-col-title">Services</div>
             <ul className="footer-link-list">
               <li>
-                <Link href="/services?service=seo">Search Engine Optimization</Link>
+                <Link href="/services/google-ads-ppc">Google Ads (PPC)</Link>
               </li>
               <li>
-                <Link href="/services?service=smm">Social Media Marketing</Link>
+                <Link href="/services/search-engine-optimization">Search Engine Optimization</Link>
               </li>
               <li>
-                <Link href="/services?service=webdev">Next.js Web Development</Link>
+                <Link href="/services/local-seo">Local SEO Navi Mumbai</Link>
               </li>
               <li>
-                <Link href="/services?service=ppc">Google &amp; Meta Ads (PPC)</Link>
+                <Link href="/services/nextjs-web-development">Next.js Web Applications</Link>
               </li>
               <li>
-                <Link href="/services?service=influencer">Influencer Marketing</Link>
+                <Link href="/services/meta-ads-instagram">Meta &amp; Instagram Ads</Link>
+              </li>
+              <li>
+                <Link href="/services/influencer-marketing">Influencer Marketing</Link>
               </li>
             </ul>
           </div>
@@ -188,10 +192,10 @@ export default function Footer() {
                 <Link href="/blog">Articles &amp; Playbooks</Link>
               </li>
               <li>
-                <Link href="/contact">Free Growth Audit</Link>
+                <Link href="/contact">Free Growth Consultation</Link>
               </li>
               <li>
-                <Link href="/contact">Get in Touch</Link>
+                <Link href="/services">All Agency Capabilities</Link>
               </li>
             </ul>
           </div>
@@ -203,27 +207,27 @@ export default function Footer() {
               <li className="footer-contact-item">
                 <Phone size={14} className="footer-contact-icn" />
                 <div className="footer-contact-text">
-                  <a href="tel:+919987682853">+91 99876 82853</a>
+                  <a href={`tel:${siteConfig.contact.primaryPhoneRaw}`}>{siteConfig.contact.primaryPhone}</a>
                   <span className="footer-sep">/</span>
-                  <a href="tel:+919833960540">+91 98339 60540</a>
+                  <a href={`tel:${siteConfig.contact.secondaryPhoneRaw}`}>{siteConfig.contact.secondaryPhone}</a>
                 </div>
               </li>
               <li className="footer-contact-item">
                 <Mail size={14} className="footer-contact-icn" />
                 <div className="footer-contact-text">
-                  <a href="mailto:info@inventusglobal.com">info@inventusglobal.com</a>
+                  <a href={`mailto:${siteConfig.contact.email}`}>{siteConfig.contact.email}</a>
                 </div>
               </li>
               <li className="footer-contact-item">
                 <MapPin size={14} className="footer-contact-icn" />
                 <div className="footer-contact-text">
-                  1209, Satra Plaza, Palm Beach Rd, Vashi, Navi Mumbai 400703
+                  {siteConfig.address.full}
                 </div>
               </li>
               <li className="footer-contact-item">
                 <Clock size={14} className="footer-contact-icn" />
                 <div className="footer-contact-text">
-                  Mon – Sat: 10:00 AM – 7:30 PM IST
+                  {siteConfig.hours.days}: {siteConfig.hours.time}
                 </div>
               </li>
             </ul>
@@ -233,7 +237,7 @@ export default function Footer() {
         {/* Compact Bottom Bar */}
         <div className="footer-bottom-strip">
           <div className="footer-copy">
-            © {new Date().getFullYear()} <strong>Inventus Global</strong>. All rights reserved.
+            © {new Date().getFullYear()} <strong>{siteConfig.name}</strong>. All rights reserved.
           </div>
           <div className="footer-legal-links">
             <Link href="/contact">Privacy Policy</Link>

@@ -181,6 +181,10 @@ export default function ContinuousLearningMarquee() {
     <section id="continuous-learning" className="learning-marquee-section">
       <div className="container">
         <div className="learning-header">
+          <div className="phase-badge phase-badge-neutral" style={{ margin: "0 auto 16px" }}>
+            <span className="phase-pulse-dot" />
+            <span>PHASE 04 // CONTINUOUS LEARNING &amp; TECH ECOSYSTEM</span>
+          </div>
           <h2 className="learning-title">
             We grow by <br />
             <span>continuous learning</span>
@@ -192,18 +196,20 @@ export default function ContinuousLearningMarquee() {
         </div>
       </div>
 
-      {/* Endless smooth marquee moving right to left */}
-      <div className="learning-marquee-container">
-        <div className="learning-marquee-track">
-          {marqueeItems.map((brand, idx) => (
-            <div
-              key={`${brand.name}-${idx}`}
-              className="learning-brand-item"
-              title={brand.name}
-            >
-              {brand.svg}
-            </div>
-          ))}
+      {/* Vibrant Colored Ribbon Marquee */}
+      <div className="learning-marquee-ribbon">
+        <div className="learning-marquee-container">
+          <div className="learning-marquee-track">
+            {marqueeItems.map((brand, idx) => (
+              <div
+                key={`${brand.name}-${idx}`}
+                className="learning-brand-item"
+                title={brand.name}
+              >
+                {brand.svg}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>

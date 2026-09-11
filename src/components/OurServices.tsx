@@ -24,7 +24,7 @@ export default function OurServices() {
       icon: <Search size={44} strokeWidth={1.8} />,
       title: "Leading SEO Company",
       desc: "We provide high-impact organic search optimization that boosts keyword rankings, drives targeted traffic, and delivers measurable revenue.",
-      href: "/services?service=seo",
+      href: "/services/search-engine-optimization",
     },
     {
       id: "smm",
@@ -33,7 +33,7 @@ export default function OurServices() {
       icon: <Share2 size={44} strokeWidth={1.8} />,
       title: "Best Social Media Marketing",
       desc: "Engage target audiences, build brand authority, and turn casual followers into loyal customers with viral creative hooks and retargeting.",
-      href: "/services?service=smm",
+      href: "/services/social-media-content",
     },
     {
       id: "webdev",
@@ -42,7 +42,7 @@ export default function OurServices() {
       icon: <Globe size={44} strokeWidth={1.8} />,
       title: "Competitive Website Development",
       desc: "Ultra-fast Next.js web applications engineered for sub-second speeds, frictionless UI/UX design, and maximum lead conversions.",
-      href: "/services?service=webdev",
+      href: "/services/nextjs-web-development",
     },
     {
       id: "ppc",
@@ -51,7 +51,7 @@ export default function OurServices() {
       icon: <Target size={44} strokeWidth={1.8} />,
       title: "Targeted Paid Advertising",
       desc: "Turn your advertising budget into predictable lead volume and sales with data-driven Google & Meta campaigns and CRO funnels.",
-      href: "/services?service=ppc",
+      href: "/services/google-ads-ppc",
     },
     {
       id: "content",
@@ -60,7 +60,7 @@ export default function OurServices() {
       icon: <FileText size={44} strokeWidth={1.8} />,
       title: "Authority Content & Copywriting",
       desc: "Authoritative editorial content and high-converting sales copy crafted to educate prospects, build trust, and drive conversions.",
-      href: "/services?service=content",
+      href: "/services/conversion-rate-optimization",
     },
     {
       id: "influencer",
@@ -69,7 +69,7 @@ export default function OurServices() {
       icon: <Sparkles size={44} strokeWidth={1.8} />,
       title: "Influencer Brand Campaigns",
       desc: "Vetted creator partnerships that deliver genuine social proof, explosive brand recognition, and trackable direct-response sales.",
-      href: "/services?service=influencer",
+      href: "/services/influencer-marketing",
     },
   ];
 
@@ -147,6 +147,10 @@ export default function OurServices() {
       <div className="container">
         {/* Header matching reference */}
         <div className="future-services-header">
+          <div className="phase-badge phase-badge-light">
+            <span className="phase-pulse-dot" />
+            <span>PHASE 02 // 04 CORE GROWTH ENGINES</span>
+          </div>
           <h2 className="future-services-title">
             We Provide <span className="future-title-accent">Future-Proof</span> Solutions
           </h2>

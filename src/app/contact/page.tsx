@@ -14,6 +14,7 @@ import {
   Shield,
   ExternalLink,
 } from "lucide-react";
+import { siteConfig } from "@/config/site";
 
 export default function ContactPage() {
   const [name, setName] = useState("");
@@ -38,7 +39,7 @@ export default function ContactPage() {
     },
     {
       q: "Can we visit your office for an in-person discussion?",
-      a: "Absolutely! We welcome clients to our corporate office at Satra Plaza, Sector 19D, Palm Beach Road, Vashi, Navi Mumbai. Feel free to book an appointment or visit during business hours.",
+      a: `Absolutely! We welcome clients to our corporate office at ${siteConfig.address.full}. Feel free to book an appointment or visit during business hours (Mon–Sat: 10:00 AM – 7:30 PM).`,
     },
   ];
 
@@ -89,7 +90,9 @@ export default function ContactPage() {
 
                   <div className="contact-success-actions">
                     <a
-                      href={`https://api.whatsapp.com/send?phone=919987682853&text=Hi%20Inventus%20Global,%20my%20name%20is%20${encodeURIComponent(name)}.%20I%20just%20submitted%20the%20contact%20form.%20Let's%20connect!`}
+                      href={siteConfig.contact.whatsappLink(
+                        `Hi Inventus Global, my name is ${name}. I just submitted the contact form. Let's connect!`
+                      )}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="contact-success-wa-btn"
@@ -139,7 +142,7 @@ export default function ContactPage() {
                       <input
                         id="contact-phone"
                         type="tel"
-                        placeholder="+91 99876 82853"
+                        placeholder={siteConfig.contact.primaryPhone}
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
                         className="contact-input"
@@ -204,7 +207,7 @@ export default function ContactPage() {
                   <div className="contact-wa-meta">
                     <div className="contact-wa-status">
                       <span className="contact-wa-dot" />
-                      <span>Online & Quick Response</span>
+                      <span>Online &amp; Quick Response</span>
                     </div>
                     <h3 className="contact-wa-title">Chat on WhatsApp</h3>
                   </div>
@@ -215,13 +218,15 @@ export default function ContactPage() {
                 </p>
 
                 <a
-                  href="https://api.whatsapp.com/send?phone=919987682853&text=Hi%20Inventus%20Global,%20I%20would%20like%20to%20know%20more%20about%20your%20services."
+                  href={siteConfig.contact.whatsappLink(
+                    "Hi Inventus Global, I would like to know more about your services."
+                  )}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="contact-wa-action-btn"
                 >
                   <MessageCircle size={18} />
-                  <span>Message +91 99876 82853</span>
+                  <span>Message {siteConfig.contact.primaryPhone}</span>
                 </a>
               </div>
 
@@ -234,21 +239,21 @@ export default function ContactPage() {
                   <div className="contact-info-item">
                     <MapPin size={18} className="contact-info-icon" />
                     <div className="contact-info-text">
-                      Office 1209, 12th Floor, Satra Plaza,<br />
-                      Sector 19D, Palm Beach Road, Vashi,<br />
-                      Navi Mumbai, Maharashtra 400703
+                      {siteConfig.address.office},<br />
+                      {siteConfig.address.landmark},<br />
+                      {siteConfig.address.locality}, {siteConfig.address.region} {siteConfig.address.postalCode}
                     </div>
                   </div>
 
                   <div className="contact-info-item">
                     <Phone size={18} className="contact-info-icon" />
                     <div className="contact-info-text">
-                      <a href="tel:+919987682853" className="contact-info-link">
-                        +91 99876 82853
+                      <a href={`tel:${siteConfig.contact.primaryPhoneRaw}`} className="contact-info-link">
+                        {siteConfig.contact.primaryPhone}
                       </a>
                       <span className="contact-info-sep">•</span>
-                      <a href="tel:+919833960540" className="contact-info-link">
-                        +91 98339 60540
+                      <a href={`tel:${siteConfig.contact.secondaryPhoneRaw}`} className="contact-info-link">
+                        {siteConfig.contact.secondaryPhone}
                       </a>
                     </div>
                   </div>
@@ -256,8 +261,8 @@ export default function ContactPage() {
                   <div className="contact-info-item">
                     <Mail size={18} className="contact-info-icon" />
                     <div className="contact-info-text">
-                      <a href="mailto:info@inventusglobal.com" className="contact-info-link">
-                        info@inventusglobal.com
+                      <a href={`mailto:${siteConfig.contact.email}`} className="contact-info-link">
+                        {siteConfig.contact.email}
                       </a>
                     </div>
                   </div>
@@ -265,13 +270,13 @@ export default function ContactPage() {
                   <div className="contact-info-item">
                     <Clock size={18} className="contact-info-icon" />
                     <div className="contact-info-text">
-                      Mon – Sat: 10:00 AM – 7:30 PM IST
+                      {siteConfig.hours.days}: {siteConfig.hours.time}
                     </div>
                   </div>
                 </div>
 
                 <a
-                  href="https://maps.google.com/?q=Satra+Plaza+Vashi+Navi+Mumbai"
+                  href={siteConfig.address.mapsUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="contact-directions-btn"

@@ -3,6 +3,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import FloatingWhatsApp from "@/components/FloatingWhatsApp";
+import FloatingSocialBar from "@/components/FloatingSocialBar";
 
 export const metadata: Metadata = {
   title: "Inventus Global | Digital Marketing & Growth Agency",
@@ -73,6 +74,7 @@ export default function RootLayout({
         <Header />
         <main style={{ flex: 1 }}>{children}</main>
         <Footer />
+        <FloatingSocialBar />
         <FloatingWhatsApp />
       </body>
     </html>

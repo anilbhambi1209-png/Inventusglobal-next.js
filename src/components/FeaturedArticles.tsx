@@ -27,9 +27,9 @@ export default function FeaturedArticles({ blogs }: FeaturedArticlesProps) {
         {/* Section Header */}
         <div className="articles-header-wrap">
           <div className="articles-header-left">
-            <div className="articles-eyebrow">
-              <BookOpen size={14} />
-              <span>MARKETING PUBLICATIONS & PLAYBOOKS</span>
+            <div className="phase-badge phase-badge-light">
+              <span className="phase-pulse-dot" />
+              <span>PHASE 05 // PROPRIETARY GROWTH PLAYBOOKS</span>
             </div>
             <h2 className="articles-main-headline">
               Latest Insights &amp; <span className="future-title-accent">Growth Playbooks</span>

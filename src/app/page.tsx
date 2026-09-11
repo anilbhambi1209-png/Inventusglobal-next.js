@@ -1,10 +1,19 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+import { ArrowRight, Phone } from "lucide-react";
+import { siteConfig } from "@/config/site";
 import { getAllBlogs } from "@/utils/blogStore";
 import OurServices from "@/components/OurServices";
 import CaseStudySpotlight from "@/components/CaseStudySpotlight";
 import ContinuousLearningMarquee from "@/components/ContinuousLearningMarquee";
 import FeaturedArticles from "@/components/FeaturedArticles";
-import { ArrowRight, Phone } from "lucide-react";
+import ScrollContactModal from "@/components/ScrollContactModal";
+
+export const metadata: Metadata = {
+  title: "Inventus Global | Digital Marketing & Growth Agency Navi Mumbai",
+  description:
+    "Data-driven digital marketing, Google PPC campaigns, ROI-focused organic SEO, social media marketing, and Next.js web applications in Satra Plaza, Vashi, Navi Mumbai.",
+};
 
 export default function HomePage() {
   const allBlogs = getAllBlogs();
@@ -27,8 +36,9 @@ export default function HomePage() {
 
         <div className="container">
           <div className="hero-content">
-            <div className="hero-eyebrow">
-              Digital marketing agency in Navi Mumbai, Mumbai &amp; Thane
+            <div className="phase-badge phase-badge-dark">
+              <span className="phase-pulse-dot" />
+              <span>PHASE 01 • PROVEN GROWTH STRATEGY</span>
             </div>
 
             <h1 className="hero-title">
@@ -39,59 +49,69 @@ export default function HomePage() {
               We help brands rank in Google, dominate social media, get cited by AI search, and turn visibility into qualified leads. Strategy, SEO, SMM, and conversion web platforms — one team, measured against results.
             </p>
 
-            {/* Hero Action Buttons - Reference Layout */}
+            {/* Hero Action Buttons */}
             <div className="hero-actions-row">
               <Link href="/contact" className="hero-btn-proposal">
                 Get a free proposal
               </Link>
 
-              <a href="tel:+919987682853" className="hero-btn-call">
+              <a href={`tel:${siteConfig.contact.primaryPhoneRaw}`} className="hero-btn-call">
                 <Phone size={17} />
-                <span>Call +91 99876 82853</span>
+                <span>Call {siteConfig.contact.primaryPhone}</span>
               </a>
             </div>
 
             {/* Clean Editorial Proof Line */}
             <div className="hero-proof-row">
               <div className="hero-proof-item">
-                <strong>₹18.5 Cr+</strong> <span>Revenue Generated</span>
+                <strong>{siteConfig.stats.revenueGenerated}</strong> <span>Revenue Generated</span>
               </div>
               <span className="hero-proof-sep">•</span>
               <div className="hero-proof-item">
-                <strong>500+</strong> <span>Campaigns Executed</span>
+                <strong>{siteConfig.stats.campaignsExecuted}</strong> <span>Campaigns Executed</span>
               </div>
               <span className="hero-proof-sep">•</span>
               <div className="hero-proof-item">
-                <strong>3.8x</strong> <span>Average ROAS</span>
+                <strong>{siteConfig.stats.averageRoas}</strong> <span>Average ROAS</span>
               </div>
               <span className="hero-proof-sep">•</span>
               <div className="hero-proof-item">
-                <strong>98%</strong> <span>Client Retention</span>
+                <strong>{siteConfig.stats.clientRetention}</strong> <span>Client Retention</span>
               </div>
             </div>
           </div>
         </div>
       </section>
 
+      <div className="phase-boundary-line" />
 
-      {/* Our Services Section (SEO, SMM, Web Development) */}
+      {/* Phase 02: Our Services Section (Future-Proof Carousel) */}
       <OurServices />
 
-      {/* Case Study Feature Spotlight (Interactive Multi-Industry Showcase) */}
+      <div className="phase-boundary-line" />
+
+      {/* Phase 03: Case Study Feature Spotlight (Interactive Multi-Industry Showcase) */}
       <CaseStudySpotlight />
 
-      {/* We Grow by Continuous Learning - Continuous Marquee Section */}
+      <div className="phase-boundary-line" />
+
+      {/* Phase 04: We Grow by Continuous Learning - Continuous Marquee Section */}
       <ContinuousLearningMarquee />
 
-      {/* Elevated Editorial Articles & Playbooks Section */}
+      <div className="phase-boundary-line" />
+
+      {/* Phase 05: Elevated Editorial Articles & Playbooks Section (Bento Grid) */}
       <FeaturedArticles blogs={allBlogs} />
 
-      {/* Bottom Conversion Section */}
+      <div className="phase-boundary-line" />
+
+      {/* Phase 06: Bottom Conversion Section */}
       <section className="home-bottom-cta-section">
         <div className="container">
           <div className="home-bottom-cta-card">
-            <div className="home-bottom-cta-badge">
-              <span>GET IN TOUCH WITH SENIOR STRATEGISTS</span>
+            <div className="phase-badge phase-badge-dark" style={{ margin: "0 auto 20px" }}>
+              <span className="phase-pulse-dot" />
+              <span>PHASE 06 • INITIATE GROWTH PARTNERSHIP</span>
             </div>
             <h2 className="home-bottom-cta-title">
               Ready to Accelerate Your <span className="future-title-accent">Digital Revenue?</span>
@@ -104,9 +124,9 @@ export default function HomePage() {
                 <span>Book Free Growth Consultation</span>
                 <ArrowRight size={17} />
               </Link>
-              <a href="tel:+919987682853" className="home-cta-btn-secondary">
+              <a href={`tel:${siteConfig.contact.primaryPhoneRaw}`} className="home-cta-btn-secondary">
                 <Phone size={17} />
-                <span>Call +91 99876 82853</span>
+                <span>Call {siteConfig.contact.primaryPhone}</span>
               </a>
             </div>
             <div className="home-bottom-cta-meta">
@@ -119,6 +139,9 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* Scroll-Triggered Growth Audit & Contact Popup (Activates between Phase 02 and Phase 03) */}
+      <ScrollContactModal />
     </div>
   );
 }

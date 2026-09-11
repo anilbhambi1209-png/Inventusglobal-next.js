@@ -1,32 +1,31 @@
 "use client";
 
 import { useState } from "react";
-import { Calculator, ArrowRight, TrendingUp, DollarSign, Users, Target } from "lucide-react";
+import { Calculator, ArrowRight, TrendingUp, MessageCircle } from "lucide-react";
+import { siteConfig } from "@/config/site";
+import Button from "@/components/ui/Button";
+import styles from "./RoiCalculator.module.css";
 
 export default function RoiCalculator() {
   const [adSpend, setAdSpend] = useState<number>(75000); // ₹75,000 / mo
   const [customerValue, setCustomerValue] = useState<number>(15000); // ₹15,000
   const [conversionRate, setConversionRate] = useState<number>(3.2); // 3.2%
 
-  // Realistic estimates
-  const estimatedCostPerClick = 35; // ₹35 avg CPC in India
+  // Real-world performance assumptions for Indian commercial PPC
+  const estimatedCostPerClick = 35;
   const clicks = Math.round(adSpend / estimatedCostPerClick);
   const leads = Math.round(clicks * (conversionRate / 100));
   const closedDeals = Math.round(leads * 0.22); // 22% lead-to-close rate
   const projectedRevenue = closedDeals * customerValue;
   const roas = adSpend > 0 ? (projectedRevenue / adSpend).toFixed(1) : "0";
 
+  const waMessage = `Hi Inventus Global, I used your ROI Calculator with a budget of ₹${adSpend.toLocaleString(
+    "en-IN"
+  )}/mo (Projected ROAS: ${roas}x). I would like to discuss a custom growth roadmap.`;
+
   return (
-    <div
-      style={{
-        background: "#ffffff",
-        border: "1px solid var(--border-light)",
-        borderRadius: "var(--radius-lg)",
-        padding: "36px",
-        boxShadow: "var(--shadow-md)",
-      }}
-    >
-      <div style={{ textAlign: "center", maxWidth: "600px", margin: "0 auto 32px" }}>
+    <div className={styles.calculatorCard}>
+      <div style={{ textAlign: "center", maxWidth: "600px", margin: "0 auto 36px" }}>
         <span
           style={{
             display: "inline-flex",
@@ -42,138 +41,104 @@ export default function RoiCalculator() {
         >
           <Calculator size={15} /> Campaign ROI Estimator
         </span>
-        <h3 style={{ fontSize: "1.6rem", fontWeight: 800, color: "var(--text-heading)", margin: "4px 0 8px" }}>
+        <h3 style={{ fontSize: "1.75rem", fontWeight: 800, color: "var(--text-heading)", margin: "4px 0 8px" }}>
           Calculate Your Projected Return on Ad Spend
         </h3>
-        <p style={{ color: "var(--text-body)", fontSize: "0.94rem", margin: 0 }}>
-          Adjust the sliders below to see your potential revenue, lead volume, and ROAS with Inventus Global.
+        <p style={{ color: "var(--text-body)", fontSize: "0.95rem", margin: 0 }}>
+          Adjust the sliders below to see your potential revenue, lead volume, and verified ROAS with Inventus Global.
         </p>
       </div>
 
-      <div className="roi-grid">
+      <div className={styles.grid}>
         {/* Sliders Column */}
         <div>
           {/* Slider 1: Monthly Ad Spend */}
-          <div style={{ marginBottom: "24px" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
-              <label style={{ fontSize: "0.9rem", fontWeight: 700, color: "var(--text-heading)" }}>
-                Monthly Ad Spend:
-              </label>
-              <span style={{ fontSize: "1.1rem", fontWeight: 800, color: "var(--primary)" }}>
-                ₹{adSpend.toLocaleString("en-IN")}
-              </span>
+          <div className={styles.sliderGroup}>
+            <div className={styles.sliderHeader}>
+              <span className={styles.sliderLabel}>Monthly Ad Spend:</span>
+              <span className={styles.sliderValue}>₹{adSpend.toLocaleString("en-IN")}</span>
             </div>
             <input
               type="range"
-              min="20000"
-              max="500000"
-              step="5000"
+              min={25000}
+              max={500000}
+              step={5000}
               value={adSpend}
               onChange={(e) => setAdSpend(Number(e.target.value))}
-              style={{ width: "100%", accentColor: "var(--primary)", height: "6px", cursor: "pointer" }}
+              className={styles.rangeInput}
+              aria-label="Monthly Ad Spend"
             />
-            <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.75rem", color: "var(--text-muted)", marginTop: "4px" }}>
-              <span>₹20,000</span>
-              <span>₹5,00,000</span>
-            </div>
           </div>
 
-          {/* Slider 2: Average Customer / Deal Value */}
-          <div style={{ marginBottom: "24px" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
-              <label style={{ fontSize: "0.9rem", fontWeight: 700, color: "var(--text-heading)" }}>
-                Avg. Customer / Deal Value:
-              </label>
-              <span style={{ fontSize: "1.1rem", fontWeight: 800, color: "var(--text-heading)" }}>
-                ₹{customerValue.toLocaleString("en-IN")}
-              </span>
+          {/* Slider 2: Average Customer Value */}
+          <div className={styles.sliderGroup}>
+            <div className={styles.sliderHeader}>
+              <span className={styles.sliderLabel}>Average Customer Value / Deal Size:</span>
+              <span className={styles.sliderValue}>₹{customerValue.toLocaleString("en-IN")}</span>
             </div>
             <input
               type="range"
-              min="2000"
-              max="100000"
-              step="1000"
+              min={2000}
+              max={150000}
+              step={1000}
               value={customerValue}
               onChange={(e) => setCustomerValue(Number(e.target.value))}
-              style={{ width: "100%", accentColor: "var(--primary)", height: "6px", cursor: "pointer" }}
+              className={styles.rangeInput}
+              aria-label="Average Customer Value"
             />
-            <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.75rem", color: "var(--text-muted)", marginTop: "4px" }}>
-              <span>₹2,000</span>
-              <span>₹1,00,000</span>
-            </div>
           </div>
 
-          {/* Slider 3: Landing Page Conversion Rate */}
-          <div style={{ marginBottom: "20px" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
-              <label style={{ fontSize: "0.9rem", fontWeight: 700, color: "var(--text-heading)" }}>
-                Target Funnel Conversion:
-              </label>
-              <span style={{ fontSize: "1.1rem", fontWeight: 800, color: "var(--text-heading)" }}>
-                {conversionRate}%
-              </span>
+          {/* Slider 3: Target Conversion Rate */}
+          <div className={styles.sliderGroup}>
+            <div className={styles.sliderHeader}>
+              <span className={styles.sliderLabel}>Target Landing Page Conversion Rate:</span>
+              <span className={styles.sliderValue}>{conversionRate}%</span>
             </div>
             <input
               type="range"
-              min="1.0"
-              max="7.0"
-              step="0.1"
+              min={1.0}
+              max={8.0}
+              step={0.1}
               value={conversionRate}
               onChange={(e) => setConversionRate(Number(e.target.value))}
-              style={{ width: "100%", accentColor: "var(--primary)", height: "6px", cursor: "pointer" }}
+              className={styles.rangeInput}
+              aria-label="Landing Page Conversion Rate"
             />
-            <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.75rem", color: "var(--text-muted)", marginTop: "4px" }}>
-              <span>1.0% (Average)</span>
-              <span>7.0% (Optimized)</span>
-            </div>
           </div>
         </div>
 
-        {/* Projected Results Card */}
-        <div
-          style={{
-            background: "#fffaf7",
-            border: "2px solid #fed7aa",
-            borderRadius: "var(--radius-md)",
-            padding: "28px",
-          }}
-        >
-          <span style={{ fontSize: "0.8rem", fontWeight: 800, color: "var(--primary)", textTransform: "uppercase", letterSpacing: "1px" }}>
-            Projected Monthly Growth
-          </span>
+        {/* Results Panel */}
+        <div className={styles.resultsPanel}>
+          <div className={styles.roasBox}>
+            <div className={styles.roasNumber}>{roas}x</div>
+            <div className={styles.roasLabel}>Estimated Return on Ad Spend (ROAS)</div>
+          </div>
 
-          <div style={{ margin: "16px 0 24px" }}>
-            <div style={{ fontSize: "0.85rem", color: "var(--text-muted)" }}>Projected Gross Revenue</div>
-            <div style={{ fontSize: "2.4rem", fontWeight: 900, color: "var(--text-heading)", lineHeight: 1.1 }}>
-              ₹{projectedRevenue.toLocaleString("en-IN")}
+          <div className={styles.breakdownGrid}>
+            <div>
+              <div className={styles.statVal}>{leads}</div>
+              <div className={styles.statLabel}>Est. Monthly Leads</div>
+            </div>
+            <div>
+              <div className={styles.statVal}>{closedDeals}</div>
+              <div className={styles.statLabel}>Est. Closed Deals</div>
+            </div>
+            <div>
+              <div className={styles.statVal}>₹{(projectedRevenue / 100000).toFixed(1)}L</div>
+              <div className={styles.statLabel}>Gross Revenue</div>
             </div>
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px", marginBottom: "24px" }}>
-            <div style={{ background: "#ffffff", padding: "12px", borderRadius: "6px", border: "1px solid var(--border-light)" }}>
-              <div style={{ fontSize: "0.8rem", color: "var(--text-muted)", fontWeight: 600 }}>Estimated Leads</div>
-              <div style={{ fontSize: "1.4rem", fontWeight: 800, color: "var(--primary)" }}>
-                {leads}+ / mo
-              </div>
-            </div>
-
-            <div style={{ background: "#ffffff", padding: "12px", borderRadius: "6px", border: "1px solid var(--border-light)" }}>
-              <div style={{ fontSize: "0.8rem", color: "var(--text-muted)", fontWeight: 600 }}>Estimated ROAS</div>
-              <div style={{ fontSize: "1.4rem", fontWeight: 800, color: "#16a34a" }}>
-                {roas}x ROAS
-              </div>
-            </div>
-          </div>
-
-          <a
-            href={`https://api.whatsapp.com/send?phone=919987682853&text=Hi%20Inventus%20Global,%20I%20used%20your%20ROI%20Calculator%20with%20an%20ad%20budget%20of%20₹${adSpend.toLocaleString("en-IN")}.%20Can%20we%20schedule%20a%20strategy%20session?`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-primary"
-            style={{ width: "100%", justifyContent: "center", padding: "12px" }}
+          <Button
+            href={siteConfig.contact.whatsappLink(waMessage)}
+            external
+            variant="whatsapp"
+            size="md"
+            fullWidth
           >
-            Claim This ROI Strategy <ArrowRight size={16} />
-          </a>
+            <MessageCircle size={16} />
+            <span>Discuss This Plan on WhatsApp</span>
+          </Button>
         </div>
       </div>
     </div>

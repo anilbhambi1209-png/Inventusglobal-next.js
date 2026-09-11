@@ -230,9 +230,9 @@ export default function CaseStudySpotlight() {
       <div className="container">
         {/* Section Header */}
         <div className="spotlight-header-center">
-          <div className="spotlight-eyebrow">
-            <TrendingUp size={14} />
-            <span>PROVEN CLIENT RESULTS & ROI</span>
+          <div className="phase-badge phase-badge-dark">
+            <span className="phase-pulse-dot" />
+            <span>PHASE 03 // VERIFIED CLIENT ROI &amp; IMPACT</span>
           </div>
           <h2 className="spotlight-headline">
             Real Businesses. <span className="future-title-accent">Undeniable Numbers.</span>

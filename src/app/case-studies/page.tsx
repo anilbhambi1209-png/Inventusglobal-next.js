@@ -1,212 +1,130 @@
-"use client";
-
-import { useState } from "react";
+import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
-import { TrendingUp, Award, ArrowRight, CheckCircle2, DollarSign, Users, Target } from "lucide-react";
+import { TrendingUp, ArrowRight, CheckCircle2, ShieldCheck } from "lucide-react";
+import { getAllCaseStudies } from "@/data/case-studies";
+import SectionHeader from "@/components/ui/SectionHeader";
+import Badge from "@/components/ui/Badge";
+import Button from "@/components/ui/Button";
+import Container from "@/components/ui/Container";
+import BottomCtaSection from "@/components/sections/BottomCtaSection";
+
+export const metadata: Metadata = {
+  title: "Verified Case Studies & ROI Proof | Inventus Global",
+  description:
+    "Explore verified client case studies from Inventus Global across luxury real estate, D2C health, healthcare chains, and B2B SaaS in Navi Mumbai and Mumbai.",
+};
 
 export default function CaseStudiesPage() {
-  const [selectedCategory, setSelectedCategory] = useState("All");
-
-  const cases = [
-    {
-      id: "case-1",
-      client: "Luxury Real Estate Developer",
-      location: "Palm Beach Road, Vashi",
-      category: "PPC & Paid Ads",
-      headline: "+340% Increase in Qualified Buyer Inquiries with a 38% Drop in CPA",
-      image: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1000&q=80",
-      challenge: "The client was spending over ₹2.5L/month on Google Ads with generic agencies, receiving junk inquiries from unqualified brokers.",
-      solution: "We rebuilt the campaign with negative audience filters, commercial intent keyword matching, and a dedicated lightning-fast Next.js mobile landing page.",
-      metrics: [
-        { label: "Lead Volume", val: "+340%" },
-        { label: "Cost Per Lead", val: "-38%" },
-        { label: "Total Revenue Generated", val: "₹18.5 Cr+" },
-      ],
-    },
-    {
-      id: "case-2",
-      client: "D2C Organic Wellness & Beauty Brand",
-      location: "Mumbai / Pan-India",
-      category: "Social Media & Meta Ads",
-      headline: "Scaled Monthly Revenue from ₹8L to ₹42L at a 4.6x Verified ROAS",
-      image: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=1000&q=80",
-      challenge: "High cost-per-purchase on Meta Ads due to ad fatigue and generic product photography that failed to stop the scroll.",
-      solution: "Deployed UGC creator video reels highlighting specific skin concerns, combined with 14-day dynamic retargeting for abandoned cart visitors.",
-      metrics: [
-        { label: "Verified ROAS", val: "4.6x" },
-        { label: "Monthly Revenue", val: "₹42 Lakhs" },
-        { label: "Customer Acquisition Cost", val: "-42%" },
-      ],
-    },
-    {
-      id: "case-3",
-      client: "Multi-Specialty Healthcare & Diagnostic Chain",
-      location: "Navi Mumbai (Vashi, Belapur, Kharghar)",
-      category: "SEO Growth",
-      headline: "#1 Google Search Rankings for 45+ Local Medical Terms & +280% Footfall",
-      image: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=1000&q=80",
-      challenge: "Struggling against massive healthcare aggregators with zero organic visibility in local Google Maps and organic pack.",
-      solution: "Executed localized technical SEO, schema structured data for medical specialties, and optimized Google Business Profiles across 5 centers.",
-      metrics: [
-        { label: "Organic Patient Bookings", val: "+280%" },
-        { label: "Top 3 Keywords", val: "45 Keywords" },
-        { label: "Annual Ad Spend Saved", val: "₹14 Lakhs" },
-      ],
-    },
-    {
-      id: "case-4",
-      client: "B2B Supply Chain & Cold Storage SaaS",
-      location: "Corporate Navi Mumbai",
-      category: "Web & PPC",
-      headline: "+190% Increase in Enterprise Demo Bookings via High-Converting Next.js Platform",
-      image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1000&q=80",
-      challenge: "A slow, outdated WordPress site taking 5.2 seconds to load resulted in an 82% bounce rate from expensive LinkedIn ads.",
-      solution: "Engineered a bespoke Next.js web platform with 0.8s load times, interactive ROI calculators, and friction-free calendar booking.",
-      metrics: [
-        { label: "Demo Conversion Rate", val: "+190%" },
-        { label: "Average Page Speed", val: "0.8s" },
-        { label: "Pipeline Value Created", val: "₹3.2 Cr" },
-      ],
-    },
-  ];
-
-  const categories = ["All", "PPC & Paid Ads", "Social Media & Meta Ads", "SEO Growth", "Web & PPC"];
-
-  const filteredCases = cases.filter(
-    (c) => selectedCategory === "All" || c.category === selectedCategory
-  );
+  const cases = getAllCaseStudies();
 
   return (
     <div>
       {/* Header */}
-      <section className="blog-header-section" style={{ padding: "64px 0 40px" }}>
-        <div className="container">
-          <span className="section-tag">Proven Results</span>
-          <h1 className="section-title case-hero-title">
-            Real Case Studies. <span className="gradient-text">Undeniable Revenue.</span>
-          </h1>
-          <p className="section-desc" style={{ maxWidth: "660px", fontSize: "1.12rem" }}>
-            Explore how we help ambitious businesses in Navi Mumbai, Mumbai, and across India dominate their markets through data-backed execution.
-          </p>
-
-          {/* Category Filter Pills */}
-          <div className="category-pills" style={{ marginTop: "28px" }}>
-            {categories.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setSelectedCategory(cat)}
-                className={`category-pill ${selectedCategory === cat ? "active" : ""}`}
-              >
-                {cat}
-              </button>
-            ))}
+      <section style={{ background: "linear-gradient(180deg, #f8fafc 0%, #ffffff 100%)", padding: "72px 0 48px", borderBottom: "1px solid var(--border-light)" }}>
+        <Container>
+          <div style={{ maxWidth: "760px" }}>
+            <span className="section-tag">Undeniable Proof</span>
+            <h1 style={{ fontSize: "clamp(2.2rem, 4.5vw, 3.4rem)", fontWeight: 900, color: "var(--text-heading)", lineHeight: 1.15, marginBottom: "16px", letterSpacing: "-0.5px" }}>
+              Real Case Studies. <span className="gradient-text">Verified Bank Revenue.</span>
+            </h1>
+            <p style={{ fontSize: "1.12rem", color: "var(--text-body)", lineHeight: "1.7", margin: 0 }}>
+              Explore how we help ambitious businesses in Navi Mumbai, Mumbai, and across India dominate their markets through data-backed execution and transparent attribution.
+            </p>
           </div>
-        </div>
+        </Container>
       </section>
 
       {/* Case Studies Cards List */}
-      <section className="section" style={{ background: "#ffffff" }}>
-        <div className="container">
+      <section style={{ padding: "72px 0", background: "#ffffff" }}>
+        <Container>
           <div style={{ display: "flex", flexDirection: "column", gap: "40px" }}>
-            {filteredCases.map((c) => (
-              <div key={c.id} className="case-study-card">
-                {/* Cover Image & Tag */}
-                <div className="case-study-img-wrap">
+            {cases.map((c) => (
+              <div
+                key={c.id}
+                style={{
+                  background: "#ffffff",
+                  border: "1px solid var(--border-light)",
+                  borderRadius: "var(--radius-xl)",
+                  overflow: "hidden",
+                  boxShadow: "0 4px 20px rgba(0,0,0,0.04)",
+                  display: "grid",
+                  gridTemplateColumns: "1fr 1.2fr",
+                }}
+              >
+                {/* Cover Image */}
+                <div style={{ position: "relative", minHeight: "340px", background: "#111827" }}>
                   <Image
                     src={c.image}
                     alt={c.client}
-                    width={550}
-                    height={380}
-                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                    fill
+                    style={{ objectFit: "cover" }}
+                    sizes="(max-width: 992px) 100vw, 45vw"
                   />
                   <div
                     style={{
                       position: "absolute",
                       top: "16px",
                       left: "16px",
-                      background: "rgba(17, 24, 39, 0.88)",
+                      background: "rgba(17, 24, 39, 0.85)",
                       backdropFilter: "blur(6px)",
-                      color: "#fbbf24",
-                      padding: "4px 12px",
-                      borderRadius: "4px",
+                      color: "#ffffff",
                       fontSize: "0.75rem",
                       fontWeight: 800,
                       textTransform: "uppercase",
+                      letterSpacing: "0.8px",
+                      padding: "4px 12px",
+                      borderRadius: "6px",
                     }}
                   >
                     {c.category}
                   </div>
                 </div>
 
-                {/* Details Body */}
-                <div className="case-study-body">
+                {/* Content Side */}
+                <div style={{ padding: "36px", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
                   <div>
-                    <div style={{ fontSize: "0.82rem", color: "var(--text-muted)", fontWeight: 700, textTransform: "uppercase", marginBottom: "4px" }}>
+                    <div style={{ fontSize: "0.85rem", color: "var(--text-muted)", fontWeight: 600, marginBottom: "8px" }}>
                       {c.client} • {c.location}
                     </div>
 
-                    <h2 className="case-study-title">
+                    <h2 style={{ fontSize: "clamp(1.25rem, 2vw, 1.6rem)", fontWeight: 800, color: "var(--text-heading)", lineHeight: 1.3, marginBottom: "14px" }}>
                       {c.headline}
                     </h2>
 
-                    <div style={{ marginBottom: "16px" }}>
-                      <p style={{ fontSize: "0.9rem", color: "var(--text-body)", lineHeight: "1.6", margin: "0 0 8px" }}>
-                        <strong>The Challenge:</strong> {c.challenge}
-                      </p>
-                      <p style={{ fontSize: "0.9rem", color: "var(--text-body)", lineHeight: "1.6", margin: 0 }}>
-                        <strong>Our Solution:</strong> {c.solution}
-                      </p>
-                    </div>
-                  </div>
+                    <p style={{ color: "var(--text-body)", fontSize: "0.94rem", lineHeight: "1.65", marginBottom: "24px" }}>
+                      {c.summary}
+                    </p>
 
-                  {/* Highlights Bar */}
-                  <div>
-                    <div className="case-metrics-grid">
-                      {c.metrics.map((m, i) => (
-                        <div key={i}>
-                          <div className="case-metric-val">
-                            {m.val}
-                          </div>
-                          <div style={{ fontSize: "0.74rem", color: "var(--text-muted)", fontWeight: 600, marginTop: "4px" }}>
-                            {m.label}
-                          </div>
+                    {/* 3 Metrics Pills */}
+                    <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "12px", marginBottom: "28px" }}>
+                      {c.metrics.slice(0, 3).map((m, i) => (
+                        <div key={i} style={{ background: "#f8fafc", padding: "12px", borderRadius: "8px", border: "1px solid var(--border-light)", textAlign: "center" }}>
+                          <div style={{ fontSize: "1.25rem", fontWeight: 900, color: "var(--primary)" }}>{m.value}</div>
+                          <div style={{ fontSize: "0.74rem", fontWeight: 700, color: "var(--text-heading)", marginTop: "2px" }}>{m.label}</div>
                         </div>
                       ))}
                     </div>
+                  </div>
 
-                    <a
-                      href={`https://api.whatsapp.com/send?phone=919987682853&text=Hi%20Inventus%20Global,%20I%20saw%20your%20case%20study%20for%20${encodeURIComponent(c.client)}.%20Can%20we%20replicate%20these%20results%20for%20my%20business?`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="btn-primary"
-                      style={{ padding: "10px 18px", fontSize: "0.88rem" }}
-                    >
-                      Get Similar Results for Your Business <ArrowRight size={14} />
-                    </a>
+                  <div style={{ display: "flex", alignItems: "center", gap: "14px", flexWrap: "wrap" }}>
+                    <Button href={`/case-studies/${c.slug}`} variant="primary" size="md">
+                      <span>View Full Breakdown</span>
+                      <ArrowRight size={14} />
+                    </Button>
+                    <Button href="/contact" variant="outline" size="md">
+                      <span>Replicate Metrics</span>
+                    </Button>
                   </div>
                 </div>
               </div>
             ))}
           </div>
-        </div>
+        </Container>
       </section>
 
-      {/* Bottom Conversion Banner */}
-      <section style={{ background: "#fafafa", borderTop: "1px solid var(--border-light)", padding: "70px 0", textAlign: "center" }}>
-        <div className="container" style={{ maxWidth: "700px" }}>
-          <span className="section-tag">Your Turn to Scale</span>
-          <h2 style={{ fontSize: "2.2rem", fontWeight: 800, margin: "10px 0 14px", color: "var(--text-heading)" }}>
-            Ready to Be Our Next Success Story?
-          </h2>
-          <p style={{ color: "var(--text-body)", fontSize: "1rem", marginBottom: "28px", lineHeight: "1.65" }}>
-            Schedule a free audit session with our leadership team at Satra Plaza, Vashi. We will review your current funnels and give you a step-by-step roadmap to scale.
-          </p>
-          <Link href="/contact" className="btn-primary" style={{ padding: "12px 28px" }}>
-            Request Your Strategy Session Now
-          </Link>
-        </div>
-      </section>
+      {/* Bottom CTA */}
+      <BottomCtaSection />
     </div>
   );
 }

@@ -11,12 +11,12 @@ import {
   X,
   ArrowRight,
   ChevronDown,
-  ChevronRight,
   Sprout,
   Rocket,
   LineChart,
   Gem,
 } from "lucide-react";
+import { siteConfig } from "@/config/site";
 
 interface ServiceItem {
   title: string;
@@ -36,15 +36,15 @@ const growthPillars: GrowthPillar[] = [
     label: "Earned & Organic",
     icon: <Sprout size={18} />,
     services: [
-      { title: "Search Engine Optimization (SEO)", href: "/services?service=seo" },
-      { title: "AI Search & GEO Optimization", href: "/services?service=seo" },
-      { title: "Local SEO & Google Maps", href: "/services?service=seo" },
-      { title: "Authority Content Marketing", href: "/services?service=content" },
-      { title: "Digital PR & High-DA Mentions", href: "/services?service=seo" },
-      { title: "Influencer Brand Partnerships", href: "/services?service=influencer" },
-      { title: "Organic Social Media Growth", href: "/services?service=smm" },
-      { title: "Email Marketing & CRM Funnels", href: "/services?service=content" },
-      { title: "Search Everywhere Optimization", href: "/services?service=seo" },
+      { title: "Search Engine Optimization (SEO)", href: "/services/search-engine-optimization" },
+      { title: "AI Search & GEO Optimization", href: "/services/search-engine-optimization" },
+      { title: "Local SEO & Google Maps", href: "/services/local-seo" },
+      { title: "Authority Content Marketing", href: "/services/search-engine-optimization" },
+      { title: "Digital PR & High-DA Mentions", href: "/services/search-engine-optimization" },
+      { title: "Influencer Brand Partnerships", href: "/services/influencer-marketing" },
+      { title: "Organic Social Media Growth", href: "/services/social-media-content" },
+      { title: "Email Marketing & CRM Funnels", href: "/services/conversion-rate-optimization" },
+      { title: "Search Everywhere Optimization", href: "/services/search-engine-optimization" },
     ],
   },
   {
@@ -52,47 +52,47 @@ const growthPillars: GrowthPillar[] = [
     label: "Paid Media",
     icon: <Rocket size={18} />,
     services: [
-      { title: "Google Search & Intent Ads", href: "/services?service=ppc" },
-      { title: "Meta Instagram & Facebook Ads", href: "/services?service=ppc" },
-      { title: "Performance Max & Shopping", href: "/services?service=ppc" },
-      { title: "High-ROAS Retargeting Funnels", href: "/services?service=ppc" },
-      { title: "Instant WhatsApp CRM Funnels", href: "/services?service=ppc" },
-      { title: "LinkedIn B2B Account Targeting", href: "/services?service=ppc" },
-      { title: "YouTube Video Ad Campaigns", href: "/services?service=ppc" },
-      { title: "Creative & Copy Split Testing", href: "/services?service=ppc" },
+      { title: "Google Search & Intent Ads", href: "/services/google-ads-ppc" },
+      { title: "Meta Instagram & Facebook Ads", href: "/services/meta-ads-instagram" },
+      { title: "Performance Max & Shopping", href: "/services/google-ads-ppc" },
+      { title: "High-ROAS Retargeting Funnels", href: "/services/google-ads-ppc" },
+      { title: "Instant WhatsApp CRM Funnels", href: "/services/conversion-rate-optimization" },
+      { title: "LinkedIn B2B Account Targeting", href: "/services/linkedin-b2b-marketing" },
+      { title: "YouTube Video Ad Campaigns", href: "/services/google-ads-ppc" },
+      { title: "Creative & Copy Split Testing", href: "/services/conversion-rate-optimization" },
       { title: "Paid Ad Audit & Account Teardown", href: "/contact" },
     ],
   },
   {
     id: "data-analytics",
-    label: "Data & Analytics",
+    label: "Tech & Platforms",
     icon: <LineChart size={18} />,
     services: [
-      { title: "Next.js 15 Web Applications", href: "/services?service=webdev" },
-      { title: "Conversion Rate Optimization (CRO)", href: "/services?service=webdev" },
-      { title: "High-Converting Landing Funnels", href: "/services?service=webdev" },
-      { title: "Core Web Vitals & Speed Optimization", href: "/services?service=webdev" },
-      { title: "Headless CMS & Custom Portals", href: "/services?service=webdev" },
-      { title: "E-Commerce Store Engineering", href: "/services?service=webdev" },
-      { title: "Interactive Lead Calculators", href: "/services?service=webdev" },
-      { title: "CRM & WhatsApp API Integrations", href: "/services?service=webdev" },
-      { title: "Security & Cloud Infrastructure", href: "/services?service=webdev" },
+      { title: "Next.js 15 Web Applications", href: "/services/nextjs-web-development" },
+      { title: "Conversion Rate Optimization (CRO)", href: "/services/conversion-rate-optimization" },
+      { title: "High-Converting Landing Funnels", href: "/services/nextjs-web-development" },
+      { title: "Core Web Vitals & Speed Optimization", href: "/services/nextjs-web-development" },
+      { title: "Headless CMS & Custom Portals", href: "/services/nextjs-web-development" },
+      { title: "E-Commerce Store Engineering", href: "/services/nextjs-web-development" },
+      { title: "Interactive Lead Calculators", href: "/services/nextjs-web-development" },
+      { title: "CRM & WhatsApp API Integrations", href: "/services/conversion-rate-optimization" },
+      { title: "Security & Cloud Infrastructure", href: "/services/nextjs-web-development" },
     ],
   },
   {
     id: "creative",
-    label: "Creative",
+    label: "Social & Creative",
     icon: <Gem size={18} />,
     services: [
-      { title: "Direct-Response Copywriting", href: "/services?service=content" },
-      { title: "Short-Form Video & UGC Hooks", href: "/services?service=smm" },
-      { title: "Brand Identity & Visual Guidelines", href: "/services?service=content" },
+      { title: "Direct-Response Copywriting", href: "/services/social-media-content" },
+      { title: "Short-Form Video & UGC Hooks", href: "/services/social-media-content" },
+      { title: "Brand Identity & Visual Guidelines", href: "/services/social-media-content" },
       { title: "Editorial Playbooks & Reports", href: "/blog" },
-      { title: "Creator Matchmaking & Direction", href: "/services?service=influencer" },
-      { title: "High-ROAS Ad Banner Creatives", href: "/services?service=ppc" },
-      { title: "Customer Video Proof & Stories", href: "/services?service=content" },
+      { title: "Creator Matchmaking & Direction", href: "/services/influencer-marketing" },
+      { title: "High-ROAS Ad Banner Creatives", href: "/services/google-ads-ppc" },
+      { title: "Customer Video Proof & Stories", href: "/case-studies" },
       { title: "Brand Voice & Positioning Strategy", href: "/about" },
-      { title: "Creative Refresh & Fatigue Shield", href: "/services?service=ppc" },
+      { title: "Creative Refresh & Fatigue Shield", href: "/services/social-media-content" },
     ],
   },
 ];
@@ -157,21 +157,42 @@ export default function Header() {
         <div className="container">
           <div className="top-bar-inner">
             <div className="top-bar-left">
-              <a href="tel:+919987682853" className="top-bar-link">
-                <Phone size={14} /> +91 99876 82853
+              <a href={`tel:${siteConfig.contact.primaryPhoneRaw}`} className="top-bar-link">
+                <Phone size={14} /> {siteConfig.contact.primaryPhone}
               </a>
-              <a href="mailto:info@inventusglobal.com" className="top-bar-link top-bar-email">
-                <Mail size={14} /> info@inventusglobal.com
+              <a href={`mailto:${siteConfig.contact.email}`} className="top-bar-link top-bar-email">
+                <Mail size={14} /> {siteConfig.contact.email}
               </a>
             </div>
             <div className="top-bar-right">
-              <a href="https://www.instagram.com/globalinventus/" target="_blank" rel="noopener noreferrer" className="top-bar-icon" title="Instagram">
+              <a
+                href={siteConfig.socials.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="top-bar-icon"
+                title="Instagram"
+                aria-label="Instagram"
+              >
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
               </a>
-              <a href="https://www.facebook.com/people/Inventus-Global/61591748107195/" target="_blank" rel="noopener noreferrer" className="top-bar-icon" title="Facebook">
+              <a
+                href={siteConfig.socials.facebook}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="top-bar-icon"
+                title="Facebook"
+                aria-label="Facebook"
+              >
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
               </a>
-              <a href="https://www.linkedin.com/company/inventusglobal" target="_blank" rel="noopener noreferrer" className="top-bar-icon" title="LinkedIn">
+              <a
+                href={siteConfig.socials.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="top-bar-icon"
+                title="LinkedIn"
+                aria-label="LinkedIn"
+              >
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
               </a>
             </div>
@@ -275,6 +296,7 @@ export default function Header() {
                       return (
                         <button
                           key={pillar.id}
+                          type="button"
                           className={`mega-tab-btn ${isActive ? "active" : ""}`}
                           onMouseEnter={() => setActivePillar(idx)}
                           onClick={() => setActivePillar(idx)}
