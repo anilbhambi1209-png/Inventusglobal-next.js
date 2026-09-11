@@ -1,0 +1,177 @@
+.editorWrapper {
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #ffffff;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.editorWrapper:focus-within {
+  border-color: #f16334;
+  box-shadow: 0 0 0 3px rgba(241, 99, 52, 0.12);
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 12px;
+  background: #f8fafc;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.toolbarGroup {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.divider {
+  width: 1px;
+  height: 22px;
+  background: #cbd5e1;
+  margin: 0 6px;
+}
+
+.toolButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.toolButton:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+.toolButton.isActive {
+  background: #f16334;
+  color: #ffffff;
+  border-color: #f16334;
+}
+
+.toolButtonText {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 8px;
+  height: 32px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: #475569;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.toolButtonText:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+.toolButtonText.isActive {
+  background: #f16334;
+  color: #ffffff;
+  border-color: #f16334;
+}
+
+.contentArea {
+  padding: 16px 20px;
+  min-height: 280px;
+  max-height: 600px;
+  overflow-y: auto;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #1e293b;
+}
+
+.contentArea :global(.ProseMirror) {
+  outline: none;
+  min-height: 250px;
+}
+
+.contentArea :global(.ProseMirror p.is-editor-empty:first-child::before) {
+  content: attr(data-placeholder);
+  float: left;
+  color: #94a3b8;
+  pointer-events: none;
+  height: 0;
+}
+
+.contentArea :global(h2) {
+  font-size: 1.6rem;
+  font-weight: 800;
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+  color: #0f172a;
+  line-height: 1.3;
+}
+
+.contentArea :global(h3) {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-top: 1.3em;
+  margin-bottom: 0.5em;
+  color: #1e293b;
+  line-height: 1.3;
+}
+
+.contentArea :global(p) {
+  margin-bottom: 1em;
+}
+
+.contentArea :global(ul),
+.contentArea :global(ol) {
+  padding-left: 1.5rem;
+  margin-bottom: 1em;
+}
+
+.contentArea :global(li) {
+  margin-bottom: 0.35em;
+}
+
+.contentArea :global(blockquote) {
+  border-left: 4px solid #f16334;
+  padding-left: 1rem;
+  margin: 1.2em 0;
+  color: #475569;
+  font-style: italic;
+  background: #fff7f2;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  border-radius: 0 8px 8px 0;
+}
+
+.contentArea :global(img) {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin: 1.2em 0;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+}
+
+.contentArea :global(a) {
+  color: #f16334;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.contentArea :global(code) {
+  background: #f1f5f9;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 0.9em;
+  color: #0f172a;
+}

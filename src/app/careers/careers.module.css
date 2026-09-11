@@ -1,0 +1,458 @@
+/* ==========================================================================
+   Careers Page CSS Module
+   ========================================================================== */
+.careersPageWrap {
+  padding-top: 100px;
+  background: #f8fafc;
+  min-height: 100vh;
+}
+
+.careersHeroSection {
+  padding: 60px 0 40px;
+  text-align: center;
+}
+
+.careersHeroContent {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.careersHeroTitle {
+  font-size: 2.75rem;
+  font-weight: 900;
+  color: #0f172a;
+  margin: 16px 0;
+  line-height: 1.25;
+}
+
+.careersHeroSubtitle {
+  font-size: 1.1rem;
+  color: #475569;
+  line-height: 1.6;
+}
+
+.careersPerksSection {
+  padding: 40px 0 60px;
+}
+
+.careersPerksHeader {
+  text-align: center;
+  margin-bottom: 36px;
+}
+
+.careersPerksHeading {
+  font-size: 1.85rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.careersPerksSub {
+  font-size: 0.95rem;
+  color: #64748b;
+  margin-top: 6px;
+}
+
+.careersPerksGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+}
+
+.careersPerkCard {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 24px;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+.careersPerkCard:hover {
+  transform: translateY(-4px);
+  border-color: #cbd5e1;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.07);
+}
+
+.perkIconWrap {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, rgba(241, 99, 52, 0.1) 0%, rgba(234, 88, 12, 0.1) 100%);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ea580c;
+  margin-bottom: 16px;
+}
+
+.perkTitle {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 8px;
+}
+
+.perkDesc {
+  font-size: 0.88rem;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+.careersPositionsSection {
+  padding: 60px 0;
+  background: #ffffff;
+}
+
+.careersPositionsHeader {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.careersPositionsTitle {
+  font-size: 2.1rem;
+  font-weight: 900;
+  color: #0f172a;
+  margin: 10px 0;
+}
+
+.careersPositionsDesc {
+  font-size: 1rem;
+  color: #64748b;
+}
+
+.careersRolesList {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.careerRoleCard {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 30px;
+  transition: all 0.25s ease;
+}
+
+.careerRoleCard:hover {
+  border-color: #f16334;
+  box-shadow: 0 10px 30px rgba(241, 99, 52, 0.08);
+}
+
+.roleMainInfo {
+  flex: 1;
+}
+
+.roleHeaderTop {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.roleDepartment {
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: #ea580c;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.roleTypeBadge {
+  background: #e2e8f0;
+  color: #334155;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 6px;
+}
+
+.roleTitle {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 12px;
+}
+
+.roleMetaPills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.metaPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  color: #475569;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 8px;
+}
+
+.roleDesc {
+  font-size: 0.92rem;
+  color: #475569;
+  line-height: 1.55;
+  margin-bottom: 16px;
+}
+
+.roleReqs {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.reqsHeading {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+.reqsList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.reqsList li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: #334155;
+}
+
+.reqCheck {
+  color: #16a34a;
+  flex-shrink: 0;
+}
+
+.roleCtaBox {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+
+.btnApplyRole {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #f16334 0%, #ea580c 100%);
+  color: #ffffff;
+  font-size: 0.88rem;
+  font-weight: 800;
+  padding: 12px 20px;
+  border-radius: 12px;
+  text-decoration: none;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 14px rgba(241, 99, 52, 0.3);
+  white-space: nowrap;
+}
+
+.btnApplyRole:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(241, 99, 52, 0.45);
+}
+
+.careersApplySection {
+  padding: 70px 0;
+  background: #f8fafc;
+}
+
+.careersApplyCard {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 24px;
+  padding: 40px;
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 40px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+}
+
+.applyHeading {
+  font-size: 2.1rem;
+  font-weight: 900;
+  color: #0f172a;
+  margin: 12px 0;
+  line-height: 1.25;
+}
+
+.applySub {
+  font-size: 0.96rem;
+  color: #475569;
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+.applyEmailLink {
+  color: #ea580c;
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+.applyOfficeBox {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 20px;
+}
+
+.officeTitle {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 6px;
+}
+
+.officeText {
+  font-size: 0.86rem;
+  color: #475569;
+  margin-bottom: 6px;
+}
+
+.officeTiming {
+  font-size: 0.8rem;
+  color: #16a34a;
+  font-weight: 700;
+}
+
+.careersForm {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.formTitle {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 6px;
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.formLabel {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #334155;
+}
+
+.formInput {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  color: #0f172a;
+  background: #ffffff;
+  transition: all 0.2s ease;
+}
+
+.formInput:focus {
+  outline: none;
+  border-color: #f16334;
+  box-shadow: 0 0 0 3px rgba(241, 99, 52, 0.15);
+}
+
+.btnSubmitApplication {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #0f172a;
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 800;
+  padding: 13px 24px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  margin-top: 8px;
+}
+
+.btnSubmitApplication:hover {
+  background: #ea580c;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(234, 88, 12, 0.3);
+}
+
+.careersSuccessBox {
+  text-align: center;
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.successIcon {
+  color: #16a34a;
+}
+
+.btnSubmitAnother {
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  color: #334155;
+  font-size: 0.88rem;
+  font-weight: 700;
+  padding: 9px 18px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btnSubmitAnother:hover {
+  background: #e2e8f0;
+}
+
+@media (max-width: 900px) {
+  .careerRoleCard {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .careersApplyCard {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+}
+
+@media (max-width: 600px) {
+  .careersHeroTitle {
+    font-size: 2rem;
+  }
+  .formRow {
+    grid-template-columns: 1fr;
+  }
+  .careersApplyCard {
+    padding: 24px 18px;
+  }
+}

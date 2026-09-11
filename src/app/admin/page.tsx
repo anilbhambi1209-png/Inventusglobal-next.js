@@ -1,70 +1,108 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import Link from "next/link";
-import { BlogPost } from "@/types/blog";
+import { useState, useEffect, useRef } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
+import dynamic from 'next/dynamic';
 import {
-  ShieldCheck,
   PlusCircle,
   CheckCircle2,
   Trash2,
   ExternalLink,
   BookOpen,
-  ArrowRight,
   Sparkles,
-  FileText,
-} from "lucide-react";
+  RefreshCw,
+  Edit,
+  Upload,
+  Loader2,
+  ImageIcon,
+} from 'lucide-react';
+import styles from './admin.module.css';
+
+// Dynamic import of RichTextEditor to ensure 100% client-side execution (no SSR / React 19 hydration issues)
+const RichTextEditor = dynamic(
+  () => import('@/components/editor/RichTextEditor'),
+  {
+    ssr: false,
+    loading: () => (
+      <div style={{ padding: '30px', textAlign: 'center', color: '#94a3b8', border: '1px dashed #cbd5e1', borderRadius: '8px' }}>
+        Loading Rich Text Editor...
+      </div>
+    ),
+  }
+);
+
+interface BlogItem {
+  id: number;
+  slug: string;
+  title: string;
+  excerpt: string;
+  category: string;
+  cover_image: string;
+  author_name: string;
+  reading_time: string;
+  is_published: number;
+  published_at: string;
+}
 
 export default function AdminPage() {
-  const [blogs, setBlogs] = useState<BlogPost[]>([]);
+  const [blogs, setBlogs] = useState<BlogItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<{
     text: string;
     slug?: string;
   } | null>(null);
 
   // Form State
-  const [title, setTitle] = useState("");
-  const [category, setCategory] = useState("PPC & Paid Ads");
+  const coverFileInputRef = useRef<HTMLInputElement>(null);
+  const [coverUploading, setCoverUploading] = useState(false);
+  const [editingSlug, setEditingSlug] = useState<string | null>(null);
+  const [title, setTitle] = useState('');
+  const [slug, setSlug] = useState('');
+  const [category, setCategory] = useState('PPC & Paid Ads');
   const [coverImage, setCoverImage] = useState(
-    "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80"
+    'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80'
   );
-  const [excerpt, setExcerpt] = useState("");
-  const [authorName, setAuthorName] = useState("Inventus Team");
-  const [authorRole, setAuthorRole] = useState("Growth Specialist");
-  const [tags, setTags] = useState("Digital Marketing, Growth");
-  const [content, setContent] = useState("");
+  const [excerpt, setExcerpt] = useState('');
+  const [authorName, setAuthorName] = useState('Inventus Team');
+  const [authorRole, setAuthorRole] = useState('Growth Specialist');
+  const [tags, setTags] = useState('Digital Marketing, Growth, SEO');
+  const [content, setContent] = useState('');
 
   const presetImages = [
     {
-      label: "Analytics & Ads",
-      url: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80",
+      label: 'Analytics & Ads',
+      url: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80',
     },
     {
-      label: "SEO & Growth",
-      url: "https://images.unsplash.com/photo-1571721795195-a2ca2d3370a9?auto=format&fit=crop&w=1200&q=80",
+      label: 'SEO & Growth',
+      url: 'https://images.unsplash.com/photo-1571721795195-a2ca2d3370a9?auto=format&fit=crop&w=1200&q=80',
     },
     {
-      label: "Social Media",
-      url: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&w=1200&q=80",
+      label: 'Social Media',
+      url: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&w=1200&q=80',
     },
     {
-      label: "Modern Web Tech",
-      url: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1200&q=80",
+      label: 'Web & Tech',
+      url: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1200&q=80',
     },
   ];
 
-  // Fetch blogs list
   const loadBlogs = async () => {
     try {
-      const res = await fetch("/api/blogs");
+      setLoading(true);
+      const res = await fetch('/api/blogs?includeDrafts=true');
       const data = await res.json();
       if (data.success) {
-        setBlogs(data.blogs);
+        setBlogs(data.blogs || []);
+      } else {
+        setErrorMessage(data.error || 'Failed to load blogs from MySQL database.');
       }
-    } catch (err) {
-      console.error("Failed to load blogs in admin:", err);
+    } catch (err: any) {
+      console.error('Failed to load blogs in admin:', err);
+      setErrorMessage('Could not connect to database API.');
     } finally {
       setLoading(false);
     }
@@ -76,129 +114,208 @@ export default function AdminPage() {
 
   const handleInsertTemplate = () => {
     setContent(
-      `## Overview of This Strategy\nProvide a clear introduction explaining the core problem and why this matters for brands.\n\n## Step 1: Research and Execution\nExplain the specific step-by-step tactics to achieve results.\n\n### Critical Factors to Consider\n* High-intent audience selection\n* Budget distribution\n* Continuous A/B testing\n\n## Step 2: Measuring ROI and Conversion\nTrack how many inquiries, leads, and sales were generated from the campaign.\n\n## Summary & Key Takeaways\nWrap up the article with practical, actionable advice for your readers.`
+      `<h2>Overview of This Strategy</h2><p>Provide a clear introduction explaining why this marketing strategy matters for modern brands and what key outcomes to expect.</p><h2>Phase 1: Research and High-Intent Targeting</h2><p>Detail the exact tactical steps to capture demand:</p><ul><li>Identify high-converting keyword themes</li><li>Filter negative intent and audience waste</li><li>Establish baseline conversion tracking</li></ul><h2>Phase 2: Execution and Conversion Optimization</h2><p>Explain how to build compelling landing pages and ad copy that convert traffic into qualified inquiries.</p><blockquote>"Great marketing doesn't just drive traffic—it builds an engine of predictable qualified revenue."</blockquote><h2>Summary & Key Takeaways</h2><p>Wrap up the article with practical, actionable advice that readers can implement immediately.</p>`
     );
+  };
+
+  const handleCoverFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    try {
+      setCoverUploading(true);
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const data = await res.json();
+      if (data.success && data.url) {
+        setCoverImage(data.url);
+      } else {
+        alert(data.error || 'Failed to upload cover image');
+      }
+    } catch (err) {
+      console.error('Cover upload error:', err);
+      alert('Error uploading cover image');
+    } finally {
+      setCoverUploading(false);
+      if (coverFileInputRef.current) {
+        coverFileInputRef.current.value = '';
+      }
+    }
+  };
+
+  const resetForm = () => {
+    setEditingSlug(null);
+    setTitle('');
+    setSlug('');
+    setExcerpt('');
+    setContent('');
+    setTags('Digital Marketing, Growth, SEO');
+  };
+
+  const handleEditClick = async (blogItem: BlogItem) => {
+    setEditingSlug(blogItem.slug);
+    setTitle(blogItem.title);
+    setSlug(blogItem.slug);
+    setCategory(blogItem.category);
+    setCoverImage(blogItem.cover_image || presetImages[0].url);
+    setAuthorName(blogItem.author_name || 'Inventus Team');
+    setExcerpt(blogItem.excerpt || '');
+
+    // Fetch full post to populate TipTap editor
+    try {
+      const res = await fetch(`/api/blogs/${blogItem.slug}`);
+      const data = await res.json();
+      if (data.success && data.blog) {
+        setContent(data.blog.content || '');
+      }
+    } catch (err) {
+      console.error('Failed to fetch blog content for editing:', err);
+    }
+
+    // Scroll to form smoothly
+    window.scrollTo({ top: 300, behavior: 'smooth' });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title || !content) {
-      alert("Please fill in both the Title and the Content.");
+    if (!title.trim() || !content.trim()) {
+      alert('Please provide both Title and Content for the article.');
       return;
     }
 
     setSubmitting(true);
+    setErrorMessage(null);
     setSuccessMessage(null);
 
     try {
-      const res = await fetch("/api/blogs", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          title,
-          category,
-          coverImage,
-          excerpt,
-          content,
-          tags,
-          author: {
-            name: authorName,
-            role: authorRole,
-            avatar:
-              "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80",
-          },
-        }),
+      const url = editingSlug ? `/api/blogs/${editingSlug}` : '/api/blogs';
+      const method = editingSlug ? 'PUT' : 'POST';
+
+      const payload = {
+        title,
+        slug: slug.trim() || undefined,
+        category,
+        coverImage,
+        excerpt,
+        content,
+        tags,
+        authorName,
+        authorRole,
+        isPublished: 1,
+      };
+
+      const res = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
       });
 
       const data = await res.json();
+
       if (data.success) {
+        const postSlug = editingSlug || data.slug;
         setSuccessMessage({
-          text: `Blog post "${data.blog.title}" published successfully!`,
-          slug: data.blog.slug,
+          text: editingSlug
+            ? `Post "${title}" updated successfully in Hostinger MySQL!`
+            : `Post "${title}" created and published live!`,
+          slug: postSlug,
         });
 
-        // Reset form
-        setTitle("");
-        setExcerpt("");
-        setContent("");
-
-        // Refresh post list
+        resetForm();
         await loadBlogs();
       } else {
-        alert(data.error || "Failed to publish post.");
+        setErrorMessage(data.error || 'Failed to save blog post.');
       }
-    } catch (err) {
-      console.error("Publish error:", err);
-      alert("An error occurred while publishing.");
+    } catch (err: any) {
+      console.error('Publish error:', err);
+      setErrorMessage(err.message || 'An unexpected error occurred while saving.');
     } finally {
       setSubmitting(false);
     }
   };
 
-  const handleDelete = async (slug: string, titleText: string) => {
-    if (!confirm(`Are you sure you want to delete "${titleText}"?`)) {
+  const handleDelete = async (slugToDelete: string, titleText: string) => {
+    if (!confirm(`Are you sure you want to permanently delete "${titleText}" from the database?`)) {
       return;
     }
 
     try {
-      const res = await fetch(`/api/blogs/${slug}`, {
-        method: "DELETE",
+      const res = await fetch(`/api/blogs/${slugToDelete}`, {
+        method: 'DELETE',
       });
       const data = await res.json();
       if (data.success) {
+        if (editingSlug === slugToDelete) {
+          resetForm();
+        }
         await loadBlogs();
       } else {
-        alert(data.error || "Failed to delete post");
+        alert(data.error || 'Failed to delete post');
       }
     } catch (err) {
-      console.error("Delete error:", err);
+      console.error('Delete error:', err);
+      alert('Error connecting to delete API');
     }
   };
 
   return (
-    <div className="admin-container">
-      {/* Top Header */}
-      <div className="admin-header">
+    <div className={styles.adminContainer}>
+      {/* Header Bar */}
+      <div className={styles.adminHeader}>
         <div>
-          <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "8px" }}>
-            <div className="admin-badge">Admin Portal</div>
-            <span style={{ fontSize: "0.85rem", color: "var(--text-muted)" }}>
-              Dummy Local Storage Active
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
+            <span className={styles.adminBadge}>Hostinger MySQL Live</span>
+            <span style={{ fontSize: '0.85rem', color: '#64748b' }}>
+              Database: {process.env.NEXT_PUBLIC_DB_NAME || 'Connected'}
             </span>
           </div>
-          <h1 style={{ fontSize: "2rem", fontWeight: 800 }}>Blog Management Dashboard</h1>
-          <p style={{ color: "var(--text-muted)", fontSize: "0.95rem" }}>
-            Create and publish articles directly to the Inventus Global blog section.
+          <h1 className={styles.title}>Blog Admin Dashboard</h1>
+          <p className={styles.subtitle}>
+            Compose, format with TipTap WYSIWYG, and publish directly to Hostinger MySQL.
           </p>
         </div>
 
-        <div style={{ display: "flex", gap: "12px" }}>
-          <Link href="/blog" className="btn-outline">
-            <BookOpen size={16} /> View Live Blog
-          </Link>
-          <Link href="/" className="btn-outline">
-            View Homepage
+        <div className={styles.headerActions}>
+          <button onClick={loadBlogs} className={styles.btnOutline} title="Refresh posts">
+            <RefreshCw size={15} /> Refresh
+          </button>
+          <Link href="/blog" className={styles.btnOutline} target="_blank">
+            <BookOpen size={16} /> Live Blog
           </Link>
         </div>
       </div>
 
+      {/* Error Alert */}
+      {errorMessage && (
+        <div className={styles.alertError}>
+          <span>⚠️ {errorMessage}</span>
+        </div>
+      )}
+
       {/* Success Notification */}
       {successMessage && (
-        <div className="admin-alert-success">
-          <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-            <CheckCircle2 size={22} />
+        <div className={styles.alertSuccess}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <CheckCircle2 size={24} />
             <div>
               <div style={{ fontWeight: 700 }}>{successMessage.text}</div>
-              <div style={{ fontSize: "0.85rem", opacity: 0.9 }}>
-                It is now visible on the live blog grid and has its own generated Table of Contents!
+              <div style={{ fontSize: '0.85rem', opacity: 0.9 }}>
+                Article HTML was stored in MySQL LONGTEXT and is live.
               </div>
             </div>
           </div>
           {successMessage.slug && (
             <Link
               href={`/blog/${successMessage.slug}`}
-              className="btn-primary"
-              style={{ background: "#059669", padding: "8px 16px", fontSize: "0.85rem" }}
+              className={styles.btnPrimary}
+              style={{ background: '#059669', padding: '8px 16px', fontSize: '0.85rem' }}
+              target="_blank"
             >
               View Post Now <ExternalLink size={14} />
             </Link>
@@ -206,236 +323,286 @@ export default function AdminPage() {
         </div>
       )}
 
-      {/* Create Blog Card */}
-      <div className="admin-card">
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            marginBottom: "24px",
-            paddingBottom: "16px",
-            borderBottom: "1px solid var(--border-light)",
-          }}
-        >
-          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            <PlusCircle size={22} style={{ color: "var(--primary)" }} />
-            <h2 style={{ fontSize: "1.35rem", fontWeight: 700 }}>Add New Blog Article</h2>
-          </div>
+      {/* Form Card */}
+      <div className={styles.card}>
+        <div className={styles.cardHeader}>
+          <h2 className={styles.cardTitle}>
+            <PlusCircle size={22} style={{ color: '#f16334' }} />
+            {editingSlug ? `Edit Article: "${title}"` : 'Create New Blog Article'}
+          </h2>
 
-          <button
-            type="button"
-            onClick={handleInsertTemplate}
-            className="btn-outline"
-            style={{ fontSize: "0.82rem", padding: "6px 12px" }}
-          >
-            <Sparkles size={14} /> Insert Headings Template
-          </button>
+          <div style={{ display: 'flex', gap: '10px' }}>
+            {editingSlug && (
+              <button
+                type="button"
+                onClick={resetForm}
+                className={styles.btnOutline}
+                style={{ fontSize: '0.8rem', padding: '6px 12px' }}
+              >
+                Cancel Edit
+              </button>
+            )}
+            <button
+              type="button"
+              onClick={handleInsertTemplate}
+              className={styles.btnOutline}
+              style={{ fontSize: '0.8rem', padding: '6px 12px' }}
+            >
+              <Sparkles size={14} /> Insert Headings Template
+            </button>
+          </div>
         </div>
 
         <form onSubmit={handleSubmit}>
-          {/* Post Title */}
-          <div className="form-group">
-            <label className="form-label">Article Title *</label>
+          {/* Title */}
+          <div className={styles.formGroup}>
+            <label className={styles.formLabel}>Article Title *</label>
             <input
               type="text"
-              placeholder="e.g. 5 High-Impact Google Ads Strategies for Navi Mumbai Businesses"
+              placeholder="e.g. 7 High-Impact Google Ads Strategies for Navi Mumbai Businesses"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="form-input"
+              className={styles.formInput}
               required
             />
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
+          <div className={styles.formGrid}>
+            {/* Slug */}
+            <div className={styles.formGroup}>
+              <label className={styles.formLabel}>
+                Custom URL Slug{' '}
+                <span style={{ fontWeight: 400, color: '#94a3b8' }}>(Leave empty to auto-generate)</span>
+              </label>
+              <input
+                type="text"
+                placeholder="e.g. google-ads-strategies-navi-mumbai"
+                value={slug}
+                onChange={(e) => setSlug(e.target.value)}
+                className={styles.formInput}
+              />
+            </div>
+
             {/* Category */}
-            <div className="form-group">
-              <label className="form-label">Category</label>
+            <div className={styles.formGroup}>
+              <label className={styles.formLabel}>Category</label>
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-                className="form-select"
+                className={styles.formSelect}
               >
                 <option value="PPC & Paid Ads">PPC & Paid Ads</option>
-                <option value="SEO">SEO</option>
-                <option value="Social Media Marketing">Social Media Marketing</option>
-                <option value="Web Development">Web Development</option>
-                <option value="Content Marketing">Content Marketing</option>
-                <option value="General">General Growth</option>
+                <option value="SEO & Organic">SEO & Organic</option>
+                <option value="Social Media">Social Media</option>
+                <option value="Web & Development">Web & Development</option>
+                <option value="Digital Strategy">Digital Strategy</option>
               </select>
             </div>
-
-            {/* Tags */}
-            <div className="form-group">
-              <label className="form-label">Tags (comma-separated)</label>
-              <input
-                type="text"
-                placeholder="PPC, ROI, Google Ads, Leads"
-                value={tags}
-                onChange={(e) => setTags(e.target.value)}
-                className="form-input"
-              />
-            </div>
           </div>
 
-          {/* Cover Image */}
-          <div className="form-group">
-            <label className="form-label">Cover Image URL</label>
+          {/* Cover Image File Upload */}
+          <div className={styles.formGroup}>
+            <label className={styles.formLabel}>Cover Image</label>
             <input
-              type="url"
-              placeholder="https://images.unsplash.com/..."
-              value={coverImage}
-              onChange={(e) => setCoverImage(e.target.value)}
-              className="form-input"
+              type="file"
+              ref={coverFileInputRef}
+              onChange={handleCoverFileUpload}
+              accept="image/*"
+              style={{ display: 'none' }}
             />
-            <div style={{ display: "flex", gap: "8px", marginTop: "8px", flexWrap: "wrap" }}>
-              <span style={{ fontSize: "0.8rem", color: "var(--text-muted)", alignSelf: "center" }}>
-                Quick Presets:
-              </span>
-              {presetImages.map((img, idx) => (
+
+            <div className={styles.uploadContainer}>
+              <div className={styles.uploadRow}>
                 <button
                   type="button"
-                  key={idx}
-                  onClick={() => setCoverImage(img.url)}
-                  style={{
-                    fontSize: "0.75rem",
-                    padding: "4px 8px",
-                    borderRadius: "4px",
-                    background: coverImage === img.url ? "var(--primary-light)" : "var(--bg-muted)",
-                    color: coverImage === img.url ? "var(--primary)" : "var(--text-muted)",
-                    border: "1px solid var(--border-light)",
-                  }}
+                  onClick={() => coverFileInputRef.current?.click()}
+                  disabled={coverUploading}
+                  className={styles.uploadBtn}
                 >
-                  {img.label}
+                  {coverUploading ? (
+                    <>
+                      <Loader2 size={16} className="animate-spin" /> Uploading Image...
+                    </>
+                  ) : (
+                    <>
+                      <Upload size={16} /> Upload Cover Image from Computer
+                    </>
+                  )}
                 </button>
-              ))}
+                <span style={{ fontSize: '0.82rem', color: '#64748b' }}>
+                  Current URL: <code style={{ color: '#0f172a' }}>{coverImage}</code>
+                </span>
+              </div>
+
+              {coverImage && (
+                <div className={styles.coverPreview}>
+                  <Image
+                    src={coverImage}
+                    alt="Cover Preview"
+                    fill
+                    sizes="(max-width: 768px) 100vw, 480px"
+                    style={{ objectFit: 'cover' }}
+                  />
+                </div>
+              )}
+
+              <div className={styles.presetsGrid}>
+                <span style={{ fontSize: '0.78rem', color: '#94a3b8', alignSelf: 'center', marginRight: '4px' }}>
+                  Or pick preset:
+                </span>
+                {presetImages.map((p) => (
+                  <button
+                    key={p.label}
+                    type="button"
+                    onClick={() => setCoverImage(p.url)}
+                    className={`${styles.presetBtn} ${coverImage === p.url ? styles.presetActive : ''}`}
+                  >
+                    {p.label}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
 
-          {/* Excerpt */}
-          <div className="form-group">
-            <label className="form-label">Short Excerpt / Summary</label>
+          {/* Short Excerpt */}
+          <div className={styles.formGroup}>
+            <label className={styles.formLabel}>
+              Article Excerpt{' '}
+              <span style={{ fontWeight: 400, color: '#94a3b8' }}>(Optional short preview summary)</span>
+            </label>
             <textarea
               rows={2}
-              placeholder="A brief 1-2 sentence overview shown on blog cards and Google search preview..."
+              placeholder="Brief 1-2 sentence preview for cards and search results..."
               value={excerpt}
               onChange={(e) => setExcerpt(e.target.value)}
-              className="form-input"
+              className={styles.formTextarea}
             />
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
-            {/* Author Name */}
-            <div className="form-group">
-              <label className="form-label">Author Name</label>
+          <div className={styles.formGrid}>
+            {/* Author */}
+            <div className={styles.formGroup}>
+              <label className={styles.formLabel}>Author Name</label>
               <input
                 type="text"
                 value={authorName}
                 onChange={(e) => setAuthorName(e.target.value)}
-                className="form-input"
+                className={styles.formInput}
               />
             </div>
 
-            {/* Author Role */}
-            <div className="form-group">
-              <label className="form-label">Author Role</label>
+            {/* Tags */}
+            <div className={styles.formGroup}>
+              <label className={styles.formLabel}>Tags (comma-separated)</label>
               <input
                 type="text"
-                value={authorRole}
-                onChange={(e) => setAuthorRole(e.target.value)}
-                className="form-input"
+                value={tags}
+                onChange={(e) => setTags(e.target.value)}
+                className={styles.formInput}
               />
             </div>
           </div>
 
-          {/* Full Content */}
-          <div className="form-group">
-            <label className="form-label">
-              Article Content *{" "}
-              <span style={{ fontWeight: 400, color: "var(--text-muted)" }}>
-                (Tip: Use <code>## Section Heading</code> and <code>### Sub-heading</code> to automatically generate the Table of Contents)
-              </span>
+          {/* TipTap Rich Text Editor */}
+          <div className={styles.formGroup}>
+            <label className={styles.formLabel}>
+              Article Content (WYSIWYG Editor) *
             </label>
-            <textarea
-              rows={12}
-              placeholder="Write your article here...&#10;&#10;## Introduction&#10;Explain the problem...&#10;&#10;## The Strategy&#10;Detail the action steps..."
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              className="form-textarea"
-              required
+            <RichTextEditor
+              content={content}
+              onChange={(newHtml) => setContent(newHtml)}
+              placeholder="Write or paste your article here. Use H2/H3 for table of contents, bold/italic, lists, links, and inline images..."
             />
           </div>
 
-          {/* Submit Button */}
-          <div style={{ display: "flex", justifyContent: "flex-end", gap: "12px", marginTop: "24px" }}>
+          {/* Submit */}
+          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px', marginTop: '24px' }}>
+            {editingSlug && (
+              <button
+                type="button"
+                onClick={resetForm}
+                className={styles.btnOutline}
+                style={{ padding: '12px 24px' }}
+              >
+                Discard Changes
+              </button>
+            )}
             <button
               type="submit"
               disabled={submitting}
-              className="btn-primary"
-              style={{ padding: "12px 32px", fontSize: "1rem" }}
+              className={styles.btnPrimary}
+              style={{ padding: '12px 32px', fontSize: '1rem' }}
             >
-              {submitting ? "Publishing..." : "Publish Blog Post Now"}
+              {submitting
+                ? 'Saving to MySQL...'
+                : editingSlug
+                ? 'Update Post in MySQL'
+                : 'Publish Post to Hostinger MySQL'}
             </button>
           </div>
         </form>
       </div>
 
       {/* Existing Blogs List */}
-      <div className="admin-card">
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "20px" }}>
+      <div className={styles.card}>
+        <div className={styles.cardHeader}>
           <div>
-            <h2 style={{ fontSize: "1.35rem", fontWeight: 700 }}>Published Articles</h2>
-            <p style={{ color: "var(--text-muted)", fontSize: "0.85rem" }}>
-              Currently live in dummy storage: {blogs.length} posts
+            <h2 className={styles.cardTitle}>Articles in Hostinger Database</h2>
+            <p style={{ color: '#64748b', fontSize: '0.85rem', marginTop: '4px' }}>
+              Fetched live from MySQL `blogs` table ({blogs.length} articles)
             </p>
           </div>
         </div>
 
         {loading ? (
-          <p style={{ color: "var(--text-muted)", padding: "20px 0" }}>Loading posts...</p>
+          <p style={{ color: '#94a3b8', padding: '20px 0' }}>Fetching articles from MySQL...</p>
         ) : blogs.length === 0 ? (
-          <p style={{ color: "var(--text-muted)", padding: "20px 0" }}>No posts created yet.</p>
+          <div style={{ textAlign: 'center', padding: '40px 20px', color: '#64748b' }}>
+            <p style={{ fontWeight: 600, fontSize: '1.05rem', marginBottom: '8px' }}>
+              No articles found in Hostinger MySQL yet!
+            </p>
+            <p style={{ fontSize: '0.9rem', color: '#94a3b8' }}>
+              Use the form above to compose and publish your first article.
+            </p>
+          </div>
         ) : (
-          <div style={{ overflowX: "auto" }}>
-            <table className="admin-table">
+          <div className={styles.tableWrapper}>
+            <table className={styles.table}>
               <thead>
                 <tr>
-                  <th>Article Title</th>
+                  <th>Title</th>
                   <th>Category</th>
-                  <th>Published Date</th>
+                  <th>Published</th>
                   <th>Reading Time</th>
                   <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {blogs.map((b) => (
-                  <tr key={b.id}>
+                  <tr key={b.id || b.slug}>
                     <td>
-                      <div style={{ fontWeight: 600, color: "var(--text-main)" }}>{b.title}</div>
-                      <div style={{ fontSize: "0.75rem", color: "var(--text-subtle)" }}>/blog/{b.slug}</div>
+                      <div style={{ fontWeight: 600, color: '#0f172a' }}>{b.title}</div>
+                      <div style={{ fontSize: '0.75rem', color: '#94a3b8' }}>/blog/{b.slug}</div>
                     </td>
                     <td>
-                      <span
-                        style={{
-                          background: "var(--primary-light)",
-                          color: "var(--primary)",
-                          padding: "3px 8px",
-                          borderRadius: "4px",
-                          fontSize: "0.75rem",
-                          fontWeight: 600,
-                        }}
-                      >
-                        {b.category}
-                      </span>
+                      <span className={styles.categoryTag}>{b.category}</span>
                     </td>
-                    <td>{b.publishedAt}</td>
-                    <td>{b.readingTime}</td>
+                    <td>{b.published_at ? new Date(b.published_at).toLocaleDateString() : 'Draft'}</td>
+                    <td>{b.reading_time || '5 min read'}</td>
                     <td>
-                      <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <button
+                          onClick={() => handleEditClick(b)}
+                          className={styles.btnOutline}
+                          style={{ padding: '5px 10px', fontSize: '0.75rem' }}
+                          title="Edit Post"
+                        >
+                          <Edit size={13} /> Edit
+                        </button>
                         <Link
                           href={`/blog/${b.slug}`}
-                          className="btn-outline"
-                          style={{ padding: "4px 8px", fontSize: "0.75rem" }}
+                          className={styles.btnOutline}
+                          style={{ padding: '5px 10px', fontSize: '0.75rem' }}
                           target="_blank"
                           title="Open Live Post"
                         >
@@ -443,8 +610,8 @@ export default function AdminPage() {
                         </Link>
                         <button
                           onClick={() => handleDelete(b.slug, b.title)}
-                          className="action-btn-danger"
-                          title="Delete Post"
+                          className={styles.actionBtnDanger}
+                          title="Delete from MySQL"
                         >
                           <Trash2 size={15} />
                         </button>

@@ -1,0 +1,198 @@
+/* ==========================================================================
+   Floating Sticky Social Bar / Rail CSS Module
+   ========================================================================== */
+.floatingSocialRail {
+  position: fixed;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 9998;
+  pointer-events: none;
+}
+
+.floatingSocialList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  pointer-events: auto;
+}
+
+.floatingSocialItem {
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* Base link docked to right edge */
+.floatingSocialLink {
+  position: relative;
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  width: 48px;
+  height: 46px;
+  border-radius: 12px 0 0 12px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-right: none;
+  color: #ffffff;
+  text-decoration: none;
+  padding: 0;
+  cursor: pointer;
+  transition: width 0.28s cubic-bezier(0.16, 1, 0.3, 1), transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.28s ease, filter 0.2s ease;
+  overflow: hidden;
+  white-space: nowrap;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+}
+
+/* Hover Expanding Slide-out to the left */
+.floatingSocialLink:hover {
+  width: 182px;
+  transform: translateX(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+  filter: brightness(1.08);
+}
+
+.floatingSocialIcon {
+  width: 48px;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+  color: #ffffff;
+}
+
+.floatingSocialLink:hover .floatingSocialIcon {
+  transform: scale(1.12);
+}
+
+.floatingSocialTooltip {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  padding: 0 8px 0 14px;
+  opacity: 0;
+  transform: translateX(12px);
+  transition: opacity 0.22s ease 0.05s, transform 0.22s ease 0.05s;
+  pointer-events: none;
+  color: #ffffff;
+  flex: 1;
+}
+
+.floatingSocialLink:hover .floatingSocialTooltip {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.floatingSocialTitle {
+  font-size: 0.84rem;
+  font-weight: 800;
+  line-height: 1.2;
+  color: #ffffff;
+}
+
+.floatingSocialSub {
+  font-size: 0.7rem;
+  opacity: 0.92;
+  line-height: 1.1;
+  color: #ffffff;
+}
+
+/* Long Vertical Contact Us Tab */
+.floatingContactVerticalTab {
+  height: 135px;
+  flex-direction: column-reverse;
+  justify-content: flex-start;
+  align-items: center;
+  padding-bottom: 8px;
+}
+
+.floatingContactVerticalTab .floatingSocialIcon {
+  width: 48px;
+  height: 36px;
+  flex-shrink: 0;
+}
+
+.floatingContactVerticalLabel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #ffffff;
+  white-space: nowrap;
+  transform: rotate(-90deg);
+  transform-origin: center center;
+  margin-bottom: 24px;
+  transition: opacity 0.2s ease;
+}
+
+/* Contact Tab expands to the left on hover */
+.floatingContactVerticalTab:hover {
+  width: 195px;
+  flex-direction: row-reverse;
+  justify-content: flex-start;
+  align-items: center;
+  padding-bottom: 0;
+}
+
+.floatingContactVerticalTab:hover .floatingContactVerticalLabel {
+  display: none;
+  opacity: 0;
+}
+
+.floatingContactVerticalTab:hover .floatingSocialTooltip {
+  display: flex;
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.floatingContactVerticalTab:hover .floatingSocialIcon {
+  height: 100%;
+}
+
+/* Individual Channel Colors */
+.socialBarContact {
+  background: #29b6f6;
+}
+.socialBarContact:hover {
+  background: #0284c7;
+}
+
+.socialBarFb {
+  background: #3b5998;
+}
+.socialBarFb:hover {
+  background: #2d4373;
+}
+
+.socialBarIg {
+  background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+}
+
+.socialBarLi {
+  background: #0077b5;
+}
+.socialBarLi:hover {
+  background: #005582;
+}
+
+.socialBarCall {
+  background: #8863c1;
+}
+.socialBarCall:hover {
+  background: #734bb0;
+}
+
+/* Hide on narrow mobile screens */
+@media (max-width: 768px) {
+  .floatingSocialRail {
+    display: none;
+  }
+}

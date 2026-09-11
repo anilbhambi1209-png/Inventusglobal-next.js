@@ -247,14 +247,14 @@ export default function Header() {
                 </Link>
               </div>
 
-              <Link href="/case-studies" className={`nav-link ${pathname === "/case-studies" ? "active" : ""}`}>
-                Case Studies
+              <Link href="/careers" className={`nav-link ${pathname.startsWith("/careers") ? "active" : ""}`}>
+                Careers
               </Link>
               <Link href="/blog" className={`nav-link ${pathname.startsWith("/blog") ? "active" : ""}`}>
                 Blog
               </Link>
-              <Link href="/contact" className={`nav-link ${pathname === "/contact" ? "active" : ""}`}>
-                Contact
+              <Link href="/why-us" className={`nav-link ${pathname.startsWith("/why-us") ? "active" : ""}`}>
+                Why Us
               </Link>
             </nav>
 
@@ -432,14 +432,14 @@ export default function Header() {
                 )}
               </div>
 
-              <Link href="/case-studies" className={`mobile-nav-link ${pathname === "/case-studies" ? "active" : ""}`} onClick={() => setMobileMenuOpen(false)}>
-                Case Studies
+              <Link href="/careers" className={`mobile-nav-link ${pathname.startsWith("/careers") ? "active" : ""}`} onClick={() => setMobileMenuOpen(false)}>
+                Careers
               </Link>
               <Link href="/blog" className={`mobile-nav-link ${pathname.startsWith("/blog") ? "active" : ""}`} onClick={() => setMobileMenuOpen(false)}>
                 Blog
               </Link>
-              <Link href="/contact" className={`mobile-nav-link ${pathname === "/contact" ? "active" : ""}`} onClick={() => setMobileMenuOpen(false)}>
-                Contact
+              <Link href="/why-us" className={`mobile-nav-link ${pathname.startsWith("/why-us") ? "active" : ""}`} onClick={() => setMobileMenuOpen(false)}>
+                Why Us
               </Link>
             </div>
 

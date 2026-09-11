@@ -17,9 +17,9 @@ export const navigationConfig = {
     { title: "Home", href: "/" },
     { title: "About", href: "/about" },
     { title: "Services", href: "/services", hasDropdown: true },
-    { title: "Case Studies", href: "/case-studies" },
+    { title: "Careers", href: "/careers" },
     { title: "Blog", href: "/blog" },
-    { title: "Contact", href: "/contact" },
+    { title: "Why Us", href: "/why-us" },
   ],
   growthPillars: [
     {

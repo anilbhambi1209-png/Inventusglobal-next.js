@@ -1,0 +1,288 @@
+/* ==========================================================================
+   Why Us CSS Module
+   ========================================================================== */
+.whyUsWrap {
+  padding-top: 100px;
+  background: #f8fafc;
+  min-height: 100vh;
+}
+
+.heroSection {
+  padding: 60px 0 50px;
+  text-align: center;
+}
+
+.heroContent {
+  max-width: 840px;
+  margin: 0 auto;
+}
+
+.heroTitle {
+  font-size: 2.85rem;
+  font-weight: 900;
+  color: #0f172a;
+  margin: 16px 0;
+  line-height: 1.22;
+  letter-spacing: -0.5px;
+}
+
+.heroSubtitle {
+  font-size: 1.12rem;
+  color: #475569;
+  line-height: 1.65;
+}
+
+/* 6 Core Pillars Grid */
+.pillarsSection {
+  padding: 40px 0 70px;
+}
+
+.pillarsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 24px;
+}
+
+.pillarCard {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  padding: 30px;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.03);
+  display: flex;
+  flex-direction: column;
+}
+
+.pillarCard:hover {
+  transform: translateY(-4px);
+  border-color: #f16334;
+  box-shadow: 0 12px 30px rgba(241, 99, 52, 0.08);
+}
+
+.pillarIconWrap {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(241, 99, 52, 0.1) 0%, rgba(234, 88, 12, 0.12) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ea580c;
+  margin-bottom: 20px;
+}
+
+.pillarTitle {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 10px;
+}
+
+.pillarDesc {
+  font-size: 0.94rem;
+  color: #64748b;
+  line-height: 1.6;
+}
+
+/* Comparison Table Section */
+.comparisonSection {
+  padding: 70px 0;
+  background: #ffffff;
+  border-top: 1px solid #e2e8f0;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.sectionHeader {
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto 48px;
+}
+
+.sectionTitle {
+  font-size: 2.2rem;
+  font-weight: 900;
+  color: #0f172a;
+  margin: 12px 0;
+}
+
+.sectionDesc {
+  font-size: 1.02rem;
+  color: #64748b;
+}
+
+.tableWrap {
+  overflow-x: auto;
+  border-radius: 20px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
+}
+
+.comparisonTable {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  background: #ffffff;
+  min-width: 640px;
+}
+
+.comparisonTable th {
+  padding: 20px 24px;
+  font-size: 0.95rem;
+  font-weight: 800;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.thFeature {
+  width: 40%;
+  color: #334155;
+  background: #f8fafc;
+}
+
+.thInventus {
+  width: 30%;
+  background: linear-gradient(135deg, #f16334 0%, #ea580c 100%);
+  color: #ffffff;
+  text-align: center;
+}
+
+.thOthers {
+  width: 30%;
+  color: #64748b;
+  background: #f8fafc;
+  text-align: center;
+}
+
+.comparisonTable td {
+  padding: 18px 24px;
+  font-size: 0.92rem;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.tdFeature {
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.tdInventus {
+  background: rgba(241, 99, 52, 0.03);
+  text-align: center;
+  font-weight: 800;
+  color: #ea580c;
+}
+
+.tdOthers {
+  text-align: center;
+  color: #94a3b8;
+}
+
+/* Guarantees Box */
+.guaranteesSection {
+  padding: 80px 0;
+  background: #f8fafc;
+}
+
+.guaranteesCard {
+  background: #0f172a;
+  color: #ffffff;
+  border-radius: 24px;
+  padding: 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.16);
+}
+
+.guaranteesBadge {
+  background: rgba(241, 99, 52, 0.2);
+  color: #f16334;
+  border: 1px solid rgba(241, 99, 52, 0.4);
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  padding: 6px 14px;
+  border-radius: 100px;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+}
+
+.guaranteesTitle {
+  font-size: 2.3rem;
+  font-weight: 900;
+  color: #ffffff;
+  margin-bottom: 16px;
+  max-width: 700px;
+  line-height: 1.25;
+}
+
+.guaranteesDesc {
+  font-size: 1.05rem;
+  color: #94a3b8;
+  max-width: 620px;
+  line-height: 1.6;
+  margin-bottom: 32px;
+}
+
+.guaranteesActions {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.btnPrimary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #f16334 0%, #ea580c 100%);
+  color: #ffffff;
+  font-size: 0.96rem;
+  font-weight: 800;
+  padding: 14px 28px;
+  border-radius: 12px;
+  text-decoration: none;
+  transition: all 0.25s ease;
+  box-shadow: 0 6px 20px rgba(241, 99, 52, 0.4);
+}
+
+.btnPrimary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 26px rgba(241, 99, 52, 0.55);
+}
+
+.btnSecondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  font-size: 0.96rem;
+  font-weight: 700;
+  padding: 14px 28px;
+  border-radius: 12px;
+  text-decoration: none;
+  transition: all 0.25s ease;
+}
+
+.btnSecondary:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+@media (max-width: 768px) {
+  .heroTitle {
+    font-size: 2.1rem;
+  }
+  .sectionTitle {
+    font-size: 1.8rem;
+  }
+  .guaranteesCard {
+    padding: 32px 20px;
+  }
+  .guaranteesTitle {
+    font-size: 1.7rem;
+  }
+}

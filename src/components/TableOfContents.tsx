@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { TableOfContentItem } from "@/types/blog";
 import { ListOrdered } from "lucide-react";
+import styles from "./TableOfContents.module.css";
 
 interface TOCProps {
   items: TableOfContentItem[];
@@ -60,14 +61,14 @@ export default function TableOfContents({ items }: TOCProps) {
   };
 
   return (
-    <aside className="toc-sidebar" aria-label="Table of contents">
-      <div className="toc-header">
+    <aside className={styles.tocSidebar} aria-label="Table of contents">
+      <div className={styles.tocHeader}>
         <ListOrdered size={18} style={{ color: "var(--primary)" }} />
         <span>Table of Contents</span>
       </div>
 
       <nav>
-        <ul className="toc-list">
+        <ul className={styles.tocList}>
           {items.map((item) => {
             const isActive = activeId === item.id;
             return (
@@ -75,8 +76,8 @@ export default function TableOfContents({ items }: TOCProps) {
                 <a
                   href={`#${item.id}`}
                   onClick={(e) => handleClick(e, item.id)}
-                  className={`toc-link ${isActive ? "active" : ""} ${
-                    item.level === 3 ? "toc-level-3" : ""
+                  className={`${styles.tocLink} ${isActive ? styles.active : ""} ${
+                    item.level === 3 ? styles.tocLevel3 : ""
                   }`}
                 >
                   {item.title}

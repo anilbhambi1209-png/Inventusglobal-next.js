@@ -1,46 +1,149 @@
-import type { Metadata } from "next";
-import Link from "next/link";
-import Image from "next/image";
-import { notFound } from "next/navigation";
-import { getBlogBySlug, getAllBlogs, slugify } from "@/utils/blogStore";
-import ReadingProgress from "@/components/ReadingProgress";
-import TableOfContents from "@/components/TableOfContents";
-import ShareButtons from "@/components/ShareButtons";
-import { ArrowLeft, Calendar, Clock, Sparkles } from "lucide-react";
+import type { Metadata } from 'next';
+import Link from 'next/link';
+import Image from 'next/image';
+import { notFound } from 'next/navigation';
+import pool from '@/lib/db';
+import type { RowDataPacket } from 'mysql2';
+import sanitizeHtml from 'sanitize-html';
+import ReadingProgress from '@/components/ReadingProgress';
+import TableOfContents from '@/components/TableOfContents';
+import ShareButtons from '@/components/ShareButtons';
+import { TableOfContentItem } from '@/types/blog';
+import { ArrowLeft, Calendar, Clock, Sparkles } from 'lucide-react';
 
 interface Props {
   params: Promise<{ slug: string }>;
 }
 
-export async function generateStaticParams() {
-  const blogs = getAllBlogs();
-  return blogs.map((blog) => ({
-    slug: blog.slug,
-  }));
+export const revalidate = 0; // Fresh fetch from MySQL on request
+
+function slugify(text: string): string {
+  return text
+    .toLowerCase()
+    .replace(/[^\w\s-]/g, '')
+    .replace(/[\s_-]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
+/**
+ * Parses HTML or markdown headings (h2, h3) to auto-generate the Table of Contents
+ * and injects corresponding `id` attributes into the HTML.
+ */
+function processContentWithToc(rawHtml: string): {
+  html: string;
+  toc: TableOfContentItem[];
+} {
+  const toc: TableOfContentItem[] = [];
+
+  // If content contains standard HTML headings (from TipTap)
+  if (/<h[23][^>]*>/i.test(rawHtml)) {
+    let headingCount = 0;
+    const transformedHtml = rawHtml.replace(
+      /<h([23])([^>]*)>(.*?)<\/h\1>/gi,
+      (match, levelStr, existingAttrs, innerText) => {
+        headingCount++;
+        const level = parseInt(levelStr, 10);
+        const plainText = innerText.replace(/<[^>]*>/g, '').trim();
+        const id = slugify(plainText) || `section-${headingCount}`;
+
+        toc.push({
+          id,
+          title: plainText,
+          level,
+        });
+
+        // Strip existing id if present and inject our sanitized id
+        const cleanAttrs = existingAttrs.replace(/\bid="[^"]*"/gi, '').trim();
+        return `<h${level} id="${id}" ${cleanAttrs}>${innerText}</h${level}>`;
+      }
+    );
+
+    return { html: transformedHtml, toc };
+  }
+
+  // Fallback for markdown-style ## and ### headings if any legacy post is stored
+  const lines = rawHtml.split('\n');
+  const processedLines: string[] = [];
+  let headingCount = 0;
+
+  lines.forEach((line) => {
+    const trimmed = line.trim();
+    if (trimmed.startsWith('### ')) {
+      headingCount++;
+      const text = trimmed.replace('### ', '').trim();
+      const id = slugify(text) || `section-${headingCount}`;
+      toc.push({ id, title: text, level: 3 });
+      processedLines.push(`<h3 id="${id}">${text}</h3>`);
+    } else if (trimmed.startsWith('## ')) {
+      headingCount++;
+      const text = trimmed.replace('## ', '').trim();
+      const id = slugify(text) || `section-${headingCount}`;
+      toc.push({ id, title: text, level: 2 });
+      processedLines.push(`<h2 id="${id}">${text}</h2>`);
+    } else if (trimmed) {
+      processedLines.push(`<p>${trimmed}</p>`);
+    }
+  });
+
+  return { html: processedLines.join(''), toc };
+}
+
+async function getBlogBySlugFromDb(slug: string) {
+  try {
+    const [rows] = await pool.query<RowDataPacket[]>(
+      'SELECT * FROM `blogs` WHERE slug = ? AND is_published = 1 LIMIT 1',
+      [slug]
+    );
+
+    if (rows.length === 0) return null;
+    return rows[0];
+  } catch (error) {
+    console.error('Error fetching blog post by slug from MySQL:', error);
+    return null;
+  }
+}
+
+async function getRelatedBlogs(currentSlug: string) {
+  try {
+    const [rows] = await pool.query<RowDataPacket[]>(
+      `SELECT id, slug, title, excerpt, cover_image, category, reading_time, published_at
+       FROM \`blogs\`
+       WHERE slug != ? AND is_published = 1
+       ORDER BY published_at DESC LIMIT 2`,
+      [currentSlug]
+    );
+    return rows;
+  } catch (error) {
+    return [];
+  }
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const blog = getBlogBySlug(slug);
+  const blog = await getBlogBySlugFromDb(slug);
 
   if (!blog) {
     return {
-      title: "Blog Not Found | Inventus Global",
+      title: 'Article Not Found | Inventus Global',
     };
   }
 
   return {
     title: `${blog.title} | Inventus Global`,
-    description: blog.excerpt,
+    description: blog.excerpt || blog.title,
     openGraph: {
       title: blog.title,
-      description: blog.excerpt,
-      type: "article",
-      publishedTime: blog.publishedAt,
-      authors: [blog.author.name],
+      description: blog.excerpt || blog.title,
+      type: 'article',
+      publishedTime: blog.published_at
+        ? new Date(blog.published_at).toISOString()
+        : undefined,
+      authors: [blog.author_name || 'Inventus Team'],
       images: [
         {
-          url: blog.coverImage,
+          url:
+            blog.cover_image ||
+            'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80',
           width: 1200,
           height: 630,
           alt: blog.title,
@@ -51,114 +154,52 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function BlogPostPage({ params }: Props) {
+  // Next.js 15: params is a Promise that must be awaited
   const { slug } = await params;
-  const blog = getBlogBySlug(slug);
+  const blog = await getBlogBySlugFromDb(slug);
 
   if (!blog) {
     notFound();
   }
 
-  const allBlogs = getAllBlogs();
-  const relatedBlogs = allBlogs
-    .filter((b) => b.slug !== slug)
-    .slice(0, 2);
+  const relatedBlogs = await getRelatedBlogs(slug);
 
-  const renderFormattedContent = (content: string) => {
-    const lines = content.split("\n");
-    const elements: React.ReactNode[] = [];
-    let currentParagraph: string[] = [];
-    let currentList: string[] = [];
+  // Process HTML with table of contents & id attributes
+  const { html: processedContent, toc } = processContentWithToc(blog.content || '');
 
-    const flushParagraph = (keyPrefix: string) => {
-      if (currentParagraph.length > 0) {
-        const text = currentParagraph.join(" ").trim();
-        if (text) {
-          elements.push(
-            <p key={`${keyPrefix}-p-${elements.length}`}>{text}</p>
-          );
-        }
-        currentParagraph = [];
-      }
-    };
+  // Sanitize HTML output for security while allowing rich elements
+  const cleanHtml = sanitizeHtml(processedContent, {
+    allowedTags: sanitizeHtml.defaults.allowedTags.concat([
+      'h1',
+      'h2',
+      'h3',
+      'h4',
+      'img',
+      'code',
+      'pre',
+      'blockquote',
+      'table',
+      'thead',
+      'tbody',
+      'tr',
+      'th',
+      'td',
+    ]),
+    allowedAttributes: {
+      ...sanitizeHtml.defaults.allowedAttributes,
+      '*': ['id', 'class', 'style'],
+      a: ['href', 'name', 'target', 'rel'],
+      img: ['src', 'alt', 'title', 'width', 'height', 'loading'],
+    },
+  });
 
-    const flushList = (keyPrefix: string) => {
-      if (currentList.length > 0) {
-        elements.push(
-          <ul key={`${keyPrefix}-ul-${elements.length}`}>
-            {currentList.map((item, idx) => (
-              <li key={idx}>
-                {item.includes("**") ? renderBoldText(item) : item}
-              </li>
-            ))}
-          </ul>
-        );
-        currentList = [];
-      }
-    };
+  const tagsList: string[] = blog.tags
+    ? blog.tags.split(',').map((t: string) => t.trim()).filter(Boolean)
+    : [];
 
-    const renderBoldText = (text: string) => {
-      const parts = text.split(/(\*\*.*?\*\*)/g);
-      return parts.map((part, i) => {
-        if (part.startsWith("**") && part.endsWith("**")) {
-          return <strong key={i}>{part.slice(2, -2)}</strong>;
-        }
-        return part;
-      });
-    };
-
-    lines.forEach((line, index) => {
-      const trimmed = line.trim();
-
-      if (!trimmed) {
-        flushParagraph(`line-${index}`);
-        flushList(`line-${index}`);
-        return;
-      }
-
-      if (trimmed.startsWith("### ")) {
-        flushParagraph(`line-${index}`);
-        flushList(`line-${index}`);
-        const title = trimmed.replace("### ", "").trim();
-        const id = slugify(title);
-        elements.push(
-          <h3 id={id} key={`h3-${index}`}>
-            {title}
-          </h3>
-        );
-      } else if (trimmed.startsWith("## ")) {
-        flushParagraph(`line-${index}`);
-        flushList(`line-${index}`);
-        const title = trimmed.replace("## ", "").trim();
-        const id = slugify(title);
-        elements.push(
-          <h2 id={id} key={`h2-${index}`}>
-            {title}
-          </h2>
-        );
-      } else if (trimmed.startsWith("* ") || trimmed.startsWith("- ")) {
-        flushParagraph(`line-${index}`);
-        currentList.push(trimmed.slice(2).trim());
-      } else if (/^\d+\.\s/.test(trimmed)) {
-        flushParagraph(`line-${index}`);
-        currentList.push(trimmed.replace(/^\d+\.\s/, "").trim());
-      } else if (trimmed.startsWith("> ")) {
-        flushParagraph(`line-${index}`);
-        flushList(`line-${index}`);
-        elements.push(
-          <blockquote key={`quote-${index}`}>
-            {trimmed.replace(/^>\s*/, "")}
-          </blockquote>
-        );
-      } else {
-        currentParagraph.push(trimmed);
-      }
-    });
-
-    flushParagraph("final");
-    flushList("final");
-
-    return elements;
-  };
+  const formattedDate = blog.published_at
+    ? new Date(blog.published_at).toISOString().split('T')[0]
+    : new Date().toISOString().split('T')[0];
 
   return (
     <div>
@@ -179,98 +220,125 @@ export default async function BlogPostPage({ params }: Props) {
           <div className="article-meta-bar">
             {/* Author info */}
             <div className="article-author-info">
-              {blog.author.avatar && (
+              {blog.author_avatar && (
                 <Image
-                  src={blog.author.avatar}
-                  alt={blog.author.name}
+                  src={blog.author_avatar}
+                  alt={blog.author_name || 'Inventus Team'}
                   width={46}
                   height={46}
                   className="author-avatar-large"
                 />
               )}
               <div>
-                <div className="author-text-name">{blog.author.name}</div>
-                <div className="author-text-role">{blog.author.role}</div>
+                <div className="author-text-name">{blog.author_name || 'Inventus Team'}</div>
+                <div className="author-text-role">{blog.author_role || 'Growth Specialist'}</div>
               </div>
             </div>
 
             {/* Date & Read time */}
             <div className="article-stats">
-              <span style={{ display: "inline-flex", alignItems: "center", gap: "5px" }}>
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
                 <Calendar size={15} />
-                {blog.publishedAt}
+                {formattedDate}
               </span>
               <span>•</span>
-              <span style={{ display: "inline-flex", alignItems: "center", gap: "5px" }}>
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
                 <Clock size={15} />
-                {blog.readingTime}
+                {blog.reading_time || '5 min read'}
               </span>
             </div>
           </div>
 
           {/* Hero Cover Image */}
-          <div className="article-hero-image-wrap">
-            <Image
-              src={blog.coverImage}
-              alt={blog.title}
-              width={1200}
-              height={600}
-              priority
-              className="article-hero-image"
-            />
-          </div>
+          {blog.cover_image && (
+            <div className="article-hero-image-wrap">
+              <Image
+                src={blog.cover_image}
+                alt={blog.title}
+                width={1200}
+                height={600}
+                priority
+                className="article-hero-image"
+              />
+            </div>
+          )}
         </div>
       </header>
 
       {/* Main Article Section with Table of Contents Layout */}
       <div className="container">
         <div className="article-layout">
-          {/* Sticky Table of Contents Sidebar */}
-          <TableOfContents items={blog.tableOfContents || []} />
-
-          {/* Article Main Body */}
+          {/* Article Main Body (Left side) */}
           <main className="article-main">
-            {/* Neil Patel Key Summary Callout Box */}
-            <div
-              style={{
-                background: "#fffaf7",
-                border: "1px solid #fed7aa",
-                borderLeft: "4px solid var(--primary)",
-                borderRadius: "var(--radius-sm)",
-                padding: "20px 24px",
-                marginBottom: "32px",
-              }}
-            >
-              <div style={{ display: "flex", alignItems: "center", gap: "6px", fontWeight: 700, color: "var(--primary)", marginBottom: "6px", fontSize: "0.92rem" }}>
-                <Sparkles size={16} />
-                <span>Quick Summary</span>
+            {/* Quick Summary Callout Box */}
+            {blog.excerpt && (
+              <div
+                style={{
+                  background: '#fffaf7',
+                  border: '1px solid #fed7aa',
+                  borderLeft: '4px solid var(--primary)',
+                  borderRadius: 'var(--radius-sm)',
+                  padding: '20px 24px',
+                  marginBottom: '32px',
+                }}
+              >
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    fontWeight: 700,
+                    color: 'var(--primary)',
+                    marginBottom: '6px',
+                    fontSize: '0.92rem',
+                  }}
+                >
+                  <Sparkles size={16} />
+                  <span>Quick Summary</span>
+                </div>
+                <p style={{ color: '#374151', fontSize: '1rem', margin: 0, lineHeight: '1.65' }}>
+                  {blog.excerpt}
+                </p>
               </div>
-              <p style={{ color: "#374151", fontSize: "1rem", margin: 0, lineHeight: "1.65" }}>
-                {blog.excerpt}
-              </p>
-            </div>
+            )}
 
-            {/* Formatted Article Content */}
-            <div className="article-content">
-              {renderFormattedContent(blog.content)}
-            </div>
+            {/* Render TipTap HTML output */}
+            <div
+              className="article-content"
+              dangerouslySetInnerHTML={{ __html: cleanHtml }}
+            />
 
             {/* Tags */}
-            {blog.tags && blog.tags.length > 0 && (
-              <div style={{ display: "flex", alignItems: "center", gap: "8px", flexWrap: "wrap", marginTop: "36px" }}>
-                <span style={{ fontSize: "0.82rem", fontWeight: 700, color: "var(--text-muted)", textTransform: "uppercase" }}>
+            {tagsList.length > 0 && (
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  flexWrap: 'wrap',
+                  marginTop: '36px',
+                }}
+              >
+                <span
+                  style={{
+                    fontSize: '0.82rem',
+                    fontWeight: 700,
+                    color: 'var(--text-muted)',
+                    textTransform: 'uppercase',
+                  }}
+                >
                   Topics:
                 </span>
-                {blog.tags.map((tag, idx) => (
+                {tagsList.map((tag, idx) => (
                   <span
                     key={idx}
                     style={{
-                      background: "#f4f4f5",
-                      color: "#374151",
-                      border: "1px solid #e5e7eb",
-                      padding: "3px 10px",
-                      borderRadius: "var(--radius-xs)",
-                      fontSize: "0.8rem",
+                      background: '#f4f4f5',
+                      color: '#374151',
+                      border: '1px solid #e5e7eb',
+                      padding: '3px 10px',
+                      borderRadius: 'var(--radius-xs)',
+                      fontSize: '0.8rem',
                       fontWeight: 600,
                     }}
                   >
@@ -286,79 +354,146 @@ export default async function BlogPostPage({ params }: Props) {
             {/* Conversion CTA Block */}
             <div
               style={{
-                marginTop: "44px",
-                background: "#fafafa",
-                border: "1px solid var(--border-light)",
-                padding: "32px",
-                borderRadius: "var(--radius-md)",
-                display: "flex",
-                flexDirection: "column",
-                gap: "14px",
+                marginTop: '44px',
+                background: '#fafafa',
+                border: '1px solid var(--border-light)',
+                padding: '32px',
+                borderRadius: 'var(--radius-md)',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '14px',
               }}
             >
-              <span style={{ color: "var(--primary)", fontWeight: 800, fontSize: "0.82rem", textTransform: "uppercase", letterSpacing: "1px" }}>
+              <span
+                style={{
+                  color: 'var(--primary)',
+                  fontWeight: 800,
+                  fontSize: '0.82rem',
+                  textTransform: 'uppercase',
+                  letterSpacing: '1px',
+                }}
+              >
                 Inventus Global Marketing
               </span>
-              <h3 style={{ fontSize: "1.5rem", fontWeight: 800, margin: 0, color: "var(--text-heading)", letterSpacing: "-0.3px" }}>
+              <h3
+                style={{
+                  fontSize: '1.5rem',
+                  fontWeight: 800,
+                  margin: 0,
+                  color: 'var(--text-heading)',
+                  letterSpacing: '-0.3px',
+                }}
+              >
                 Need Help Implementing These Strategies?
               </h3>
-              <p style={{ color: "var(--text-body)", fontSize: "0.98rem", margin: 0, lineHeight: "1.6" }}>
-                Our growth team based in Satra Plaza, Vashi builds and executes ROI-focused search, paid ad, and social campaigns for leading businesses.
+              <p style={{ color: 'var(--text-muted)', margin: 0, fontSize: '0.96rem', lineHeight: '1.6' }}>
+                Schedule a complimentary 30-minute growth diagnostic session with our marketing architects.
               </p>
-              <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
-                <Link href="/blog" className="btn-primary" style={{ padding: "10px 20px" }}>
-                  Explore More Guides
-                </Link>
-                <Link href="/admin" className="btn-outline" style={{ padding: "10px 20px" }}>
-                  Add a New Post in Admin
+              <div>
+                <Link
+                  href="/contact"
+                  className="btn-primary"
+                  style={{ display: 'inline-flex', padding: '10px 22px' }}
+                >
+                  Book Free Strategy Consultation →
                 </Link>
               </div>
             </div>
           </main>
-        </div>
 
-        {/* Related Articles Section */}
-        {relatedBlogs.length > 0 && (
-          <section style={{ padding: "50px 0 70px", borderTop: "1px solid var(--border-light)" }}>
-            <h2 style={{ fontSize: "1.6rem", fontWeight: 800, marginBottom: "24px", color: "var(--text-heading)" }}>
-              Recommended Articles
+          {/* Right Sidebar: Sticky Table of Contents */}
+          <aside className="article-sidebar">
+            <div className="sticky-toc-wrapper">
+              <TableOfContents items={toc} />
+            </div>
+          </aside>
+        </div>
+      </div>
+
+      {/* Related Articles Section */}
+      {relatedBlogs.length > 0 && (
+        <section
+          style={{
+            background: '#fafafa',
+            borderTop: '1px solid var(--border-hairline)',
+            padding: '60px 0',
+            marginTop: '80px',
+          }}
+        >
+          <div className="container">
+            <h2 style={{ fontSize: '1.4rem', fontWeight: 800, marginBottom: '24px', color: 'var(--text-heading)' }}>
+              Explore Related Publications
             </h2>
-            <div className="blog-grid" style={{ marginTop: 0 }}>
-              {relatedBlogs.map((item) => (
-                <article key={item.id} className="blog-card">
-                  <div className="blog-card-image-wrap">
-                    <Image
-                      src={item.coverImage}
-                      alt={item.title}
-                      width={400}
-                      height={220}
-                      className="blog-card-image"
-                    />
-                    <span className="blog-card-category">{item.category}</span>
-                  </div>
-                  <div className="blog-card-body">
-                    <div className="blog-meta-row">
-                      <span>{item.publishedAt}</span>
-                      <span>•</span>
-                      <span>{item.readingTime}</span>
-                    </div>
-                    <Link href={`/blog/${item.slug}`}>
-                      <h3 className="blog-card-title">{item.title}</h3>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px' }}>
+              {relatedBlogs.map((related) => (
+                <article
+                  key={related.id}
+                  style={{
+                    background: '#ffffff',
+                    border: '1px solid var(--border-hairline)',
+                    borderRadius: '8px',
+                    overflow: 'hidden',
+                    display: 'flex',
+                    flexDirection: 'column',
+                  }}
+                >
+                  {related.cover_image && (
+                    <Link href={`/blog/${related.slug}`}>
+                      <Image
+                        src={related.cover_image}
+                        alt={related.title}
+                        width={400}
+                        height={220}
+                        style={{ width: '100%', height: '180px', objectFit: 'cover' }}
+                      />
                     </Link>
-                    <p className="blog-card-excerpt">{item.excerpt}</p>
-                    <div className="blog-card-footer">
-                      <span className="blog-author-name">{item.author.name}</span>
-                      <Link href={`/blog/${item.slug}`} className="read-link">
-                        Read <ArrowLeft size={13} style={{ transform: "rotate(180deg)" }} />
-                      </Link>
+                  )}
+                  <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', flex: 1 }}>
+                    <span
+                      style={{
+                        fontSize: '0.75rem',
+                        fontWeight: 700,
+                        color: 'var(--primary)',
+                        textTransform: 'uppercase',
+                        marginBottom: '8px',
+                      }}
+                    >
+                      {related.category}
+                    </span>
+                    <Link href={`/blog/${related.slug}`} style={{ textDecoration: 'none' }}>
+                      <h3
+                        style={{
+                          fontSize: '1.08rem',
+                          fontWeight: 700,
+                          color: 'var(--text-heading)',
+                          margin: '0 0 8px',
+                          lineHeight: '1.4',
+                        }}
+                      >
+                        {related.title}
+                      </h3>
+                    </Link>
+                    <p
+                      style={{
+                        color: 'var(--text-muted)',
+                        fontSize: '0.88rem',
+                        lineHeight: '1.5',
+                        margin: '0 0 14px',
+                        flex: 1,
+                      }}
+                    >
+                      {related.excerpt}
+                    </p>
+                    <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+                      {related.reading_time || '5 min read'}
                     </div>
                   </div>
                 </article>
               ))}
             </div>
-          </section>
-        )}
-      </div>
+          </div>
+        </section>
+      )}
     </div>
   );
 }
