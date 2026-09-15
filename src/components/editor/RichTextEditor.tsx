@@ -21,6 +21,7 @@ import {
   Loader2,
 } from 'lucide-react';
 import styles from './editor.module.css';
+import { compressImage } from '@/utils/imageCompressor';
 
 interface RichTextEditorProps {
   content: string;
@@ -88,11 +89,13 @@ export default function RichTextEditor({
   };
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file || !editor) return;
+    const rawFile = e.target.files?.[0];
+    if (!rawFile || !editor) return;
 
     try {
       setIsUploading(true);
+      // Auto-compress large images down to web-optimized WebP (~150KB)
+      const file = await compressImage(rawFile);
       const formData = new FormData();
       formData.append('file', file);
 

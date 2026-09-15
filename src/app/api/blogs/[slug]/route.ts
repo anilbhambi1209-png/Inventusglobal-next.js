@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import pool from '@/lib/db';
 import type { RowDataPacket, ResultSetHeader } from 'mysql2';
+import { isAuthenticated } from '@/lib/auth';
 
 function calculateReadingTime(htmlContent: string): string {
   const text = htmlContent.replace(/<[^>]*>/g, ' ');
@@ -55,6 +56,14 @@ export async function PUT(
   { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
+    const authorized = await isAuthenticated(request);
+    if (!authorized) {
+      return NextResponse.json(
+        { success: false, error: 'Unauthorized: Admin authentication required' },
+        { status: 401 }
+      );
+    }
+
     const { slug } = await params;
     const body = await request.json();
 
@@ -173,6 +182,14 @@ export async function DELETE(
   { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
+    const authorized = await isAuthenticated(request);
+    if (!authorized) {
+      return NextResponse.json(
+        { success: false, error: 'Unauthorized: Admin authentication required' },
+        { status: 401 }
+      );
+    }
+
     const { slug } = await params;
 
     const [result] = await pool.execute<ResultSetHeader>(

@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
+import { useRouter } from 'next/navigation';
 import {
   PlusCircle,
   CheckCircle2,
@@ -16,8 +17,10 @@ import {
   Upload,
   Loader2,
   ImageIcon,
+  LogOut,
 } from 'lucide-react';
 import styles from './admin.module.css';
+import { compressImage } from '@/utils/imageCompressor';
 
 // Dynamic import of RichTextEditor to ensure 100% client-side execution (no SSR / React 19 hydration issues)
 const RichTextEditor = dynamic(
@@ -46,9 +49,11 @@ interface BlogItem {
 }
 
 export default function AdminPage() {
+  const router = useRouter();
   const [blogs, setBlogs] = useState<BlogItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+  const [loggingOut, setLoggingOut] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<{
     text: string;
@@ -94,6 +99,10 @@ export default function AdminPage() {
     try {
       setLoading(true);
       const res = await fetch('/api/blogs?includeDrafts=true');
+      if (res.status === 401) {
+        router.push('/admin/login');
+        return;
+      }
       const data = await res.json();
       if (data.success) {
         setBlogs(data.blogs || []);
@@ -110,6 +119,7 @@ export default function AdminPage() {
 
   useEffect(() => {
     loadBlogs();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleInsertTemplate = () => {
@@ -119,11 +129,13 @@ export default function AdminPage() {
   };
 
   const handleCoverFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+    const rawFile = e.target.files?.[0];
+    if (!rawFile) return;
 
     try {
       setCoverUploading(true);
+      // Auto-compress large images down to web-optimized WebP (~150KB)
+      const file = await compressImage(rawFile);
       const formData = new FormData();
       formData.append('file', file);
 
@@ -288,6 +300,28 @@ export default function AdminPage() {
           <Link href="/blog" className={styles.btnOutline} target="_blank">
             <BookOpen size={16} /> Live Blog
           </Link>
+          <button
+            onClick={async () => {
+              if (confirm('Are you sure you want to log out?')) {
+                setLoggingOut(true);
+                try {
+                  await fetch('/api/auth/logout', { method: 'POST' });
+                  router.push('/admin/login');
+                  router.refresh();
+                } catch {
+                  router.push('/admin/login');
+                } finally {
+                  setLoggingOut(false);
+                }
+              }
+            }}
+            disabled={loggingOut}
+            className={styles.btnOutline}
+            style={{ color: '#ef4444', borderColor: '#fca5a5' }}
+            title="Log out of admin session"
+          >
+            <LogOut size={15} /> {loggingOut ? 'Signing out...' : 'Sign Out'}
+          </button>
         </div>
       </div>
 

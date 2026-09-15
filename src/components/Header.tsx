@@ -98,7 +98,7 @@ const growthPillars: GrowthPillar[] = [
 ];
 
 export default function Header() {
-  const pathname = usePathname();
+  const pathname = usePathname() || "";
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isServicesOpen, setIsServicesOpen] = useState(false);
   const [activePillar, setActivePillar] = useState(0);

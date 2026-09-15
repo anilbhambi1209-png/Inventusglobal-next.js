@@ -10,16 +10,11 @@ interface FeaturedArticlesProps {
 }
 
 export default function FeaturedArticles({ blogs }: FeaturedArticlesProps) {
-  // Sort or pick high-value blogs (avoiding short dummy posts if richer ones exist)
-  const validBlogs = [...blogs].sort((a, b) => {
-    // Prefer posts with longer content or established IDs
-    return (b.content?.length || 0) - (a.content?.length || 0);
-  });
+  if (!blogs || blogs.length === 0) return null;
 
-  const featured = validBlogs[0] || blogs[0];
-  const secondaryBlogs = validBlogs.slice(1, 3);
-
-  if (!featured) return null;
+  // Recent blogs are delivered in chronological order (most recent first)
+  const featured = blogs[0];
+  const secondaryBlogs = blogs.slice(1, 3);
 
   return (
     <section id="featured-articles" className="articles-master-section">
@@ -56,6 +51,7 @@ export default function FeaturedArticles({ blogs }: FeaturedArticlesProps) {
                 width={700}
                 height={400}
                 className="articles-hero-img"
+                unoptimized
               />
               <div className="articles-hero-overlay" />
 
@@ -114,7 +110,14 @@ export default function FeaturedArticles({ blogs }: FeaturedArticlesProps) {
                 className="articles-side-card"
               >
                 <div className="articles-side-thumb-wrap">
-                  <Image src={b.coverImage} alt={b.title} width={280} height={180} className="articles-side-thumb" />
+                  <Image
+                    src={b.coverImage}
+                    alt={b.title}
+                    width={280}
+                    height={180}
+                    className="articles-side-thumb"
+                    unoptimized
+                  />
                   <span className="articles-side-cat-pill">{b.category}</span>
                 </div>
 

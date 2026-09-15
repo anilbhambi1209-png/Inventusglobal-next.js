@@ -258,6 +258,7 @@ export default async function BlogPostPage({ params }: Props) {
                 width={1200}
                 height={600}
                 priority
+                unoptimized
                 className="article-hero-image"
               />
             </div>

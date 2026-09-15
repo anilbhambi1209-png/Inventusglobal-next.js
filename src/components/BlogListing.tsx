@@ -109,7 +109,8 @@ export default function BlogListing({ initialBlogs }: BlogListingProps) {
                     width={640}
                     height={360}
                     priority
-                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                    unoptimized
+                    style={{ width: "100%", height: "100%", objectFit: "contain", background: "#0b1120" }}
                   />
                 </Link>
 
@@ -165,7 +166,8 @@ export default function BlogListing({ initialBlogs }: BlogListingProps) {
                       alt={blog.title}
                       width={260}
                       height={160}
-                      style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                      unoptimized
+                      style={{ width: "100%", height: "100%", objectFit: "contain", background: "#0b1120" }}
                     />
                   </Link>
                 </article>

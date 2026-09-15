@@ -1,8 +1,17 @@
 import { NextResponse } from 'next/server';
 import pool from '@/lib/db';
+import { isAuthenticated } from '@/lib/auth';
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
+    const authorized = await isAuthenticated(request);
+    if (!authorized) {
+      return NextResponse.json(
+        { success: false, error: 'Unauthorized: Admin authentication required to setup database.' },
+        { status: 401 }
+      );
+    }
+
     const createTableQuery = `
       CREATE TABLE IF NOT EXISTS \`blogs\` (
         \`id\` INT AUTO_INCREMENT PRIMARY KEY,
@@ -26,8 +35,23 @@ export async function GET() {
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
     `;
 
-    // Execute table creation
+    // Execute blogs table creation
     await pool.query(createTableQuery);
+
+    const createMediaTableQuery = `
+      CREATE TABLE IF NOT EXISTS \`media\` (
+        \`id\` VARCHAR(128) PRIMARY KEY,
+        \`filename\` VARCHAR(255) NOT NULL,
+        \`mime_type\` VARCHAR(100) NOT NULL,
+        \`data\` LONGBLOB NOT NULL,
+        \`size_bytes\` INT NOT NULL,
+        \`created_at\` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        INDEX \`idx_created\` (\`created_at\`)
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+    `;
+
+    // Execute media table creation
+    await pool.query(createMediaTableQuery);
 
     // Verify table structure
     const [columns] = await pool.query('DESCRIBE `blogs`');

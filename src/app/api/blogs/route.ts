@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import pool from '@/lib/db';
 import type { RowDataPacket, ResultSetHeader } from 'mysql2';
+import { isAuthenticated } from '@/lib/auth';
 
 function generateSlug(title: string): string {
   return title
@@ -23,6 +24,17 @@ export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const includeDrafts = searchParams.get('includeDrafts') === 'true';
+
+    // If requesting drafts, verify that the requester is an authenticated admin
+    if (includeDrafts) {
+      const authorized = await isAuthenticated(request);
+      if (!authorized) {
+        return NextResponse.json(
+          { success: false, error: 'Unauthorized to view drafts' },
+          { status: 401 }
+        );
+      }
+    }
 
     let sql = `
       SELECT 
@@ -63,6 +75,14 @@ export async function GET(request: Request) {
 // POST create a new blog
 export async function POST(request: Request) {
   try {
+    const authorized = await isAuthenticated(request);
+    if (!authorized) {
+      return NextResponse.json(
+        { success: false, error: 'Unauthorized: Admin authentication required' },
+        { status: 401 }
+      );
+    }
+
     const body = await request.json();
     const {
       title,
