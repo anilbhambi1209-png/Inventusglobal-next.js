@@ -14,12 +14,13 @@ import {
   Shield,
   ExternalLink,
 } from "lucide-react";
-import { siteConfig } from "@/config/site";
+import { siteConfig, servicesList } from "@/config/site";
 
 export default function ContactPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+  const [service, setService] = useState("");
   const [message, setMessage] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
@@ -91,7 +92,7 @@ export default function ContactPage() {
                   <div className="contact-success-actions">
                     <a
                       href={siteConfig.contact.whatsappLink(
-                        `Hi Inventus Global, my name is ${name}. I just submitted the contact form. Let's connect!`
+                        `Hi Inventus Global, my name is ${name}${service ? ` interested in ${service}` : ""}. I just submitted the contact form. Let's connect!`
                       )}
                       target="_blank"
                       rel="noopener noreferrer"
@@ -108,6 +109,7 @@ export default function ContactPage() {
                         setName("");
                         setEmail("");
                         setPhone("");
+                        setService("");
                         setMessage("");
                       }}
                       className="contact-success-reset-btn"
@@ -151,20 +153,42 @@ export default function ContactPage() {
                     </div>
                   </div>
 
-                  {/* Email Field */}
-                  <div className="contact-field-group">
-                    <label htmlFor="contact-email" className="contact-label">
-                      Email Address <span className="text-orange">*</span>
-                    </label>
-                    <input
-                      id="contact-email"
-                      type="email"
-                      placeholder="rahul@company.com"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      className="contact-input"
-                      required
-                    />
+                  {/* Email & Service Required Row */}
+                  <div className="contact-form-row">
+                    <div className="contact-field-group">
+                      <label htmlFor="contact-email" className="contact-label">
+                        Email Address <span className="text-orange">*</span>
+                      </label>
+                      <input
+                        id="contact-email"
+                        type="email"
+                        placeholder="rahul@company.com"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        className="contact-input"
+                        required
+                      />
+                    </div>
+
+                    <div className="contact-field-group">
+                      <label htmlFor="contact-service" className="contact-label">
+                        Service Required <span className="text-orange">*</span>
+                      </label>
+                      <select
+                        id="contact-service"
+                        value={service}
+                        onChange={(e) => setService(e.target.value)}
+                        className="contact-select"
+                        required
+                      >
+                        <option value="">Select a service...</option>
+                        {servicesList.map((s) => (
+                          <option key={s} value={s}>
+                            {s}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
                   </div>
 
                   {/* Message Field */}

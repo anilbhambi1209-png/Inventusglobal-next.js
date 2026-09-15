@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Briefcase,
   MapPin,
@@ -12,89 +12,151 @@ import {
   Users,
   Building2,
   TrendingUp,
+  Loader2,
+  AlertCircle,
 } from "lucide-react";
 import { siteConfig } from "@/config/site";
+import { JobPosition } from "@/types/career";
 import styles from "./careers.module.css";
 
+const defaultPositions: JobPosition[] = [
+  {
+    id: "ppc-specialist",
+    title: "Senior Performance Marketing Manager",
+    slug: "senior-performance-marketing-manager",
+    department: "Paid Media",
+    type: "Full-Time",
+    location: "Vashi, Navi Mumbai (On-Site)",
+    experience: "3+ Years Experience",
+    salary: "Competitive + Performance Bonus",
+    description:
+      "Lead high-budget Google Ads and Meta campaign architectures. Optimize ROAS, manage CPA thresholds, and build automated negative keyword funnels.",
+    requirements: [
+      "Proven track record managing ₹5L+ monthly ad spend",
+      "Expertise in Google Ads (Search, PMax, Shopping) & Meta Ads",
+      "Strong understanding of GA4, GTM, and server-side tracking",
+      "Ability to analyze CVR, CTR, CAC, and LTV metrics",
+    ],
+    is_active: 1,
+  },
+  {
+    id: "seo-strategist",
+    title: "SEO & Growth Content Strategist",
+    slug: "seo-growth-content-strategist",
+    department: "Earned & Organic",
+    type: "Full-Time",
+    location: "Vashi, Navi Mumbai (On-Site)",
+    experience: "2+ Years Experience",
+    salary: "Competitive Retainer + Performance Perks",
+    description:
+      "Architect semantic topic clusters, technical Core Web Vitals audits, and generative AI search (GEO) optimization engines for high-growth brands.",
+    requirements: [
+      "Hands-on experience with Ahrefs, SEMrush, Screaming Frog, and Search Console",
+      "Deep technical SEO knowledge (schema, canonicals, site architecture)",
+      "Proven ability to scale organic traffic for competitive B2B or D2C niches",
+      "Experience in content direction and direct-response copywriting",
+    ],
+    is_active: 1,
+  },
+  {
+    id: "nextjs-developer",
+    title: "Full-Stack Next.js 15 Web Engineer",
+    slug: "fullstack-nextjs-web-engineer",
+    department: "Data & Engineering",
+    type: "Full-Time",
+    location: "Vashi, Navi Mumbai (On-Site / Hybrid)",
+    experience: "2+ Years Experience",
+    salary: "Industry Leading",
+    description:
+      "Build ultra-fast Next.js 15 web applications, headless landing funnels, and CRM integrations tailored for maximum conversion rates.",
+    requirements: [
+      "Proficiency in React 19, Next.js (App Router), TypeScript, and Tailwind CSS",
+      "Strong understanding of server components, API routes, and web speed optimization",
+      "Experience integrating REST APIs, webhooks, and analytics scripts",
+      "Eye for modern design aesthetics, micro-animations, and responsive layouts",
+    ],
+    is_active: 1,
+  },
+  {
+    id: "creative-director",
+    title: "Short-Form Video & UGC Creative Director",
+    slug: "shortform-video-creative-director",
+    department: "Creative Studio",
+    type: "Full-Time",
+    location: "Vashi, Navi Mumbai (On-Site)",
+    experience: "1+ Years Experience",
+    salary: "Attractive Stipend + Revenue Share",
+    description:
+      "Script, direct, and edit scroll-stopping short-form video reels, TikTok/Instagram ad creatives, and high-converting UGC campaigns.",
+    requirements: [
+      "Proficiency in Premiere Pro, CapCut, or DaVinci Resolve",
+      "Understanding of direct-response hook mechanics in the first 3 seconds",
+      "Portfolio of high-performing social video ad creatives",
+      "Strong storytelling skills and visual aesthetics",
+    ],
+    is_active: 1,
+  },
+];
+
 export default function CareersPage() {
+  const [openPositions, setOpenPositions] = useState<JobPosition[]>(defaultPositions);
   const [selectedRole, setSelectedRole] = useState<string>("Senior Performance Marketing Manager");
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [portfolio, setPortfolio] = useState("");
   const [experience, setExperience] = useState("2-4 years");
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState(false);
 
-  const openPositions = [
-    {
-      id: "ppc-specialist",
-      title: "Senior Performance Marketing Manager",
-      department: "Paid Media",
-      type: "Full-Time",
-      location: "Vashi, Navi Mumbai (On-Site)",
-      experience: "3+ Years Experience",
-      salary: "Competitive + Performance Bonus",
-      description:
-        "Lead high-budget Google Ads and Meta campaign architectures. Optimize ROAS, manage CPA thresholds, and build automated negative keyword funnels.",
-      requirements: [
-        "Proven track record managing ₹5L+ monthly ad spend",
-        "Expertise in Google Ads (Search, PMax, Shopping) & Meta Ads",
-        "Strong understanding of GA4, GTM, and server-side tracking",
-        "Ability to analyze CVR, CTR, CAC, and LTV metrics",
-      ],
-    },
-    {
-      id: "seo-strategist",
-      title: "SEO & Growth Content Strategist",
-      department: "Earned & Organic",
-      type: "Full-Time",
-      location: "Vashi, Navi Mumbai (On-Site)",
-      experience: "2+ Years Experience",
-      salary: "Competitive Retainer + Performance Perks",
-      description:
-        "Architect semantic topic clusters, technical Core Web Vitals audits, and generative AI search (GEO) optimization engines for high-growth brands.",
-      requirements: [
-        "Hands-on experience with Ahrefs, SEMrush, Screaming Frog, and Search Console",
-        "Deep technical SEO knowledge (schema, canonicals, site architecture)",
-        "Proven ability to scale organic traffic for competitive B2B or D2C niches",
-        "Experience in content direction and direct-response copywriting",
-      ],
-    },
-    {
-      id: "nextjs-developer",
-      title: "Full-Stack Next.js 15 Web Engineer",
-      department: "Data & Engineering",
-      type: "Full-Time",
-      location: "Vashi, Navi Mumbai (On-Site / Hybrid)",
-      experience: "2+ Years Experience",
-      salary: "Industry Leading",
-      description:
-        "Build ultra-fast Next.js 15 web applications, headless landing funnels, and CRM integrations tailored for maximum conversion rates.",
-      requirements: [
-        "Proficiency in React 19, Next.js (App Router), TypeScript, and Tailwind CSS",
-        "Strong understanding of server components, API routes, and web speed optimization",
-        "Experience integrating REST APIs, webhooks, and analytics scripts",
-        "Eye for modern design aesthetics, micro-animations, and responsive layouts",
-      ],
-    },
-    {
-      id: "creative-director",
-      title: "Short-Form Video & UGC Creative Director",
-      department: "Creative Studio",
-      type: "Full-Time",
-      location: "Vashi, Navi Mumbai (On-Site)",
-      experience: "1+ Years Experience",
-      salary: "Attractive Stipend + Revenue Share",
-      description:
-        "Script, direct, and edit scroll-stopping short-form video reels, TikTok/Instagram ad creatives, and high-converting UGC campaigns.",
-      requirements: [
-        "Proficiency in Premiere Pro, CapCut, or DaVinci Resolve",
-        "Understanding of direct-response hook mechanics in the first 3 seconds",
-        "Portfolio of high-performing social video ad creatives",
-        "Strong storytelling skills and visual aesthetics",
-      ],
-    },
-  ];
+  useEffect(() => {
+    const fetchJobs = async () => {
+      try {
+        const res = await fetch("/api/jobs");
+        const data = await res.json();
+        if (data.success && data.jobs && data.jobs.length > 0) {
+          setOpenPositions(data.jobs);
+          setSelectedRole(data.jobs[0].title);
+        }
+      } catch (err) {
+        console.error("Failed to load live jobs:", err);
+      }
+    };
+    fetchJobs();
+  }, []);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitting(true);
+    setSubmitError(null);
+
+    try {
+      const res = await fetch("/api/applications", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          role_applied: selectedRole,
+          full_name: fullName,
+          email,
+          phone,
+          experience,
+          portfolio,
+        }),
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        setSubmitted(true);
+      } else {
+        setSubmitError(data.error || "Failed to submit application.");
+      }
+    } catch (err: any) {
+      setSubmitError("Network error. Please try submitting again.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   const perks = [
     {
@@ -118,11 +180,6 @@ export default function CareersPage() {
       desc: "Zero bureaucracy. High autonomy with clear pathways to leadership roles.",
     },
   ];
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setSubmitted(true);
-  };
 
   return (
     <div className={styles.careersPageWrap}>
@@ -328,9 +385,29 @@ export default function CareersPage() {
                     />
                   </div>
 
-                  <button type="submit" className={styles.btnSubmitApplication}>
-                    <span>Submit Application</span>
-                    <Send size={16} />
+                  {submitError && (
+                    <div style={{ padding: "10px 14px", background: "rgba(239, 68, 68, 0.1)", border: "1px solid rgba(239, 68, 68, 0.3)", borderRadius: "8px", color: "#ef4444", fontSize: "0.88rem", display: "flex", alignItems: "center", gap: "8px", marginBottom: "16px" }}>
+                      <AlertCircle size={16} />
+                      <span>{submitError}</span>
+                    </div>
+                  )}
+
+                  <button
+                    type="submit"
+                    className={styles.btnSubmitApplication}
+                    disabled={submitting}
+                  >
+                    {submitting ? (
+                      <>
+                        <Loader2 size={16} className="animate-spin" />
+                        <span>Submitting Application...</span>
+                      </>
+                    ) : (
+                      <>
+                        <span>Submit Application</span>
+                        <Send size={16} />
+                      </>
+                    )}
                   </button>
                 </form>
               )}

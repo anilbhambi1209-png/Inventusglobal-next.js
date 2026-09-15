@@ -111,8 +111,9 @@
 .proofRow {
   display: flex;
   align-items: center;
-  gap: 24px;
-  flex-wrap: wrap;
+  gap: 16px;
+  flex-wrap: nowrap !important;
+  white-space: nowrap !important;
   padding-top: 24px;
   border-top: 1px solid rgba(255, 255, 255, 0.15);
 }
@@ -121,6 +122,8 @@
   display: flex;
   align-items: baseline;
   gap: 6px;
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
 }
 
 .proofValue {

@@ -39,12 +39,35 @@ export const siteConfig = {
     linkedin: "https://www.linkedin.com/company/inventusglobal",
   },
   stats: {
-    revenueGenerated: "₹18.5 Cr+",
-    campaignsExecuted: "500+",
-    averageRoas: "3.8x",
+    targetRoas: "4.8x",
+    attribution: "100%",
+    certified: "Google & Meta",
+    clientSatisfaction: "98%",
+    experienceYears: "3+",
+    // Maintained for backward compatibility
+    revenueGenerated: "100%",
+    campaignsExecuted: "Google & Meta",
+    averageRoas: "4.8x",
     clientRetention: "98%",
-    experienceYears: "10+",
   },
+  heroHighlights: [
+    { value: "4.8x", label: "Target ROAS" },
+    { value: "100%", label: "Transparent Attribution" },
+    { value: "Google & Meta", label: "Certified" },
+    { value: "98%", label: "Client Satisfaction" },
+  ],
 };
 
+export const servicesList = [
+  "Digital Marketing",
+  "Web Development",
+  "Social Media Marketing",
+  "Paid Ad Campaigns",
+  "Influencer Marketing",
+  "Content Marketing",
+  "Email Marketing",
+  "SEO",
+] as const;
+
+export type ServiceOption = (typeof servicesList)[number];
 export type SiteConfig = typeof siteConfig;

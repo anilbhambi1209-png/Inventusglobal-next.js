@@ -12,19 +12,21 @@ import {
   ArrowRight,
   MessageCircle,
   ShieldCheck,
+  Sparkles,
 } from "lucide-react";
-import { siteConfig } from "@/config/site";
+import { siteConfig, servicesList } from "@/config/site";
 
 export default function ScrollContactModal() {
   const [isOpen, setIsOpen] = useState(false);
   const [hasDismissed, setHasDismissed] = useState(false);
 
-  // Exact 5 Fields
+  // Form Fields
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [businessName, setBusinessName] = useState("");
   const [location, setLocation] = useState("");
+  const [service, setService] = useState("");
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -180,13 +182,13 @@ export default function ScrollContactModal() {
             </h3>
 
             <p className="simple-modal-success-desc">
-              Thank you, <strong>{fullName}</strong>. We have received your request for <strong>{businessName}</strong> ({location}). Our growth team will reach out at <strong>{phone}</strong> / <strong>{email}</strong> within 4 business hours.
+              Thank you, <strong>{fullName}</strong>. We have received your request for <strong>{businessName}</strong> ({location}){service ? ` for ${service}` : ""}. Our growth team will reach out at <strong>{phone}</strong> / <strong>{email}</strong> within 4 business hours.
             </p>
 
             <div className="simple-modal-success-actions">
               <a
                 href={siteConfig.contact.whatsappLink(
-                  `Hi Inventus Global, my name is ${fullName} from ${businessName} (${location}). I just requested a growth proposal. Let's connect!`
+                  `Hi Inventus Global, my name is ${fullName} from ${businessName} (${location})${service ? ` interested in ${service}` : ""}. I just requested a growth proposal. Let's connect!`
                 )}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -219,11 +221,11 @@ export default function ScrollContactModal() {
               </h2>
 
               <p className="simple-modal-subtitle">
-                Fill in these 5 quick details and our team will get in touch within 4 hours.
+                Fill in these quick details and our team will get in touch within 4 hours.
               </p>
             </div>
 
-            {/* Form with exactly the 5 requested fields */}
+            {/* Form */}
             <form onSubmit={handleSubmit} className="simple-modal-form">
               {/* Row 1: Full Name & Phone Number */}
               <div className="simple-modal-grid">
@@ -295,21 +297,44 @@ export default function ScrollContactModal() {
                 </div>
               </div>
 
-              {/* Row 3: Location */}
-              <div className="simple-modal-field">
-                <label htmlFor="modal-location" className="simple-modal-label">
-                  <MapPin size={13} className="text-orange" />
-                  <span>Location *</span>
-                </label>
-                <input
-                  id="modal-location"
-                  type="text"
-                  required
-                  placeholder="e.g. Vashi, Navi Mumbai / Mumbai"
-                  value={location}
-                  onChange={(e) => setLocation(e.target.value)}
-                  className="simple-modal-input"
-                />
+              {/* Row 3: Location & Service Required */}
+              <div className="simple-modal-grid">
+                <div className="simple-modal-field">
+                  <label htmlFor="modal-location" className="simple-modal-label">
+                    <MapPin size={13} className="text-orange" />
+                    <span>Location *</span>
+                  </label>
+                  <input
+                    id="modal-location"
+                    type="text"
+                    required
+                    placeholder="e.g. Vashi, Navi Mumbai"
+                    value={location}
+                    onChange={(e) => setLocation(e.target.value)}
+                    className="simple-modal-input"
+                  />
+                </div>
+
+                <div className="simple-modal-field">
+                  <label htmlFor="modal-service" className="simple-modal-label">
+                    <Sparkles size={13} className="text-orange" />
+                    <span>Service *</span>
+                  </label>
+                  <select
+                    id="modal-service"
+                    required
+                    value={service}
+                    onChange={(e) => setService(e.target.value)}
+                    className="simple-modal-select"
+                  >
+                    <option value="">Select a service...</option>
+                    {servicesList.map((s) => (
+                      <option key={s} value={s}>
+                        {s}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
 
               {/* Submit CTA */}

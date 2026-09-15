@@ -44,18 +44,18 @@ export default function AboutPage() {
             </div>
             <div style={{ width: "1px", background: "var(--border-hairline)" }} />
             <div>
-              <div style={{ fontSize: "1.8rem", fontWeight: 800, color: "var(--primary)" }}>{siteConfig.stats.revenueGenerated}</div>
-              <div style={{ fontSize: "0.85rem", color: "var(--text-muted)", fontWeight: 600 }}>Tracked Client Revenue</div>
+              <div style={{ fontSize: "1.8rem", fontWeight: 800, color: "var(--primary)" }}>{siteConfig.stats.attribution}</div>
+              <div style={{ fontSize: "0.85rem", color: "var(--text-muted)", fontWeight: 600 }}>Transparent Attribution</div>
             </div>
             <div style={{ width: "1px", background: "var(--border-hairline)" }} />
             <div>
-              <div style={{ fontSize: "1.8rem", fontWeight: 800, color: "var(--primary)" }}>{siteConfig.stats.averageRoas}</div>
-              <div style={{ fontSize: "0.85rem", color: "var(--text-muted)", fontWeight: 600 }}>Average Campaign ROAS</div>
+              <div style={{ fontSize: "1.8rem", fontWeight: 800, color: "var(--primary)" }}>{siteConfig.stats.targetRoas}</div>
+              <div style={{ fontSize: "0.85rem", color: "var(--text-muted)", fontWeight: 600 }}>Target Campaign ROAS</div>
             </div>
             <div style={{ width: "1px", background: "var(--border-hairline)" }} />
             <div>
-              <div style={{ fontSize: "1.8rem", fontWeight: 800, color: "var(--primary)" }}>{siteConfig.stats.clientRetention}</div>
-              <div style={{ fontSize: "0.85rem", color: "var(--text-muted)", fontWeight: 600 }}>Client Retention</div>
+              <div style={{ fontSize: "1.8rem", fontWeight: 800, color: "var(--primary)" }}>{siteConfig.stats.clientSatisfaction}</div>
+              <div style={{ fontSize: "0.85rem", color: "var(--text-muted)", fontWeight: 600 }}>Client Satisfaction</div>
             </div>
           </div>
         </div>

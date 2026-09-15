@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, Phone } from "lucide-react";
+import { ArrowRight, Phone, TrendingUp, ShieldCheck, Award, Sparkles } from "lucide-react";
 import { siteConfig } from "@/config/site";
 import pool from "@/lib/db";
 import type { RowDataPacket } from "mysql2";
@@ -89,15 +89,15 @@ export default async function HomePage() {
           <div className="hero-content">
             <div className="phase-badge phase-badge-dark">
               <span className="phase-pulse-dot" />
-              <span>PHASE 01 • PROVEN GROWTH STRATEGY</span>
+              <span>PROVEN GROWTH STRATEGY</span>
             </div>
 
             <h1 className="hero-title">
-              Your trusted digital marketing agency in Navi Mumbai
+              We don&apos;t just do Digital Marketing. We scale businesses.
             </h1>
 
             <p className="hero-subtitle">
-              We help brands rank in Google, dominate social media, get cited by AI search, and turn visibility into qualified leads. Strategy, SEO, SMM, and conversion web platforms — one team, measured against results.
+              Inventus Global is a performance-driven digital marketing agency based in Navi Mumbai, specializing in scalable growth strategies that deliver measurable results.
             </p>
 
             {/* Hero Action Buttons */}
@@ -115,19 +115,31 @@ export default async function HomePage() {
             {/* Clean Editorial Proof Line */}
             <div className="hero-proof-row">
               <div className="hero-proof-item">
-                <strong>{siteConfig.stats.revenueGenerated}</strong> <span>Revenue Generated</span>
+                <TrendingUp size={15} className="hero-proof-icon" />
+                <div className="hero-proof-text">
+                  <strong>4.8x</strong> <span>Target ROAS</span>
+                </div>
               </div>
               <span className="hero-proof-sep">•</span>
               <div className="hero-proof-item">
-                <strong>{siteConfig.stats.campaignsExecuted}</strong> <span>Campaigns Executed</span>
+                <ShieldCheck size={15} className="hero-proof-icon" />
+                <div className="hero-proof-text">
+                  <strong>100%</strong> <span>Transparent Attribution</span>
+                </div>
               </div>
               <span className="hero-proof-sep">•</span>
               <div className="hero-proof-item">
-                <strong>{siteConfig.stats.averageRoas}</strong> <span>Average ROAS</span>
+                <Award size={15} className="hero-proof-icon" />
+                <div className="hero-proof-text">
+                  <strong>Google &amp; Meta</strong> <span>Certified</span>
+                </div>
               </div>
               <span className="hero-proof-sep">•</span>
               <div className="hero-proof-item">
-                <strong>{siteConfig.stats.clientRetention}</strong> <span>Client Retention</span>
+                <Sparkles size={15} className="hero-proof-icon" />
+                <div className="hero-proof-text">
+                  <strong>98%</strong> <span>Client Satisfaction</span>
+                </div>
               </div>
             </div>
           </div>

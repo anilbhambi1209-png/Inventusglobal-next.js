@@ -53,6 +53,43 @@ export async function GET(request: Request) {
     // Execute media table creation
     await pool.query(createMediaTableQuery);
 
+    const createJobsTableQuery = `
+      CREATE TABLE IF NOT EXISTS \`jobs\` (
+        \`id\` INT AUTO_INCREMENT PRIMARY KEY,
+        \`title\` VARCHAR(255) NOT NULL,
+        \`slug\` VARCHAR(255) NOT NULL UNIQUE,
+        \`department\` VARCHAR(100) NOT NULL,
+        \`type\` VARCHAR(50) NOT NULL DEFAULT 'Full-Time',
+        \`location\` VARCHAR(150) NOT NULL DEFAULT 'Vashi, Navi Mumbai (On-Site)',
+        \`experience\` VARCHAR(100) NOT NULL,
+        \`salary\` VARCHAR(150) NULL,
+        \`description\` TEXT NOT NULL,
+        \`requirements\` TEXT NOT NULL,
+        \`is_active\` TINYINT(1) NOT NULL DEFAULT 1,
+        \`created_at\` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        \`updated_at\` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        INDEX \`idx_active\` (\`is_active\`, \`created_at\`)
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+    `;
+    await pool.query(createJobsTableQuery);
+
+    const createAppTableQuery = `
+      CREATE TABLE IF NOT EXISTS \`job_applications\` (
+        \`id\` INT AUTO_INCREMENT PRIMARY KEY,
+        \`job_id\` INT NULL,
+        \`role_applied\` VARCHAR(255) NOT NULL,
+        \`full_name\` VARCHAR(255) NOT NULL,
+        \`email\` VARCHAR(255) NOT NULL,
+        \`phone\` VARCHAR(50) NOT NULL,
+        \`experience\` VARCHAR(100) NULL,
+        \`portfolio\` VARCHAR(500) NULL,
+        \`status\` VARCHAR(50) NOT NULL DEFAULT 'new',
+        \`created_at\` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        INDEX \`idx_created\` (\`created_at\`)
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+    `;
+    await pool.query(createAppTableQuery);
+
     // Verify table structure
     const [columns] = await pool.query('DESCRIBE `blogs`');
 

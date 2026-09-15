@@ -149,7 +149,7 @@ export default function OurServices() {
         <div className="future-services-header">
           <div className="phase-badge phase-badge-light">
             <span className="phase-pulse-dot" />
-            <span>PHASE 02 // 04 CORE GROWTH ENGINES</span>
+            <span>CORE GROWTH ENGINES</span>
           </div>
           <h2 className="future-services-title">
             We Provide <span className="future-title-accent">Future-Proof</span> Solutions

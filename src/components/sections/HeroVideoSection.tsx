@@ -49,25 +49,15 @@ export default function HeroVideoSection() {
 
           {/* Proof Row */}
           <div className={styles.proofRow}>
-            <div className={styles.proofItem}>
-              <span className={styles.proofValue}>{siteConfig.stats.revenueGenerated}</span>
-              <span className={styles.proofLabel}>Revenue Generated</span>
-            </div>
-            <span className={styles.proofSep}>•</span>
-            <div className={styles.proofItem}>
-              <span className={styles.proofValue}>{siteConfig.stats.campaignsExecuted}</span>
-              <span className={styles.proofLabel}>Campaigns Executed</span>
-            </div>
-            <span className={styles.proofSep}>•</span>
-            <div className={styles.proofItem}>
-              <span className={styles.proofValue}>{siteConfig.stats.averageRoas}</span>
-              <span className={styles.proofLabel}>Average ROAS</span>
-            </div>
-            <span className={styles.proofSep}>•</span>
-            <div className={styles.proofItem}>
-              <span className={styles.proofValue}>{siteConfig.stats.clientRetention}</span>
-              <span className={styles.proofLabel}>Client Retention</span>
-            </div>
+            {siteConfig.heroHighlights.map((item, index) => (
+              <React.Fragment key={item.label}>
+                {index > 0 && <span className={styles.proofSep}>•</span>}
+                <div className={styles.proofItem}>
+                  <span className={styles.proofValue}>{item.value}</span>
+                  <span className={styles.proofLabel}>{item.label}</span>
+                </div>
+              </React.Fragment>
+            ))}
           </div>
         </div>
       </Container>
