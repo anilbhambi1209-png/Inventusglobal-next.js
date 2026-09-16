@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, Phone, TrendingUp, ShieldCheck, Award, Sparkles } from "lucide-react";
+import { ArrowRight, Phone } from "lucide-react";
 import { siteConfig } from "@/config/site";
 import pool from "@/lib/db";
 import type { RowDataPacket } from "mysql2";
 import { BlogPost } from "@/types/blog";
 import { getAllBlogs } from "@/utils/blogStore";
+import InteractiveParticleHero from "@/components/InteractiveParticleHero";
 import OurServices from "@/components/OurServices";
+import AnatomyOfGrowthSection from "@/components/AnatomyOfGrowthSection";
 import CaseStudySpotlight from "@/components/CaseStudySpotlight";
 import ContinuousLearningMarquee from "@/components/ContinuousLearningMarquee";
 import FeaturedArticles from "@/components/FeaturedArticles";
@@ -71,110 +73,43 @@ export default async function HomePage() {
 
   return (
     <div>
-      {/* Hero Section - Full 100vh Video Background */}
-      <section className="hero-video-section">
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="hero-video-bg"
-        >
-          <source src="/hero_video.mp4" type="video/mp4" />
-        </video>
-
-        <div className="hero-overlay" />
-
-        <div className="container">
-          <div className="hero-content">
-            <div className="phase-badge phase-badge-dark">
-              <span className="phase-pulse-dot" />
-              <span>PROVEN GROWTH STRATEGY</span>
-            </div>
-
-            <h1 className="hero-title">
-              We don&apos;t just do Digital Marketing. We scale businesses.
-            </h1>
-
-            <p className="hero-subtitle">
-              Inventus Global is a performance-driven digital marketing agency based in Navi Mumbai, specializing in scalable growth strategies that deliver measurable results.
-            </p>
-
-            {/* Hero Action Buttons */}
-            <div className="hero-actions-row">
-              <Link href="/contact" className="hero-btn-proposal">
-                Get a free proposal
-              </Link>
-
-              <a href={`tel:${siteConfig.contact.primaryPhoneRaw}`} className="hero-btn-call">
-                <Phone size={17} />
-                <span>Call {siteConfig.contact.primaryPhone}</span>
-              </a>
-            </div>
-
-            {/* Clean Editorial Proof Line */}
-            <div className="hero-proof-row">
-              <div className="hero-proof-item">
-                <TrendingUp size={15} className="hero-proof-icon" />
-                <div className="hero-proof-text">
-                  <strong>4.8x</strong> <span>Target ROAS</span>
-                </div>
-              </div>
-              <span className="hero-proof-sep">•</span>
-              <div className="hero-proof-item">
-                <ShieldCheck size={15} className="hero-proof-icon" />
-                <div className="hero-proof-text">
-                  <strong>100%</strong> <span>Transparent Attribution</span>
-                </div>
-              </div>
-              <span className="hero-proof-sep">•</span>
-              <div className="hero-proof-item">
-                <Award size={15} className="hero-proof-icon" />
-                <div className="hero-proof-text">
-                  <strong>Google &amp; Meta</strong> <span>Certified</span>
-                </div>
-              </div>
-              <span className="hero-proof-sep">•</span>
-              <div className="hero-proof-item">
-                <Sparkles size={15} className="hero-proof-icon" />
-                <div className="hero-proof-text">
-                  <strong>98%</strong> <span>Client Satisfaction</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Phase 01: Hero Interactive Particle Engine (Atom Network Physics) */}
+      <InteractiveParticleHero />
 
       <div className="phase-boundary-line" />
 
-      {/* Phase 02: Our Services Section (Future-Proof Carousel) */}
+      {/* Phase 02: Anatomy of a Growth Campaign (Editorial Funnel) */}
+      <AnatomyOfGrowthSection />
+
+      <div className="phase-boundary-line" />
+
+      {/* Phase 03: Our Services Section (Future-Proof Carousel) */}
       <OurServices />
 
       <div className="phase-boundary-line" />
 
-      {/* Phase 03: Case Study Feature Spotlight (Interactive Multi-Industry Showcase) */}
+      {/* Phase 04: Case Study Feature Spotlight (Interactive Multi-Industry Showcase) */}
       <CaseStudySpotlight />
 
       <div className="phase-boundary-line" />
 
-      {/* Phase 04: We Grow by Continuous Learning - Continuous Marquee Section */}
+      {/* Phase 05: We Grow by Continuous Learning - Continuous Marquee Section */}
       <ContinuousLearningMarquee />
 
       <div className="phase-boundary-line" />
 
-      {/* Phase 05: Elevated Editorial Articles & Playbooks Section (Bento Grid) */}
+      {/* Phase 06: Elevated Editorial Articles & Playbooks Section (Bento Grid) */}
       <FeaturedArticles blogs={recentBlogs} />
 
       <div className="phase-boundary-line" />
 
-      {/* Phase 06: Bottom Conversion Section */}
+      {/* Phase 07: Bottom Conversion Section */}
       <section className="home-bottom-cta-section">
         <div className="container">
           <div className="home-bottom-cta-card">
             <div className="phase-badge phase-badge-dark" style={{ margin: "0 auto 20px" }}>
               <span className="phase-pulse-dot" />
-              <span>PHASE 06 • INITIATE GROWTH PARTNERSHIP</span>
+              <span>PHASE 07 • INITIATE GROWTH PARTNERSHIP</span>
             </div>
             <h2 className="home-bottom-cta-title">
               Ready to Accelerate Your <span className="future-title-accent">Digital Revenue?</span>
