@@ -13,60 +13,67 @@ import {
   ChevronRight,
   Pause,
   Play,
+  ArrowRight,
 } from "lucide-react";
 
 export default function OurServices() {
   const baseServices = [
     {
       id: "seo",
+      category: "ORGANIC SEARCH",
       accentColor: "#22c55e",
       accentRgb: "34, 197, 94",
-      icon: <Search size={44} strokeWidth={1.8} />,
+      icon: <Search size={38} strokeWidth={1.9} />,
       title: "Leading SEO Company",
       desc: "We provide high-impact organic search optimization that boosts keyword rankings, drives targeted traffic, and delivers measurable revenue.",
       href: "/services/search-engine-optimization",
     },
     {
       id: "smm",
+      category: "AUDIENCE RETENTION",
       accentColor: "#f16334",
       accentRgb: "241, 99, 52",
-      icon: <Share2 size={44} strokeWidth={1.8} />,
+      icon: <Share2 size={38} strokeWidth={1.9} />,
       title: "Best Social Media Marketing",
       desc: "Engage target audiences, build brand authority, and turn casual followers into loyal customers with viral creative hooks and retargeting.",
       href: "/services/social-media-content",
     },
     {
       id: "webdev",
+      category: "NEXT.JS ARCHITECTURE",
       accentColor: "#f59e0b",
       accentRgb: "245, 158, 11",
-      icon: <Globe size={44} strokeWidth={1.8} />,
+      icon: <Globe size={38} strokeWidth={1.9} />,
       title: "Competitive Website Development",
       desc: "Ultra-fast Next.js web applications engineered for sub-second speeds, frictionless UI/UX design, and maximum lead conversions.",
       href: "/services/nextjs-web-development",
     },
     {
       id: "ppc",
+      category: "HIGH-ROAS FUNNELS",
       accentColor: "#6366f1",
       accentRgb: "99, 102, 241",
-      icon: <Target size={44} strokeWidth={1.8} />,
+      icon: <Target size={38} strokeWidth={1.9} />,
       title: "Targeted Paid Advertising",
       desc: "Turn your advertising budget into predictable lead volume and sales with data-driven Google & Meta campaigns and CRO funnels.",
       href: "/services/google-ads-ppc",
     },
     {
       id: "content",
+      category: "CONVERSION COPY",
       accentColor: "#06b6d4",
       accentRgb: "6, 182, 212",
-      icon: <FileText size={44} strokeWidth={1.8} />,
+      icon: <FileText size={38} strokeWidth={1.9} />,
       title: "Authority Content & Copywriting",
       desc: "Authoritative editorial content and high-converting sales copy crafted to educate prospects, build trust, and drive conversions.",
       href: "/services/conversion-rate-optimization",
     },
     {
       id: "influencer",
+      category: "VIRAL SOCIAL PROOF",
       accentColor: "#ec4899",
       accentRgb: "236, 72, 153",
-      icon: <Sparkles size={44} strokeWidth={1.8} />,
+      icon: <Sparkles size={38} strokeWidth={1.9} />,
       title: "Influencer Brand Campaigns",
       desc: "Vetted creator partnerships that deliver genuine social proof, explosive brand recognition, and trackable direct-response sales.",
       href: "/services/influencer-marketing",
@@ -144,15 +151,15 @@ export default function OurServices() {
 
   return (
     <section id="our-services" className="future-services-section">
-      <div className="container">
+      {/* Precision architectural tech grid & ambient lighting */}
+      <div className="future-services-grid" aria-hidden="true" />
+      <div className="future-services-ambient-glow" aria-hidden="true" />
+
+      <div className="container future-services-container">
         {/* Header matching reference */}
         <div className="future-services-header">
-          <div className="phase-badge phase-badge-light">
-            <span className="phase-pulse-dot" />
-            <span>CORE GROWTH ENGINES</span>
-          </div>
           <h2 className="future-services-title">
-            We Provide <span className="future-title-accent">Future-Proof</span> Solutions
+            We Engineer <span className="future-title-accent">Future-Proof</span> Growth
           </h2>
           <p className="future-services-desc">
             Explore our high-impact digital marketing, search dominance, and custom web engineering services engineered to scale your revenue.
@@ -203,14 +210,24 @@ export default function OurServices() {
                       } as React.CSSProperties
                     }
                   >
-                    <div className="future-card-icon">{item.icon}</div>
+                    <div className="future-card-topbar">
+                      <span className="future-card-category">{item.category}</span>
+                      {isFeatured && (
+                        <span className="future-card-featured-pill">FEATURED</span>
+                      )}
+                    </div>
+
+                    <div className="future-card-icon-box">
+                      <div className="future-card-icon">{item.icon}</div>
+                    </div>
 
                     <h3 className="future-card-title">{item.title}</h3>
 
                     <p className="future-card-desc">{item.desc}</p>
 
                     <Link href={item.href} className="future-card-btn">
-                      Read More
+                      <span>Explore Capability</span>
+                      <ArrowRight size={14} className="future-btn-arrow" />
                     </Link>
                   </div>
                 </div>

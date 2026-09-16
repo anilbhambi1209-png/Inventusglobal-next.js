@@ -10,11 +10,11 @@ import {
   ShieldCheck,
   HeartHandshake,
   TrendingUp,
-  Phone,
 } from "lucide-react";
 import { siteConfig } from "@/config/site";
 import { teamData } from "@/data/team";
 import { milestonesData } from "@/data/milestones";
+import BottomConversionCta from "@/components/BottomConversionCta";
 
 export const metadata: Metadata = {
   title: "About Us | Inventus Global - Navi Mumbai Marketing Agency",
@@ -273,38 +273,10 @@ export default function AboutPage() {
       </section>
 
       {/* Bottom Conversion Section */}
-      <section className="home-bottom-cta-section">
-        <div className="container">
-          <div className="home-bottom-cta-card">
-            <div className="home-bottom-cta-badge">
-              <span>SCALE WITH INVENTUS GLOBAL</span>
-            </div>
-            <h2 className="home-bottom-cta-title">
-              Ready to Accelerate Your <span className="future-title-accent">Digital Revenue?</span>
-            </h2>
-            <p className="home-bottom-cta-desc">
-              Connect directly with our senior growth team at Satra Plaza, Vashi, or explore our proven playbooks to unlock your brand&apos;s full potential.
-            </p>
-            <div className="home-bottom-cta-actions">
-              <Link href="/contact" className="home-cta-btn-primary">
-                <span>Book Free Growth Consultation</span>
-                <ArrowRight size={17} />
-              </Link>
-              <a href={`tel:${siteConfig.contact.primaryPhoneRaw}`} className="home-cta-btn-secondary">
-                <Phone size={17} />
-                <span>Call {siteConfig.contact.primaryPhone}</span>
-              </a>
-            </div>
-            <div className="home-bottom-cta-meta">
-              <span className="home-cta-meta-item">✓ Office 1209, Satra Plaza, Vashi</span>
-              <span className="home-cta-meta-sep">•</span>
-              <span className="home-cta-meta-item">✓ No Obligation Strategy Audit</span>
-              <span className="home-cta-meta-sep">•</span>
-              <span className="home-cta-meta-item">✓ 4-Hour Response Guarantee</span>
-            </div>
-          </div>
-        </div>
-      </section>
+      <BottomConversionCta
+        badge="SCALE WITH INVENTUS GLOBAL"
+        subBadge="Direct Senior Growth Intake"
+      />
     </div>
   );
 }

@@ -222,8 +222,7 @@
 @media (max-width: 640px) {
   .future-services-section,
   .learning-marquee-section,
-  .articles-master-section,
-  .home-bottom-cta-section {
+  .articles-master-section {
     padding: 54px 0 64px;
   }
 
@@ -241,48 +240,7 @@
     font-size: 1.18rem !important;
   }
 
-  .spotlight-tab-bar {
-    display: grid !important;
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 6px !important;
-    width: 100% !important;
-    border-radius: 14px !important;
-    padding: 6px !important;
-    background: #eef2f6 !important;
-  }
 
-  .spotlight-tab-btn {
-    padding: 8px 8px !important;
-    border-radius: 10px !important;
-    font-size: 0.76rem !important;
-    justify-content: center !important;
-    width: 100% !important;
-  }
-
-  .spotlight-card-box {
-    padding: 24px 16px !important;
-    border-radius: 20px !important;
-  }
-
-  .spotlight-img-frame {
-    height: 270px !important;
-    border-radius: 16px !important;
-  }
-
-  .spotlight-floating-badge {
-    padding: 6px 10px !important;
-    border-radius: 10px !important;
-    gap: 7px !important;
-    max-width: calc(100% - 20px) !important;
-  }
-
-  .floating-badge-title {
-    font-size: 0.74rem !important;
-  }
-
-  .floating-badge-sub {
-    font-size: 0.65rem !important;
-  }
 
   .badge-top {
     top: 10px !important;
@@ -354,23 +312,6 @@
     font-size: 0.94rem !important;
   }
 
-  .spotlight-actions-row {
-    flex-direction: column !important;
-    align-items: stretch !important;
-    width: 100% !important;
-    gap: 10px !important;
-  }
-
-  .spotlight-cta-primary,
-  .spotlight-cta-secondary {
-    width: 100% !important;
-    text-align: center !important;
-    justify-content: center !important;
-  }
-
-  .spotlight-stats {
-    gap: 14px;
-  }
 
   .badge-top {
     display: none !important; /* Prevents overlap on very small screens so the main visual is pristine */

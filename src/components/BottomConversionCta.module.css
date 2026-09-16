@@ -1,0 +1,765 @@
+/* ==========================================================================
+   Cinema Premiere VIP Growth Ticket
+   Vibrant Sunset Cinema Stage + Real Vector Cutouts
+   ========================================================================== */
+
+.sectionCta {
+  position: relative;
+  /* Radiant Sunset Cinema Stage — 100% Non-Black, Rich & Vibrant */
+  background: radial-gradient(ellipse 95% 75% at 50% 10%, #ff7f41 0%, #ea580c 45%, #b4380c 100%);
+  color: #0f172a;
+  padding: 104px 0 114px;
+  overflow: hidden;
+  text-align: center;
+}
+
+/* Overhead Premiere Marquee Spotlight Cone */
+.spotlightCone {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 820px;
+  height: 480px;
+  background: radial-gradient(ellipse 65% 55% at 50% 0%, rgba(255, 255, 255, 0.38) 0%, rgba(255, 237, 213, 0.15) 50%, transparent 75%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.stageAura {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1000px;
+  height: 320px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.14) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.stageGridPattern {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.22) 1.2px, transparent 1.2px);
+  background-size: 32px 32px;
+  mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, #000000 30%, transparent 85%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, #000000 30%, transparent 85%);
+}
+
+.container {
+  position: relative;
+  z-index: 3;
+}
+
+/* ==========================================================================
+   The Master Movie Ticket Card
+   ========================================================================== */
+.ticketCard {
+  max-width: 1040px;
+  margin: 0 auto;
+  position: relative;
+  /* Realistic physical card drop shadow conforming to vector cutouts */
+  filter: drop-shadow(0 25px 60px rgba(124, 45, 18, 0.42))
+          drop-shadow(0 8px 20px rgba(0, 0, 0, 0.18));
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), filter 0.28s ease;
+}
+
+.ticketCard:hover {
+  transform: translateY(-4px);
+  filter: drop-shadow(0 32px 75px rgba(124, 45, 18, 0.52))
+          drop-shadow(0 12px 28px rgba(0, 0, 0, 0.22));
+}
+
+/* Desktop Real Vector Ticket Silhouette (Untouched on PC) */
+.ticketSvgDesktop {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Mobile in-flow notches and tear strip: hidden on desktop */
+.mobileNotchTop,
+.mobileNotchBottom,
+.mobileTearStrip {
+  display: none;
+}
+
+/* Ticket Content Layer */
+.ticketContent {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: stretch;
+  min-height: 360px;
+}
+
+/* ==========================================================================
+   Left Side: Main Ticket Body
+   ========================================================================== */
+.ticketMain {
+  flex: 7;
+  padding: 40px 40px 32px 46px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+}
+
+/* Inner Guilloche Security Frame */
+.ticketMain::before {
+  content: "";
+  position: absolute;
+  inset: 12px;
+  border: 1px dashed rgba(241, 99, 52, 0.22);
+  border-radius: 14px;
+  pointer-events: none;
+}
+
+.ticketHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+  gap: 12px;
+  position: relative;
+  z-index: 2;
+}
+
+.admitOnePill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 14px;
+  border-radius: 9999px;
+  background: rgba(241, 99, 52, 0.1);
+  border: 1px solid rgba(241, 99, 52, 0.3);
+  font-family: var(--font-heading);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: #ea580c;
+}
+
+.pillIcon {
+  color: #f16334;
+}
+
+.ticketSerialWrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: monospace, var(--font-heading);
+  font-size: 0.74rem;
+  font-weight: 800;
+  color: #64748b;
+  letter-spacing: 1.5px;
+}
+
+.serialIndicator {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: #10b981;
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.8);
+}
+
+.headline {
+  font-family: var(--font-heading);
+  font-size: clamp(1.95rem, 3.2vw, 2.7rem);
+  font-weight: 900;
+  line-height: 1.16;
+  letter-spacing: -0.035em;
+  color: #0f172a;
+  margin: 0 0 10px 0;
+  position: relative;
+  z-index: 2;
+}
+
+.headlineHighlight {
+  display: inline-block;
+  background: linear-gradient(135deg, #ea580c 0%, #f16334 50%, #d97706 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 2px 10px rgba(241, 99, 52, 0.25));
+}
+
+.description {
+  font-family: var(--font-body);
+  font-size: 1.02rem;
+  line-height: 1.6;
+  color: #475569;
+  margin: 0 0 20px 0;
+  max-width: 580px;
+  position: relative;
+  z-index: 2;
+}
+
+/* Compact Cinema Metadata Strip */
+.metaRow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: rgba(241, 99, 52, 0.04);
+  border: 1px solid rgba(241, 99, 52, 0.16);
+  border-radius: 12px;
+  padding: 11px 16px;
+  margin-bottom: 18px;
+  position: relative;
+  z-index: 2;
+  flex-wrap: wrap;
+}
+
+.metaItem {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.metaLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font-heading);
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #ea580c;
+  text-transform: uppercase;
+}
+
+.metaValue {
+  font-family: var(--font-heading);
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.metaValueFree {
+  font-family: var(--font-heading);
+  font-size: 0.86rem;
+  font-weight: 800;
+  color: #15803d;
+}
+
+.metaDivider {
+  width: 1px;
+  height: 26px;
+  background-color: rgba(241, 99, 52, 0.2);
+}
+
+/* Barcode Strip */
+.barcodeStrip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(241, 99, 52, 0.15);
+  position: relative;
+  z-index: 2;
+}
+
+.barcodeBars {
+  display: flex;
+  align-items: center;
+  gap: 2.5px;
+  height: 22px;
+}
+
+.bar1,
+.bar2,
+.bar3,
+.bar4 {
+  display: inline-block;
+  height: 100%;
+  background-color: #0f172a;
+  border-radius: 1px;
+}
+
+.bar1 { width: 1.5px; }
+.bar2 { width: 2.5px; }
+.bar3 { width: 4px; }
+.bar4 { width: 6px; }
+
+.barcodeText {
+  font-family: monospace, var(--font-heading);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #94a3b8;
+}
+
+/* Authentic Ink Rubber Stamp */
+.ticketStamp {
+  position: absolute;
+  right: 28px;
+  bottom: 20px;
+  width: 86px;
+  height: 86px;
+  border-radius: 50%;
+  border: 2px dashed rgba(234, 88, 12, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: rotate(-13deg);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.stampInner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #ea580c;
+  font-family: var(--font-heading);
+  font-size: 0.58rem;
+  font-weight: 900;
+  letter-spacing: 0.5px;
+  line-height: 1.2;
+}
+
+.stampSub {
+  font-size: 0.52rem;
+  letter-spacing: 1px;
+  color: #c2410c;
+}
+
+/* ==========================================================================
+   Right Side: Ticket Stub
+   ========================================================================== */
+.ticketStub {
+  flex: 3;
+  padding: 40px 26px 32px 34px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: center;
+  position: relative;
+}
+
+/* Inset Frame on Stub */
+.ticketStub::before {
+  content: "";
+  position: absolute;
+  inset: 12px;
+  border: 1px dashed rgba(241, 99, 52, 0.22);
+  border-radius: 14px;
+  pointer-events: none;
+}
+
+.stubHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  position: relative;
+  z-index: 2;
+}
+
+.stubTitle {
+  font-family: var(--font-heading);
+  font-size: 0.74rem;
+  font-weight: 900;
+  letter-spacing: 1.5px;
+  color: #ea580c;
+}
+
+.stubSeat {
+  font-family: monospace, var(--font-heading);
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 3px 7px;
+  border-radius: 6px;
+  background: #0f172a;
+  color: #ffffff;
+  letter-spacing: 1px;
+}
+
+.stubBranding {
+  margin-bottom: 18px;
+  position: relative;
+  z-index: 2;
+}
+
+.stubAgency {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: 0.98rem;
+  font-weight: 900;
+  color: #0f172a;
+  letter-spacing: 0.5px;
+}
+
+.stubSub {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #94a3b8;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+}
+
+/* Action Zone */
+.stubActions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 16px;
+  position: relative;
+  z-index: 2;
+}
+
+.primaryBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #f16334 0%, #ea580c 100%);
+  color: #ffffff;
+  font-family: var(--font-heading);
+  font-size: 0.96rem;
+  font-weight: 800;
+  padding: 13px 18px;
+  border-radius: 9999px;
+  text-decoration: none;
+  box-shadow: 0 8px 22px rgba(241, 99, 52, 0.38);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.primaryBtn::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transform: skewX(-20deg);
+  transition: left 0.7s ease;
+}
+
+.primaryBtn:hover::after {
+  left: 140%;
+}
+
+.primaryBtn:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, #ff7244 0%, #f16334 100%);
+  box-shadow: 0 12px 28px rgba(241, 99, 52, 0.5);
+  color: #ffffff;
+}
+
+.phoneBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  background: #ffffff;
+  color: #1e293b;
+  font-family: var(--font-heading);
+  font-size: 0.86rem;
+  font-weight: 700;
+  padding: 11px 14px;
+  border-radius: 9999px;
+  border: 1.5px solid #e2e8f0;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.phoneBtn:hover {
+  border-color: rgba(241, 99, 52, 0.4);
+  color: #ea580c;
+  background: #fffaf7;
+  transform: translateY(-1px);
+}
+
+.waLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-family: var(--font-heading);
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #16a34a;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.waLink:hover {
+  color: #15803d;
+  text-decoration: underline;
+}
+
+.stubFooter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 12px;
+  border-top: 1px solid rgba(241, 99, 52, 0.15);
+  position: relative;
+  z-index: 2;
+}
+
+.stubStatus {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: monospace, var(--font-heading);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #64748b;
+}
+
+.statusDot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: #10b981;
+}
+
+/* ==========================================================================
+   Responsive Adaptations (Tablet & Phone Fixes)
+   ========================================================================== */
+@media (max-width: 960px) {
+  .sectionCta {
+    padding: 76px 0 84px;
+  }
+
+  /* Switch from PC vector SVG to rock-solid responsive ticket container */
+  .ticketSvgDesktop {
+    display: none;
+  }
+
+  .ticketCard {
+    max-width: 540px;
+    background: #ffffff;
+    border: 2px solid rgba(241, 99, 52, 0.42);
+    border-radius: 24px;
+    overflow: hidden;
+    margin: 0 auto;
+    width: calc(100% - 24px);
+    box-shadow: 0 20px 50px rgba(124, 45, 18, 0.38);
+  }
+
+  /* Top & bottom punch cutouts on mobile */
+  .mobileNotchTop,
+  .mobileNotchBottom {
+    display: block;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 32px;
+    height: 16px;
+    z-index: 10;
+  }
+
+  .mobileNotchTop {
+    top: -2px;
+    border-bottom-left-radius: 32px;
+    border-bottom-right-radius: 32px;
+    border: 2px solid rgba(241, 99, 52, 0.42);
+    border-top: none;
+    background: #ea580c;
+  }
+
+  .mobileNotchBottom {
+    bottom: -2px;
+    border-top-left-radius: 32px;
+    border-top-right-radius: 32px;
+    border: 2px solid rgba(241, 99, 52, 0.42);
+    border-bottom: none;
+    background: #b4380c;
+  }
+
+  .ticketContent {
+    flex-direction: column;
+    min-height: auto;
+  }
+
+  .ticketMain {
+    flex: none;
+    padding: 34px 28px 20px;
+  }
+
+  /* In-flow tear strip between main ticket and stub */
+  .mobileTearStrip {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    width: 100%;
+    height: 28px;
+    z-index: 5;
+    background: #ffffff;
+  }
+
+  .mobileNotchLeft,
+  .mobileNotchRight {
+    display: block;
+    position: absolute;
+    top: 0;
+    width: 14px;
+    height: 28px;
+    z-index: 6;
+  }
+
+  .mobileNotchLeft {
+    left: -2px;
+    border-top-right-radius: 28px;
+    border-bottom-right-radius: 28px;
+    border: 2px solid rgba(241, 99, 52, 0.42);
+    border-left: none;
+    background: #ea580c;
+  }
+
+  .mobileNotchRight {
+    right: -2px;
+    border-top-left-radius: 28px;
+    border-bottom-left-radius: 28px;
+    border: 2px solid rgba(241, 99, 52, 0.42);
+    border-right: none;
+    background: #ea580c;
+  }
+
+  .mobileDashedLine {
+    width: 100%;
+    height: 0;
+    border-top: 2px dashed rgba(241, 99, 52, 0.38);
+    margin: 0 16px;
+  }
+
+  .ticketStub {
+    flex: none;
+    padding: 24px 28px 28px;
+    background: linear-gradient(180deg, #ffffff 0%, #fffbf6 100%);
+  }
+
+  .headline {
+    font-size: clamp(1.65rem, 4.5vw, 2.1rem);
+  }
+
+  .metaRow {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    padding: 10px;
+  }
+
+  .metaDivider {
+    display: none;
+  }
+
+  .barcodeStrip {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 10px;
+    margin-top: 6px;
+  }
+
+  .barcodeBars {
+    height: 18px;
+  }
+
+  .ticketStamp {
+    width: 72px;
+    height: 72px;
+    right: 14px;
+    bottom: 12px;
+    opacity: 0.3;
+  }
+}
+
+@media (max-width: 600px) {
+  .sectionCta {
+    padding: 60px 0 70px;
+  }
+
+  .ticketCard {
+    width: calc(100% - 16px);
+    border-radius: 20px;
+  }
+
+  .ticketMain {
+    padding: 26px 18px 16px;
+  }
+
+  .ticketMain::before {
+    inset: 8px;
+  }
+
+  .ticketStub {
+    padding: 18px 18px 22px;
+  }
+
+  .ticketStub::before {
+    inset: 8px;
+  }
+
+  .headline {
+    font-size: clamp(1.42rem, 5.2vw, 1.75rem);
+    margin-bottom: 8px;
+  }
+
+  .description {
+    font-size: 0.92rem;
+    line-height: 1.5;
+    margin-bottom: 14px;
+  }
+
+  .metaRow {
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    padding: 8px 10px;
+  }
+
+  .metaItem:last-child {
+    grid-column: span 2;
+  }
+
+  .metaValue,
+  .metaValueFree {
+    font-size: 0.8rem;
+  }
+
+  .barcodeText {
+    font-size: 0.58rem;
+    letter-spacing: 1px;
+  }
+
+  .barcodeBars {
+    gap: 1.5px;
+    height: 16px;
+  }
+
+  .stubAgency {
+    font-size: 0.88rem;
+  }
+
+  .primaryBtn {
+    padding: 13px 16px;
+    font-size: 0.92rem;
+  }
+
+  .phoneBtn {
+    padding: 10px 14px;
+    font-size: 0.84rem;
+  }
+}

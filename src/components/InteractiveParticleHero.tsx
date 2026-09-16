@@ -65,8 +65,8 @@ export default function InteractiveParticleHero() {
 
       // Generous canvas bleed padding so particles never clip against any rectangular boundary
       const isMobile = width < 768;
-      const padX = isMobile ? 80 : 160;
-      const padY = isMobile ? 60 : 120;
+      const padX = isMobile ? 30 : 160;
+      const padY = isMobile ? 18 : 120;
 
       canvasLogicalW = width + padX * 2;
       canvasLogicalH = height + padY * 2;
@@ -85,10 +85,10 @@ export default function InteractiveParticleHero() {
       const offCtx = offscreen.getContext("2d", { willReadFrequently: true });
       if (!offCtx) return;
 
-      // Scale logo significantly larger (up to 820px width) to fill the executive view
+      // Scale logo proportionally to fit within container bounds with safe margin
       const aspect = logoImg.height / (logoImg.width || 1);
-      const maxLogoW = Math.min(width * 0.92, 820);
-      const maxLogoH = Math.max(height - 12, 60);
+      const maxLogoW = isMobile ? Math.min(width * 0.94, 340) : Math.min(width * 0.92, 820);
+      const maxLogoH = isMobile ? Math.max(height - 10, 50) : Math.max(height - 12, 60);
       const targetW = Math.min(maxLogoW, maxLogoH / (aspect || 0.193));
       const targetH = targetW * aspect;
 
@@ -99,8 +99,8 @@ export default function InteractiveParticleHero() {
       const imgData = offCtx.getImageData(0, 0, targetW, targetH);
       const data = imgData.data;
 
-      // Calibrated sampling step and particle radius for visible separation & subtle gaps
-      const step = width < 768 ? 3.2 : 2.4;
+      // High density on mobile (1.55 step) prevents barcode/stripe artifacts; 2.4 on desktop gives crisp micro-gaps
+      const step = isMobile ? 1.55 : 2.4;
       particles = [];
       orangeParticles = [];
       amberParticles = [];
@@ -113,10 +113,10 @@ export default function InteractiveParticleHero() {
 
       // Active interactive boundary around the logo particles
       logoBounds = {
-        minX: startX - 45,
-        maxX: startX + targetW + 45,
-        minY: startY - 40,
-        maxY: startY + targetH + 40,
+        minX: startX - 35,
+        maxX: startX + targetW + 35,
+        minY: startY - 20,
+        maxY: startY + targetH + 20,
       };
 
       for (let y = 0; y < targetH; y += step) {
@@ -133,14 +133,13 @@ export default function InteractiveParticleHero() {
             const originX = startX + x;
             const originY = startY + y;
             const p: Particle = {
-              x: originX + (Math.random() - 0.5) * 40,
-              y: originY + (Math.random() - 0.5) * 40,
+              x: originX + (Math.random() - 0.5) * 20,
+              y: originY + (Math.random() - 0.5) * 20,
               originX,
               originY,
               vx: 0,
               vy: 0,
-              // Refined radius (0.95 - 1.15px) leaving a crisp ~0.4px gap between adjacent 2.4px grid points
-              size: Math.random() * 0.2 + 0.95,
+              size: isMobile ? (Math.random() * 0.2 + 1.1) : (Math.random() * 0.2 + 0.95),
               color: "",
             };
 
