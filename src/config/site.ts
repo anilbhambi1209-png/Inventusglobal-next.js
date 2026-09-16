@@ -9,8 +9,6 @@ export const siteConfig = {
   contact: {
     primaryPhone: "+91 99876 82853",
     primaryPhoneRaw: "+919987682853",
-    secondaryPhone: "+91 98339 60540",
-    secondaryPhoneRaw: "+919833960540",
     email: "info@inventusglobal.com",
     whatsappNumber: "919987682853",
     whatsappLink: (message?: string) =>

@@ -225,8 +225,6 @@ export default function Footer() {
                 <Phone size={14} className="footer-contact-icn" />
                 <div className="footer-contact-text">
                   <a href={`tel:${siteConfig.contact.primaryPhoneRaw}`}>{siteConfig.contact.primaryPhone}</a>
-                  <span className="footer-sep">/</span>
-                  <a href={`tel:${siteConfig.contact.secondaryPhoneRaw}`}>{siteConfig.contact.secondaryPhone}</a>
                 </div>
               </li>
               <li className="footer-contact-item">

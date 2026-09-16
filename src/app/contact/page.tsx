@@ -311,10 +311,6 @@ export default function ContactPage() {
                       <a href={`tel:${siteConfig.contact.primaryPhoneRaw}`} className="contact-info-link">
                         {siteConfig.contact.primaryPhone}
                       </a>
-                      <span className="contact-info-sep">•</span>
-                      <a href={`tel:${siteConfig.contact.secondaryPhoneRaw}`} className="contact-info-link">
-                        {siteConfig.contact.secondaryPhone}
-                      </a>
                     </div>
                   </div>
 
