@@ -23,6 +23,8 @@ export default function ContactPage() {
   const [service, setService] = useState("");
   const [message, setMessage] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const [openFaq, setOpenFaq] = useState<number | null>(0);
 
   const faqs = [
@@ -44,9 +46,37 @@ export default function ContactPage() {
     },
   ];
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+    setIsSubmitting(true);
+    setErrorMessage("");
+
+    try {
+      const res = await fetch("/api/leads", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: "contact_page",
+          name,
+          email,
+          phone,
+          service,
+          message,
+          page_url: typeof window !== "undefined" ? window.location.href : "/contact",
+        }),
+      });
+
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setSubmitted(true);
+      } else {
+        setErrorMessage(data.error || "Failed to submit. Please check your details and try again.");
+      }
+    } catch {
+      setErrorMessage("Network error. Please try again or reach out on WhatsApp.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -206,9 +236,15 @@ export default function ContactPage() {
                     />
                   </div>
 
+                  {errorMessage && (
+                    <div style={{ padding: "10px 14px", background: "#fef2f2", border: "1px solid #fecaca", borderRadius: "8px", color: "#b91c1c", fontSize: "0.86rem", marginBottom: "12px" }}>
+                      {errorMessage}
+                    </div>
+                  )}
+
                   {/* Submit Button */}
-                  <button type="submit" className="contact-submit-btn">
-                    <span>Send Message</span>
+                  <button type="submit" className="contact-submit-btn" disabled={isSubmitting} style={{ opacity: isSubmitting ? 0.7 : 1, cursor: isSubmitting ? "not-allowed" : "pointer" }}>
+                    <span>{isSubmitting ? "Sending Inquiry..." : "Send Message"}</span>
                     <ArrowRight size={18} className="contact-submit-arrow" />
                   </button>
 

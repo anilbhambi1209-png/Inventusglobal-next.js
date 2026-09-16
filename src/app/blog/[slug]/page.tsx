@@ -11,11 +11,18 @@ import ShareButtons from '@/components/ShareButtons';
 import { TableOfContentItem } from '@/types/blog';
 import { ArrowLeft, Calendar, Clock, Sparkles } from 'lucide-react';
 
+import { getAllBlogs, getBlogBySlug } from '@/utils/blogStore';
+
 interface Props {
   params: Promise<{ slug: string }>;
 }
 
-export const revalidate = 0; // Fresh fetch from MySQL on request
+export const revalidate = 1800; // 30-minute ISR edge caching for high performance
+
+export async function generateStaticParams() {
+  const blogs = getAllBlogs();
+  return blogs.map((b) => ({ slug: b.slug }));
+}
 
 function slugify(text: string): string {
   return text
@@ -95,15 +102,46 @@ async function getBlogBySlugFromDb(slug: string) {
       [slug]
     );
 
-    if (rows.length === 0) return null;
-    return rows[0];
+    if (rows.length > 0) return rows[0];
   } catch (error) {
-    console.error('Error fetching blog post by slug from MySQL:', error);
-    return null;
+    console.error('Error fetching blog post by slug from MySQL, checking static fallback:', error);
   }
+
+  // Resilient fallback to local blogStore so single blog pages never fail if DB is cold
+  const staticBlog = getBlogBySlug(slug);
+  if (!staticBlog) return null;
+
+  return {
+    id: staticBlog.id,
+    slug: staticBlog.slug,
+    title: staticBlog.title,
+    excerpt: staticBlog.excerpt,
+    content: staticBlog.content,
+    cover_image: staticBlog.coverImage,
+    category: staticBlog.category,
+    tags: Array.isArray(staticBlog.tags) ? staticBlog.tags.join(', ') : staticBlog.tags,
+    author_name: staticBlog.author?.name || 'Inventus Team',
+    author_role: staticBlog.author?.role || 'Growth Specialist',
+    author_avatar:
+      staticBlog.author?.avatar ||
+      'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80',
+    reading_time: staticBlog.readingTime,
+    published_at: staticBlog.publishedAt,
+  } as any;
 }
 
-async function getRelatedBlogs(currentSlug: string) {
+interface RelatedBlog {
+  id: string | number;
+  slug: string;
+  title: string;
+  excerpt?: string;
+  cover_image?: string;
+  category?: string;
+  reading_time?: string;
+  published_at?: string | Date;
+}
+
+async function getRelatedBlogs(currentSlug: string): Promise<RelatedBlog[]> {
   try {
     const [rows] = await pool.query<RowDataPacket[]>(
       `SELECT id, slug, title, excerpt, cover_image, category, reading_time, published_at
@@ -112,10 +150,24 @@ async function getRelatedBlogs(currentSlug: string) {
        ORDER BY published_at DESC LIMIT 2`,
       [currentSlug]
     );
-    return rows;
-  } catch (error) {
-    return [];
+    if (rows && rows.length > 0) return rows as RelatedBlog[];
+  } catch {
+    // fallback below
   }
+
+  return getAllBlogs()
+    .filter((b) => b.slug !== currentSlug)
+    .slice(0, 2)
+    .map((b) => ({
+      id: b.id,
+      slug: b.slug,
+      title: b.title,
+      excerpt: b.excerpt,
+      cover_image: b.coverImage,
+      category: b.category,
+      reading_time: b.readingTime,
+      published_at: b.publishedAt,
+    }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

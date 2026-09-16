@@ -90,6 +90,23 @@ export async function GET(request: Request) {
     `;
     await pool.query(createAppTableQuery);
 
+    const createLeadsTableQuery = `
+      CREATE TABLE IF NOT EXISTS \`leads\` (
+        \`id\` INT AUTO_INCREMENT PRIMARY KEY,
+        \`type\` VARCHAR(50) NOT NULL DEFAULT 'contact',
+        \`name\` VARCHAR(255) NULL,
+        \`email\` VARCHAR(255) NOT NULL,
+        \`phone\` VARCHAR(50) NULL,
+        \`service\` VARCHAR(255) NULL,
+        \`message\` TEXT NULL,
+        \`page_url\` VARCHAR(512) NULL,
+        \`created_at\` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        INDEX \`idx_type\` (\`type\`),
+        INDEX \`idx_created\` (\`created_at\`)
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+    `;
+    await pool.query(createLeadsTableQuery);
+
     // Verify table structure
     const [columns] = await pool.query('DESCRIBE `blogs`');
 

@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     "Data-driven digital marketing, Google PPC campaigns, ROI-focused organic SEO, social media marketing, and Next.js web applications in Satra Plaza, Vashi, Navi Mumbai.",
 };
 
-export const revalidate = 0; // Fetch fresh blogs on page visit
+export const revalidate = 1800; // 30-minute ISR edge caching (super-fast TTFB, protects database)
 
 async function getRecentBlogs(): Promise<BlogPost[]> {
   try {

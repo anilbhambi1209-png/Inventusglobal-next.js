@@ -15,12 +15,15 @@ import {
   Rocket,
   LineChart,
   Gem,
+  Sparkles,
 } from "lucide-react";
 import { siteConfig } from "@/config/site";
 
 interface ServiceItem {
   title: string;
   href: string;
+  desc: string;
+  tag: string;
 }
 
 interface GrowthPillar {
@@ -36,63 +39,81 @@ const growthPillars: GrowthPillar[] = [
     label: "Earned & Organic",
     icon: <Sprout size={18} />,
     services: [
-      { title: "Search Engine Optimization (SEO)", href: "/services/search-engine-optimization" },
-      { title: "AI Search & GEO Optimization", href: "/services/search-engine-optimization" },
-      { title: "Local SEO & Google Maps", href: "/services/local-seo" },
-      { title: "Authority Content Marketing", href: "/services/search-engine-optimization" },
-      { title: "Digital PR & High-DA Mentions", href: "/services/search-engine-optimization" },
-      { title: "Influencer Brand Partnerships", href: "/services/influencer-marketing" },
-      { title: "Organic Social Media Growth", href: "/services/social-media-content" },
-      { title: "Email Marketing & CRM Funnels", href: "/services/conversion-rate-optimization" },
-      { title: "Search Everywhere Optimization", href: "/services/search-engine-optimization" },
+      {
+        title: "Search Engine Optimization (SEO)",
+        href: "/services/search-engine-optimization",
+        desc: "Technical audits, authority backlink building & high-ranking commercial keyword mapping.",
+        tag: "Organic Search & AI",
+      },
+      {
+        title: "Local SEO & Google Business Profile",
+        href: "/services/local-seo",
+        desc: "Dominate Google 3-Pack and hyper-local buyer searches across Navi Mumbai and Mumbai MMR.",
+        tag: "Google Maps 3-Pack",
+      },
     ],
   },
   {
     id: "paid-media",
-    label: "Paid Media",
+    label: "Paid Performance",
     icon: <Rocket size={18} />,
     services: [
-      { title: "Google Search & Intent Ads", href: "/services/google-ads-ppc" },
-      { title: "Meta Instagram & Facebook Ads", href: "/services/meta-ads-instagram" },
-      { title: "Performance Max & Shopping", href: "/services/google-ads-ppc" },
-      { title: "High-ROAS Retargeting Funnels", href: "/services/google-ads-ppc" },
-      { title: "Instant WhatsApp CRM Funnels", href: "/services/conversion-rate-optimization" },
-      { title: "LinkedIn B2B Account Targeting", href: "/services/linkedin-b2b-marketing" },
-      { title: "YouTube Video Ad Campaigns", href: "/services/google-ads-ppc" },
-      { title: "Creative & Copy Split Testing", href: "/services/conversion-rate-optimization" },
-      { title: "Paid Ad Audit & Account Teardown", href: "/contact" },
+      {
+        title: "Google Ads & Intent PPC",
+        href: "/services/google-ads-ppc",
+        desc: "High-intent Search, Shopping & Performance Max campaigns engineered for maximum ROAS.",
+        tag: "High-ROAS Search",
+      },
+      {
+        title: "Meta Ads (Instagram & Facebook)",
+        href: "/services/meta-ads-instagram",
+        desc: "Direct-response creative testing, dynamic catalog ads & profitable retargeting funnels.",
+        tag: "Paid Social Scale",
+      },
+      {
+        title: "LinkedIn B2B Account Targeting",
+        href: "/services/linkedin-b2b-marketing",
+        desc: "Reach verified C-suite executives, senior directors & enterprise decision-makers.",
+        tag: "B2B Account Marketing",
+      },
     ],
   },
   {
-    id: "data-analytics",
+    id: "tech-platforms",
     label: "Tech & Platforms",
     icon: <LineChart size={18} />,
     services: [
-      { title: "Next.js 15 Web Applications", href: "/services/nextjs-web-development" },
-      { title: "Conversion Rate Optimization (CRO)", href: "/services/conversion-rate-optimization" },
-      { title: "High-Converting Landing Funnels", href: "/services/nextjs-web-development" },
-      { title: "Core Web Vitals & Speed Optimization", href: "/services/nextjs-web-development" },
-      { title: "Headless CMS & Custom Portals", href: "/services/nextjs-web-development" },
-      { title: "E-Commerce Store Engineering", href: "/services/nextjs-web-development" },
-      { title: "Interactive Lead Calculators", href: "/services/nextjs-web-development" },
-      { title: "CRM & WhatsApp API Integrations", href: "/services/conversion-rate-optimization" },
-      { title: "Security & Cloud Infrastructure", href: "/services/nextjs-web-development" },
+      {
+        title: "Next.js 15 Web Applications",
+        href: "/services/nextjs-web-development",
+        desc: "Custom headless portals and web applications engineered for 100/100 Core Web Vitals speed.",
+        tag: "Headless Architecture",
+      },
+      {
+        title: "Conversion Rate Optimization (CRO)",
+        href: "/services/conversion-rate-optimization",
+        desc: "UX heatmap audits, landing page A/B tests & automated instant WhatsApp CRM funnels.",
+        tag: "Conversion Funnels",
+      },
     ],
   },
   {
-    id: "creative",
+    id: "social-creative",
     label: "Social & Creative",
     icon: <Gem size={18} />,
     services: [
-      { title: "Direct-Response Copywriting", href: "/services/social-media-content" },
-      { title: "Short-Form Video & UGC Hooks", href: "/services/social-media-content" },
-      { title: "Brand Identity & Visual Guidelines", href: "/services/social-media-content" },
-      { title: "Editorial Playbooks & Reports", href: "/blog" },
-      { title: "Creator Matchmaking & Direction", href: "/services/influencer-marketing" },
-      { title: "High-ROAS Ad Banner Creatives", href: "/services/google-ads-ppc" },
-      { title: "Customer Video Proof & Stories", href: "/case-studies" },
-      { title: "Brand Voice & Positioning Strategy", href: "/about" },
-      { title: "Creative Refresh & Fatigue Shield", href: "/services/social-media-content" },
+      {
+        title: "Organic Social Media & Content",
+        href: "/services/social-media-content",
+        desc: "High-retention short-form video hooks, visual brand guidelines & active community growth.",
+        tag: "Reels & Brand Identity",
+      },
+      {
+        title: "Influencer Marketing & Creators",
+        href: "/services/influencer-marketing",
+        desc: "Curated creator matchmaking, authentic product demos & trackable promo attribution.",
+        tag: "Creator Partnerships",
+      },
     ],
   },
 ];
@@ -312,27 +333,58 @@ export default function Header() {
               </div>
             </div>
 
-            {/* Main Content Body - Clean Centered 3x3 Services Grid */}
+            {/* Main Content Body - Clean 2-Column Services + Spotlight */}
             <div className="mega-panel-body">
               <div className="container">
                 <div className="mega-centered-content">
-                  {/* Clean 3-Column Simple Services List */}
-                  <div className="mega-services-simple-grid">
-                    {currentPillar.services.map((item) => (
+                  <div className="mega-panel-grid">
+                    {/* Left: Core Service Cards */}
+                    <div className="mega-services-cards-col">
+                      {currentPillar.services.map((item) => (
+                        <Link
+                          key={item.title}
+                          href={item.href}
+                          className="mega-service-card"
+                          onClick={() => setIsServicesOpen(false)}
+                        >
+                          <div className="mega-service-card-top">
+                            <span className="mega-service-card-title">{item.title}</span>
+                            <ArrowRight size={14} className="mega-service-card-arrow" />
+                          </div>
+                          <p className="mega-service-card-desc">{item.desc}</p>
+                          <span className="mega-service-card-tag">{item.tag}</span>
+                        </Link>
+                      ))}
+                    </div>
+
+                    {/* Right: Featured Proposal / Audit Card */}
+                    <div className="mega-audit-card">
+                      <div>
+                        <div className="mega-audit-badge">
+                          <Sparkles size={12} />
+                          <span>Growth Diagnostic</span>
+                        </div>
+                        <h4 className="mega-audit-title">Ready to scale your business?</h4>
+                        <p className="mega-audit-desc">
+                          Get a 20-minute tailored competitor, ad account &amp; funnel teardown with our senior growth architects.
+                        </p>
+                      </div>
                       <Link
-                        key={item.title}
-                        href={item.href}
-                        className="mega-simple-link"
+                        href="/contact"
+                        className="mega-audit-btn"
                         onClick={() => setIsServicesOpen(false)}
                       >
-                        <span className="mega-simple-chevron">›</span>
-                        <span className="mega-simple-title">{item.title}</span>
+                        <span>Get Free Proposal</span>
+                        <ArrowRight size={14} />
                       </Link>
-                    ))}
+                    </div>
                   </div>
 
                   {/* Clean Bottom Simple View All */}
                   <div className="mega-simple-bottom">
+                    <span style={{ fontSize: "0.82rem", color: "#64748b" }}>
+                      All services engineered for transparent attribution &amp; measurable ROAS.
+                    </span>
                     <Link
                       href="/services"
                       className="mega-simple-viewall"

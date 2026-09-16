@@ -1,0 +1,44 @@
+/* ============================================================
+   INVENTUS GLOBAL - EDITORIAL HUMAN-CRAFTED DESIGN SYSTEM
+   Inspired by modern minimalist conversion design & Neil Patel
+   Typography: Poppins (Headings) + DM Sans (Body)
+   Palette: Pure White, Signature Orange (#F16334), Warm Amber Accent (#F59E0B)
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Poppins:wght@500;600;700;800&display=swap');
+
+:root {
+  --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-heading: 'Poppins', 'DM Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+  /* Signature Conversion Orange */
+  --primary: #f16334;
+  --primary-hover: #df4e1f;
+  --primary-light: #fff5f1;
+  --primary-subtle: #fef8f6;
+
+  /* Golden Amber */
+  --accent-yellow: #f59e0b;
+  --accent-yellow-light: #fef3c7;
+
+  /* Clean Neutrals */
+  --bg-main: #ffffff;
+  --bg-alt: #fafafa;
+  --bg-dark: #0f172a;
+
+  /* High-Contrast Typography */
+  --text-heading: #0f172a;
+  --text-body: #334155;
+  --text-muted: #64748b;
+  --text-subtle: #94a3b8;
+
+  /* Hairlines (Subtle, never heavy) */
+  --border-hairline: #e2e8f0;
+  --border-subtle: #f1f5f9;
+
+  /* Shadows (Natural, ultra-subtle) */
+  --shadow-subtle: 0 1px 3px 0 rgba(0, 0, 0, 0.04);
+  --shadow-hover: 0 8px 24px -4px rgba(0, 0, 0, 0.06);
+
+  --max-width: 1240px;
+}

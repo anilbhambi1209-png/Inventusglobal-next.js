@@ -134,17 +134,35 @@ export default function ScrollContactModal() {
     };
   }, [hasDismissed]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    setTimeout(() => {
-      setIsSubmitting(false);
+    try {
+      await fetch("/api/leads", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: "modal_popup",
+          name: businessName,
+          email,
+          phone,
+          service,
+          message: `Location: ${location || "Not specified"}`,
+          page_url: typeof window !== "undefined" ? window.location.href : "/",
+        }),
+      });
+
       setIsSuccess(true);
       if (typeof window !== "undefined") {
         sessionStorage.setItem("inventus_popup_dismissed", "true");
       }
-    }, 500);
+    } catch (err) {
+      console.error("Failed to submit modal lead:", err);
+      setIsSuccess(true);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (!isOpen) return null;
