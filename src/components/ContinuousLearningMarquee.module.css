@@ -1,0 +1,73 @@
+.marquee-band-1 {
+  /* Ribbon 1 container */
+  position: relative;
+}
+
+.learning-brand-tile {
+  flex-shrink: 0;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: #ffffff !important;
+  border-radius: 12px !important;
+  padding: 8px 18px !important;
+  height: 60px !important;
+  width: 170px !important;
+  min-width: 170px !important;
+  max-width: 170px !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15) !important;
+  border: 1px solid rgba(255, 255, 255, 0.95) !important;
+  transition: transform 0.25s ease, box-shadow 0.25s ease !important;
+  cursor: pointer;
+  box-sizing: border-box !important;
+  overflow: hidden !important;
+}
+
+.learning-brand-tile:hover {
+  transform: scale(1.06) !important;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.25) !important;
+}
+
+.brand-tile-img {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-height: 42px !important;
+  max-width: 134px !important;
+  object-fit: contain !important;
+  object-position: center !important;
+  margin: auto !important;
+  filter: contrast(1.05);
+}
+
+@media (max-width: 768px) {
+  .learning-brand-tile {
+    height: 48px !important;
+    width: 130px !important;
+    min-width: 130px !important;
+    max-width: 130px !important;
+    padding: 6px 12px !important;
+    border-radius: 9px !important;
+  }
+
+  .brand-tile-img {
+    max-height: 32px !important;
+    max-width: 106px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .learning-brand-tile {
+    height: 42px !important;
+    width: 115px !important;
+    min-width: 115px !important;
+    max-width: 115px !important;
+    padding: 4px 10px !important;
+    border-radius: 8px !important;
+  }
+
+  .brand-tile-img {
+    max-height: 28px !important;
+    max-width: 95px !important;
+  }
+}
