@@ -98,11 +98,14 @@ export default function ScrollContactModal() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isOpen, handleClose]);
 
-  // Scroll observer: triggers smoothly between Phase 02 and Phase 03
+  // Scroll observer: triggers smoothly as user scrolls past Phase 02/03
   useEffect(() => {
     if (hasDismissed) return;
 
-    const target = document.getElementById("case-study-spotlight");
+    const target =
+      document.getElementById("case-study-spotlight") ||
+      document.getElementById("inventus-standard") ||
+      document.getElementById("our-services");
     if (!target) return;
 
     let timer: NodeJS.Timeout;
@@ -121,7 +124,7 @@ export default function ScrollContactModal() {
       },
       {
         root: null,
-        rootMargin: "0px 0px -15% 0px",
+        rootMargin: "0px 0px -10% 0px",
         threshold: 0.1,
       }
     );

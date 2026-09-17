@@ -57,7 +57,7 @@ const timelineSteps: TimelineStep[] = [
 
 export default function CaseStudySpotlight() {
   return (
-    <section id="inventus-standard" className="manifesto-master-section">
+    <section id="case-study-spotlight" data-section="inventus-standard" className="manifesto-master-section">
       <div className="container manifesto-container">
         {/* Split Grid: Left Manifesto, Right Timeline */}
         <div className="manifesto-split-layout">
