@@ -221,7 +221,7 @@ export default function BottomConversionCta({
               {/* Action Zone */}
               <div className={styles.stubActions}>
                 <Link href="/contact" className={styles.primaryBtn} id="claim-ticket-pass-btn">
-                  <span>Claim Free Pass</span>
+                  <span>Claim Now</span>
                   <ArrowRight size={15} />
                 </Link>
 
@@ -240,10 +240,10 @@ export default function BottomConversionCta({
                   )}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={styles.waLink}
+                  className={styles.whatsappBtn}
                   title="Chat on WhatsApp"
                 >
-                  <MessageSquare size={13} />
+                  <MessageSquare size={14} />
                   <span>WhatsApp Desk</span>
                 </a>
               </div>

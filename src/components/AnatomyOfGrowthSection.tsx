@@ -7,41 +7,47 @@ import { ArrowRight } from "lucide-react";
 interface FunnelStage {
   id: string;
   label: string;
-  targetWidth: number; // Percentage (e.g. 100, 68, 38, 20, 14)
+  targetWidth: number; // Percentage
   valueText: string;
+  gradient: string;
   isFinal?: boolean;
 }
 
 const FUNNEL_STAGES: FunnelStage[] = [
   {
-    id: "market",
-    label: "MARKET MAPPED",
+    id: "impressions",
+    label: "AD IMPRESSIONS",
     targetWidth: 100,
-    valueText: "100,000 target buyers",
+    valueText: "250,000 Impressions",
+    gradient: "linear-gradient(90deg, #3b82f6 0%, #2563eb 100%)",
   },
   {
     id: "traffic",
-    label: "APPROACHED WITH INTENT",
-    targetWidth: 68,
-    valueText: "4,800 qualified clicks",
-  },
-  {
-    id: "funnel",
-    label: "ASSESSED IN DEPTH",
-    targetWidth: 38,
-    valueText: "920 engaged sessions",
+    label: "QUALIFIED TRAFFIC",
+    targetWidth: 78,
+    valueText: "12,500 Visits",
+    gradient: "linear-gradient(90deg, #0ea5e9 0%, #0284c7 100%)",
   },
   {
     id: "leads",
-    label: "SHORTLIST PRESENTED",
-    targetWidth: 20,
-    valueText: "160 verified leads",
+    label: "INBOUND LEADS",
+    targetWidth: 58,
+    valueText: "850 Verified Leads",
+    gradient: "linear-gradient(90deg, #f59e0b 0%, #d97706 100%)",
+  },
+  {
+    id: "pipeline",
+    label: "SALES PIPELINE",
+    targetWidth: 42,
+    valueText: "180 Booked Calls",
+    gradient: "linear-gradient(90deg, #f16334 0%, #ea580c 100%)",
   },
   {
     id: "revenue",
-    label: "OFFER ACCEPTED",
-    targetWidth: 14,
-    valueText: "18 closed clients",
+    label: "CLOSED CLIENTS",
+    targetWidth: 28,
+    valueText: "42 Closed Deals",
+    gradient: "linear-gradient(90deg, #10b981 0%, #059669 100%)",
     isFinal: true,
   },
 ];
@@ -91,19 +97,20 @@ export default function AnatomyOfGrowthSection() {
           </div>
 
           <h2 className="anatomy-headline">
-            What a single <span className="anatomy-headline-accent">high-yield growth campaign</span> looks like from the inside.
+            From first click to <br />
+            <span className="anatomy-headline-accent">closed contract.</span>
           </h2>
 
           <p className="anatomy-desc">
-            Most digital marketing agencies show you vanity clicks and impression graphs. This is the rigorous conversion architecture behind actual revenue: the market we map, the high-intent buyers we approach with precision, and the qualified deals that reach your table.
+            Most agencies celebrate clicks that never buy. We engineer high-converting sales funnels that capture active market demand, weed out tire-kickers, and feed your pipeline with deal-ready decision-makers.
           </p>
 
           <p className="anatomy-desc">
-            Around 100,000 potential buyers exist in a typical commercial target market. Only the most profitable reach your sales team.
+            Every rupee you invest is tracked directly to qualified conversations, closed deals, and verifiable pipeline revenue.
           </p>
         </div>
 
-        {/* Right Column: Animated Funnel Bars matching the image */}
+        {/* Right Column: Animated Funnel Bars */}
         <div className="anatomy-funnel-wrap">
           {FUNNEL_STAGES.map((stage, idx) => {
             const delay = `${idx * 0.15}s`;
@@ -117,9 +124,10 @@ export default function AnatomyOfGrowthSection() {
                   <div
                     className={`anatomy-bar-fill ${
                       stage.isFinal ? "anatomy-bar-final" : ""
-                    }`}
+                    } ${isVisible ? "is-animated" : ""}`}
                     style={{
                       width: isVisible ? `${stage.targetWidth}%` : "0%",
+                      background: stage.gradient,
                       transitionDelay: isVisible ? delay : "0s",
                     }}
                   >
@@ -141,12 +149,12 @@ export default function AnatomyOfGrowthSection() {
 
           <div className="anatomy-footnote">
             <span className="anatomy-footnote-dot" />
-            <span>REPRESENTATIVE SHAPE OF A COMPLETED GROWTH SPRINT. VOLUMES VARY BY SECTOR AND BUDGET.</span>
+            <span>MEASURABLE PIPELINE ARCHITECTURE ENGINEERED FOR CONSISTENT HIGH-ROAS SCALE.</span>
           </div>
 
           <div>
             <Link href="/contact" className="anatomy-cta-btn">
-              <span>SEE THE FIVE-STAGE METHOD</span>
+              <span>EXPLORE THE FUNNEL</span>
               <ArrowRight size={14} />
             </Link>
           </div>

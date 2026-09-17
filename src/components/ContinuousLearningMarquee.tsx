@@ -188,7 +188,7 @@ export default function ContinuousLearningMarquee() {
         <div className="learning-header">
           <div className="learning-eyebrow">
             <span className="learning-eyebrow-dot" />
-            <span>PHASE 05 • CONTINUOUS UPSKILLING &amp; TECH ECOSYSTEM</span>
+            <span>CONTINUOUS UPSKILLING &amp; TECH ECOSYSTEM</span>
           </div>
           <h2 className="learning-title">
             We grow by <br />

@@ -3,52 +3,55 @@
 import Link from "next/link";
 import { ArrowRight, CheckCircle2, MapPin } from "lucide-react";
 
-interface BenchmarkRow {
-  index: string;
-  category: string;
-  metric: string;
-  metricColor: string;
+interface TimelineStep {
+  step: string;
+  duration: string;
   title: string;
+  badge: string;
   description: string;
-  tag: string;
+  color: string;
 }
 
-const benchmarkRows: BenchmarkRow[] = [
+const timelineSteps: TimelineStep[] = [
   {
-    index: "01",
-    category: "VELOCITY",
-    metric: "0.8s",
-    metricColor: "#f16334",
-    title: "Sub-Second Funnel Velocity",
-    description: "Next.js edge-rendered platforms that convert high-intent traffic before sluggish WordPress competitors even load.",
-    tag: "Core Web Vitals 99/100",
+    step: "01",
+    duration: "DAYS 1–7",
+    title: "Commercial Audit & Strategy",
+    badge: "FOUNDATION",
+    description: "We analyze your audience, audit historical ad performance, and engineer your bespoke multi-channel acquisition roadmap.",
+    color: "#3b82f6",
   },
   {
-    index: "02",
-    category: "EFFICIENCY",
-    metric: "-38%",
-    metricColor: "#16a34a",
-    title: "Algorithmic Intent Bidding",
-    description: "Zero broad-match ad waste. We target documented commercial intent on Google & Meta, backed by automated WhatsApp CRM triage.",
-    tag: "Verified Buyer Pipeline",
+    step: "02",
+    duration: "DAYS 8–14",
+    title: "High-Converting Architecture",
+    badge: "SUB-SECOND TECH",
+    description: "We launch lightning-fast Next.js landing pages, integrate conversion APIs (CAPI), and configure automated CRM pipelines.",
+    color: "#0ea5e9",
   },
   {
-    index: "03",
-    category: "INTEGRITY",
-    metric: "100%",
-    metricColor: "#0284c7",
-    title: "Direct Revenue Attribution",
-    description: "Every campaign rupee is tracked through CRM integration directly to closed deals, verified inventory, and measurable enterprise ROI.",
-    tag: "₹48 Cr+ Pipeline Generated",
+    step: "03",
+    duration: "DAYS 15–30",
+    title: "Targeted Ad Deployment",
+    badge: "ALGORITHMIC INTENT",
+    description: "We deploy precision Google & Meta campaigns targeted exclusively at high-intent buyers, eliminating ad spend waste.",
+    color: "#f59e0b",
   },
   {
-    index: "04",
-    category: "GOVERNANCE",
-    metric: "1:1",
-    metricColor: "#7c3aed",
-    title: "Zero Junior Account Layers",
-    description: "Your brand never gets handed off to interns. Campaigns are architected and optimized directly by senior strategists in Vashi.",
-    tag: "4-Hour Response SLA",
+    step: "04",
+    duration: "MONTH 2+",
+    title: "Pipeline Triage & Optimization",
+    badge: "LEAD FILTERING",
+    description: "Our systems filter tire-kickers and route sales-qualified leads straight to your sales team via automated WhatsApp and CRM flows.",
+    color: "#f16334",
+  },
+  {
+    step: "05",
+    duration: "ONGOING",
+    title: "Revenue Scale & Client Success",
+    badge: "HIGH ROAS",
+    description: "You enjoy predictable revenue growth, transparent weekly attribution reports, and direct access to senior strategists.",
+    color: "#10b981",
   },
 ];
 
@@ -56,33 +59,24 @@ export default function CaseStudySpotlight() {
   return (
     <section id="inventus-standard" className="manifesto-master-section">
       <div className="container manifesto-container">
-        {/* Split Grid: Left Manifesto, Right Ledger */}
+        {/* Split Grid: Left Manifesto, Right Timeline */}
         <div className="manifesto-split-layout">
           {/* Left Column: The Strategic Thesis */}
           <div className="manifesto-left-col">
             <div className="manifesto-eyebrow">
               <span className="manifesto-eyebrow-dot" />
-              <span>PHASE 04 • THE OPERATIONAL BLUEPRINT</span>
+              <span>THE CLIENT SUCCESS BLUEPRINT</span>
             </div>
 
             <h2 className="manifesto-headline">
-              Not Just Campaigns. <br />
-              A Deterministic <br />
-              <span className="manifesto-headline-accent">Revenue Engine.</span>
+              How We Guide You <br />
+              From First Call <br />
+              To <span className="manifesto-headline-accent">Scalable Revenue.</span>
             </h2>
 
             <p className="manifesto-thesis">
-              Most marketing agencies treat growth as creative guesswork—buying broad-match clicks and celebrating vanity impressions. Inventus Global was built on an engineering principle: every rupee deployed must yield measurable, closed-loop pipeline revenue.
+              We eliminate guesswork. Our step-by-step roadmap takes you from onboarding to a predictable, revenue-generating acquisition engine with complete transparency at every stage.
             </p>
-
-            {/* The Growth Equation Box */}
-            <div className="manifesto-equation-box">
-              <div className="manifesto-equation-label">THE INVENTUS GROWTH EQUATION</div>
-              <div className="manifesto-equation-text">
-                <span className="eq-val">PREDICTABLE REVENUE</span> = <br />
-                <span className="eq-term">COMMERCIAL INTENT</span> × <span className="eq-term">0.8s NEXT.JS</span> × <span className="eq-term">CRM TRIAGE</span>
-              </div>
-            </div>
 
             {/* Left Action Footer */}
             <div className="manifesto-left-footer">
@@ -92,38 +86,53 @@ export default function CaseStudySpotlight() {
               </div>
 
               <Link href="/contact" className="manifesto-cta-btn">
-                <span>Audit Your Infrastructure</span>
+                <span>Start Your Growth Journey</span>
                 <ArrowRight size={15} />
               </Link>
             </div>
           </div>
 
-          {/* Right Column: The Architectural Ledger (Rows, NOT Cards!) */}
+          {/* Right Column: The Client Success Timeline */}
           <div className="manifesto-right-col">
             <div className="manifesto-ledger-header">
-              <span className="ledger-header-label">OPERATIONAL BENCHMARK</span>
-              <span className="ledger-header-label">THE INVENTUS STANDARD</span>
+              <span className="ledger-header-label">ACQUISITION ROADMAP</span>
+              <span className="ledger-header-label">OUTCOME</span>
             </div>
 
-            <div className="manifesto-ledger-list">
-              {benchmarkRows.map((row, idx) => (
-                <div key={idx} className="manifesto-ledger-row">
-                  <div className="ledger-col-metric">
-                    <div className="ledger-row-num">{row.index} / {row.category}</div>
-                    <div className="ledger-row-val" style={{ color: row.metricColor }}>
-                      {row.metric}
+            <div className="manifesto-timeline-list">
+              {timelineSteps.map((step, idx) => (
+                <div key={idx} className="manifesto-timeline-item">
+                  <div className="timeline-marker-col">
+                    <div
+                      className="timeline-step-badge"
+                      style={{ borderColor: step.color, color: step.color }}
+                    >
+                      {step.step}
                     </div>
+                    {idx < timelineSteps.length - 1 && (
+                      <div className="timeline-connector-line" />
+                    )}
                   </div>
 
-                  <div className="ledger-col-content">
-                    <div className="ledger-row-head">
-                      <h3 className="ledger-row-title">{row.title}</h3>
-                      <span className="ledger-row-tag">
-                        <CheckCircle2 size={12} />
-                        <span>{row.tag}</span>
+                  <div className="timeline-content-col">
+                    <div className="timeline-step-header">
+                      <div className="timeline-title-wrap">
+                        <span className="timeline-duration">{step.duration}</span>
+                        <h3 className="timeline-title">{step.title}</h3>
+                      </div>
+                      <span
+                        className="timeline-badge"
+                        style={{
+                          color: step.color,
+                          backgroundColor: `${step.color}14`,
+                          borderColor: `${step.color}35`,
+                        }}
+                      >
+                        <CheckCircle2 size={11} />
+                        <span>{step.badge}</span>
                       </span>
                     </div>
-                    <p className="ledger-row-desc">{row.description}</p>
+                    <p className="timeline-desc">{step.description}</p>
                   </div>
                 </div>
               ))}

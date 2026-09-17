@@ -127,7 +127,7 @@ export default function OurServices() {
 
     autoPlayTimerRef.current = setInterval(() => {
       handleNext();
-    }, 3800);
+    }, 1500);
 
     return () => {
       if (autoPlayTimerRef.current) {
@@ -142,7 +142,7 @@ export default function OurServices() {
       const resetTimeout = setTimeout(() => {
         setIsTransitioning(false);
         setCurrentIndex(currentIndex % totalBase);
-      }, 650);
+      }, 260);
       return () => clearTimeout(resetTimeout);
     }
   }, [currentIndex, totalBase]);
@@ -180,7 +180,7 @@ export default function OurServices() {
             style={{
               transform: `translateX(-${currentIndex * (100 / visibleCount)}%)`,
               transition: isTransitioning
-                ? "transform 0.65s cubic-bezier(0.25, 1, 0.5, 1)"
+                ? "transform 0.25s cubic-bezier(0.25, 1, 0.5, 1)"
                 : "none",
             }}
           >

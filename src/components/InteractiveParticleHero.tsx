@@ -602,8 +602,8 @@ export default function InteractiveParticleHero() {
         {/* Hero Editorial Narrative & Actions */}
         <div className="hero-particle-content">
           <h1 className="hero-particle-title">
-            <span className="hero-particle-title-primary">Not Just Digital Marketing.</span>
-            <span className="hero-particle-title-accent">We Scale Businesses.</span>
+            <span className="hero-particle-title-primary">Ignite Your Growth.</span>
+            <span className="hero-particle-title-accent">Accelerate Your Sales.</span>
           </h1>
 
           <p className="hero-particle-subtitle">
