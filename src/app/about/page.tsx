@@ -1,212 +1,286 @@
-import type { Metadata } from "next";
+"use client";
+
+import { useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {
-  Award,
   Target,
-  Users,
   CheckCircle2,
   ArrowRight,
-  ShieldCheck,
   HeartHandshake,
   TrendingUp,
+  Eye,
+  Lightbulb,
+  Handshake,
 } from "lucide-react";
 import { siteConfig } from "@/config/site";
 import { teamData } from "@/data/team";
 import { milestonesData } from "@/data/milestones";
 import BottomConversionCta from "@/components/BottomConversionCta";
-
-export const metadata: Metadata = {
-  title: "About Us | Inventus Global - Navi Mumbai Marketing Agency",
-  description:
-    "Learn about Inventus Global: our history at Satra Plaza, Vashi, our leadership team, and our philosophy of revenue-driven digital growth.",
-};
+import styles from "./About.module.css";
 
 export default function AboutPage() {
+  const revealRefs = useRef<HTMLElement[]>([]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add(styles.revealVisible);
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.12, rootMargin: "0px 0px -40px 0px" }
+    );
+
+    revealRefs.current.forEach((el) => {
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
+  const addRevealRef = (el: HTMLElement | null) => {
+    if (el && !revealRefs.current.includes(el)) {
+      revealRefs.current.push(el);
+    }
+  };
+
+  const checklistItems = [
+    "100% Transparent, Real-Time ROAS & Revenue Reporting",
+    "Custom Performance Strategies Tailored to Your Specific Margins",
+    "Direct Access to Senior Growth Architects, Never Junior Trainees",
+    "Server-Side Conversion Infrastructure (Meta CAPI, GA4 First-Party)",
+  ];
+
+  const standardItems = [
+    {
+      icon: <Target size={22} />,
+      title: "Precision Commercial Intent",
+      desc: "We focus marketing budget strictly on prospects actively searching with purchasing intent, eliminating informational click waste.",
+    },
+    {
+      icon: <TrendingUp size={22} />,
+      title: "Conversion Rate Architecture",
+      desc: "Traffic without high-converting landing funnels is wasted ad spend. We engineer sub-second Next.js pages that convert.",
+    },
+    {
+      icon: <HeartHandshake size={22} />,
+      title: "True Partnership Mindset",
+      desc: "We grow only when our clients scale profitably. That is why our long-term client retention exceeds 98%.",
+    },
+  ];
+
+  const coreValues = [
+    {
+      icon: <Eye size={26} />,
+      title: "Radical Transparency",
+      desc: "Every rupee of your ad spend is tracked, attributed, and visible in real-time dashboards. No vanity metrics, no hidden fees — only verifiable revenue impact.",
+    },
+    {
+      icon: <Handshake size={26} />,
+      title: "Growth Partnership",
+      desc: "We don't just execute campaigns — we embed ourselves in your business model. Our success is measured only by your profitable growth.",
+    },
+    {
+      icon: <Lightbulb size={26} />,
+      title: "Relentless Innovation",
+      desc: "From server-side tracking to AI-powered bidding, we deploy cutting-edge technology before it becomes mainstream — giving you an unfair advantage.",
+    },
+  ];
+
+  const statsData = [
+    { value: siteConfig.stats.experienceYears, label: "Agency Experience" },
+    { value: siteConfig.stats.attribution, label: "Transparent Attribution" },
+    { value: siteConfig.stats.targetRoas, label: "Target Campaign ROAS" },
+    { value: siteConfig.stats.clientSatisfaction, label: "Client Satisfaction" },
+  ];
+
   return (
     <div>
-      {/* Hero Header */}
-      <section className="blog-header-section" style={{ padding: "72px 0 48px", background: "#f8fafc", borderBottom: "1px solid var(--border-hairline)" }}>
-        <div className="container">
-          <span className="section-tag">About Inventus Global</span>
-          <h1 className="section-title about-hero-title">
-            We Replace Marketing Vanity Metrics with <span className="gradient-text">Real Bank Revenue.</span>
+      {/* ═══════════════════════════════════════════════════════
+          HERO — IMMERSIVE DARK CINEMATIC
+          ═══════════════════════════════════════════════════════ */}
+      <section className={styles.heroSection}>
+        {/* Decorative overlays */}
+        <div className={styles.heroGrid} />
+        <div className={styles.heroAmbient} />
+        <div className={styles.heroAmbientSecondary} />
+        <div className={styles.heroHorizon} />
+
+        <div className={`container ${styles.heroContent}`}>
+          <div className={styles.heroTag}>
+            <span className={styles.heroPulseDot} />
+            About Inventus Global
+          </div>
+
+          <h1 className={styles.heroTitle}>
+            We Replace Marketing Vanity Metrics with{" "}
+            <span className={styles.heroTitleAccent}>Real Bank Revenue.</span>
           </h1>
-          <p className="section-desc" style={{ maxWidth: "720px", fontSize: "1.15rem", lineHeight: "1.7" }}>
-            Founded at Satra Plaza, Vashi, Inventus Global was built on a single conviction: marketing should never be an expense line item—it must be an accountable, revenue-generating engine.
+
+          <p className={styles.heroDesc}>
+            Founded at Satra Plaza, Vashi, Inventus Global was built on a single
+            conviction: marketing should never be an expense line item — it must
+            be an accountable, revenue-generating engine.
           </p>
 
-          {/* Key Proof Strip */}
-          <div style={{ display: "flex", gap: "28px", marginTop: "32px", flexWrap: "wrap" }}>
-            <div>
-              <div style={{ fontSize: "1.8rem", fontWeight: 800, color: "var(--primary)" }}>{siteConfig.stats.experienceYears}</div>
-              <div style={{ fontSize: "0.85rem", color: "var(--text-muted)", fontWeight: 600 }}>Agency Experience</div>
-            </div>
-            <div style={{ width: "1px", background: "var(--border-hairline)" }} />
-            <div>
-              <div style={{ fontSize: "1.8rem", fontWeight: 800, color: "var(--primary)" }}>{siteConfig.stats.attribution}</div>
-              <div style={{ fontSize: "0.85rem", color: "var(--text-muted)", fontWeight: 600 }}>Transparent Attribution</div>
-            </div>
-            <div style={{ width: "1px", background: "var(--border-hairline)" }} />
-            <div>
-              <div style={{ fontSize: "1.8rem", fontWeight: 800, color: "var(--primary)" }}>{siteConfig.stats.targetRoas}</div>
-              <div style={{ fontSize: "0.85rem", color: "var(--text-muted)", fontWeight: 600 }}>Target Campaign ROAS</div>
-            </div>
-            <div style={{ width: "1px", background: "var(--border-hairline)" }} />
-            <div>
-              <div style={{ fontSize: "1.8rem", fontWeight: 800, color: "var(--primary)" }}>{siteConfig.stats.clientSatisfaction}</div>
-              <div style={{ fontSize: "0.85rem", color: "var(--text-muted)", fontWeight: 600 }}>Client Satisfaction</div>
-            </div>
+          {/* Glassmorphic Stats Strip */}
+          <div className={styles.heroStats}>
+            {statsData.map((stat) => (
+              <div key={stat.label} className={styles.heroStatCard}>
+                <div className={styles.heroStatValue}>{stat.value}</div>
+                <div className={styles.heroStatLabel}>{stat.label}</div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Story & Philosophy */}
-      <section className="section" style={{ background: "#ffffff", padding: "80px 0" }}>
+      {/* ═══════════════════════════════════════════════════════
+          STORY & PHILOSOPHY
+          ═══════════════════════════════════════════════════════ */}
+      <section className={styles.storySection}>
         <div className="container">
-          <div className="about-story-grid">
-            <div>
-              <span className="section-tag">Our Story &amp; Philosophy</span>
-              <h2 className="about-story-title">
+          <div className={styles.storyGrid}>
+            {/* Left Column — Story */}
+            <div ref={addRevealRef} className={styles.reveal}>
+              <span className={styles.storyTag}>Our Story &amp; Philosophy</span>
+              <h2 className={styles.storyTitle}>
                 Built by Practitioners, Not Sales Pitchers
               </h2>
-              <p style={{ color: "var(--text-body)", fontSize: "1.05rem", lineHeight: "1.75", marginBottom: "18px" }}>
-                Too many agencies promise &quot;brand buzz&quot; and deliver monthly reports full of impressions and social likes while client revenue stays flat. At Inventus Global, we operate differently.
+              <p className={styles.storyText}>
+                Too many agencies promise &quot;brand buzz&quot; and deliver
+                monthly reports full of impressions and social likes while client
+                revenue stays flat. At Inventus Global, we operate differently.
               </p>
-              <p style={{ color: "var(--text-body)", fontSize: "1.05rem", lineHeight: "1.75", marginBottom: "28px" }}>
-                Every strategy we deploy—from a high-intent Google Ads PPC ad group to an enterprise Next.js web application—is engineered to attract qualified inquiries, lower customer acquisition costs, and maximize net profit margins.
+              <p className={styles.storyText}>
+                Every strategy we deploy — from a high-intent Google Ads PPC ad
+                group to an enterprise Next.js web application — is engineered to
+                attract qualified inquiries, lower customer acquisition costs,
+                and maximize net profit margins.
               </p>
 
-              <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                  <CheckCircle2 size={20} style={{ color: "var(--primary)", flexShrink: 0 }} />
-                  <span style={{ fontWeight: 600, color: "var(--text-heading)", fontSize: "0.98rem" }}>100% Transparent, Real-Time ROAS &amp; Revenue Reporting</span>
-                </div>
-                <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                  <CheckCircle2 size={20} style={{ color: "var(--primary)", flexShrink: 0 }} />
-                  <span style={{ fontWeight: 600, color: "var(--text-heading)", fontSize: "0.98rem" }}>Custom Performance Strategies Tailored to Your Specific Margins</span>
-                </div>
-                <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                  <CheckCircle2 size={20} style={{ color: "var(--primary)", flexShrink: 0 }} />
-                  <span style={{ fontWeight: 600, color: "var(--text-heading)", fontSize: "0.98rem" }}>Direct Access to Senior Growth Architects, Never Junior Trainees</span>
-                </div>
-                <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                  <CheckCircle2 size={20} style={{ color: "var(--primary)", flexShrink: 0 }} />
-                  <span style={{ fontWeight: 600, color: "var(--text-heading)", fontSize: "0.98rem" }}>Server-Side Conversion Infrastructure (Meta CAPI, GA4 First-Party)</span>
-                </div>
+              <div className={styles.checkList}>
+                {checklistItems.map((text, i) => (
+                  <div
+                    key={text}
+                    ref={addRevealRef}
+                    className={`${styles.checkItem} ${styles.reveal} ${
+                      styles[`revealDelay${i + 1}` as keyof typeof styles] || ""
+                    }`}
+                  >
+                    <div className={styles.checkIcon}>
+                      <CheckCircle2 size={16} />
+                    </div>
+                    <span className={styles.checkText}>{text}</span>
+                  </div>
+                ))}
               </div>
             </div>
 
-            <div className="about-standard-card">
-              <h3 style={{ fontSize: "1.35rem", fontWeight: 800, color: "var(--text-heading)", marginBottom: "22px" }}>
+            {/* Right Column — Standards Card */}
+            <div ref={addRevealRef} className={`${styles.standardsCard} ${styles.reveal}`}>
+              <h3 className={styles.standardsTitle}>
                 The Inventus Global Standard
               </h3>
-              <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-                <div style={{ display: "flex", gap: "16px" }}>
-                  <div style={{ width: "42px", height: "42px", borderRadius: "8px", background: "rgba(241, 99, 52, 0.1)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                    <Target size={22} style={{ color: "var(--primary)" }} />
+              <div className={styles.standardsList}>
+                {standardItems.map((item) => (
+                  <div key={item.title} className={styles.standardItem}>
+                    <div className={styles.standardIcon}>{item.icon}</div>
+                    <div>
+                      <h4 className={styles.standardItemTitle}>{item.title}</h4>
+                      <p className={styles.standardItemDesc}>{item.desc}</p>
+                    </div>
                   </div>
-                  <div>
-                    <h4 style={{ fontSize: "1.02rem", fontWeight: 700, margin: "0 0 4px", color: "var(--text-heading)" }}>
-                      Precision Commercial Intent
-                    </h4>
-                    <p style={{ margin: 0, fontSize: "0.9rem", color: "var(--text-muted)", lineHeight: "1.55" }}>
-                      We focus marketing budget strictly on prospects actively searching with purchasing intent, eliminating informational click waste.
-                    </p>
-                  </div>
-                </div>
-
-                <div style={{ display: "flex", gap: "16px" }}>
-                  <div style={{ width: "42px", height: "42px", borderRadius: "8px", background: "rgba(241, 99, 52, 0.1)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                    <TrendingUp size={22} style={{ color: "var(--primary)" }} />
-                  </div>
-                  <div>
-                    <h4 style={{ fontSize: "1.02rem", fontWeight: 700, margin: "0 0 4px", color: "var(--text-heading)" }}>
-                      Conversion Rate Architecture
-                    </h4>
-                    <p style={{ margin: 0, fontSize: "0.9rem", color: "var(--text-muted)", lineHeight: "1.55" }}>
-                      Traffic without high-converting landing funnels is wasted ad spend. We engineer sub-second Next.js pages that convert.
-                    </p>
-                  </div>
-                </div>
-
-                <div style={{ display: "flex", gap: "16px" }}>
-                  <div style={{ width: "42px", height: "42px", borderRadius: "8px", background: "rgba(241, 99, 52, 0.1)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                    <HeartHandshake size={22} style={{ color: "var(--primary)" }} />
-                  </div>
-                  <div>
-                    <h4 style={{ fontSize: "1.02rem", fontWeight: 700, margin: "0 0 4px", color: "var(--text-heading)" }}>
-                      True Partnership Mindset
-                    </h4>
-                    <p style={{ margin: 0, fontSize: "0.9rem", color: "var(--text-muted)", lineHeight: "1.55" }}>
-                      We grow only when our clients scale profitably. That is why our long-term client retention exceeds 98%.
-                    </p>
-                  </div>
-                </div>
+                ))}
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Leadership Team */}
-      <section className="section" style={{ background: "#f8fafc", borderTop: "1px solid var(--border-hairline)", borderBottom: "1px solid var(--border-hairline)", padding: "80px 0" }}>
+      {/* ═══════════════════════════════════════════════════════
+          CORE VALUES — DARK STRIP
+          ═══════════════════════════════════════════════════════ */}
+      <section className={styles.valuesSection}>
         <div className="container">
-          <div className="section-header" style={{ textAlign: "center", maxWidth: "700px", margin: "0 auto 48px" }}>
-            <span className="section-tag">Leadership Team</span>
-            <h2 className="section-title">Meet the Minds Driving Your Growth</h2>
-            <p className="section-desc">
-              Senior performance marketers, search architects, and creative directors committed to scaling your brand.
+          <div ref={addRevealRef} className={`${styles.valuesHeader} ${styles.reveal}`}>
+            <div className={styles.valuesTag}>
+              <span className={styles.heroPulseDot} />
+              What Drives Us
+            </div>
+            <h2 className={styles.valuesTitle}>
+              Principles That Power Every Campaign
+            </h2>
+            <p className={styles.valuesDesc}>
+              Three non-negotiable values that guide every strategy, campaign,
+              and client relationship at Inventus Global.
             </p>
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "32px" }}>
-            {teamData.map((member) => (
+          <div className={styles.valuesGrid}>
+            {coreValues.map((value, i) => (
+              <div
+                key={value.title}
+                ref={addRevealRef}
+                className={`${styles.valueCard} ${styles.reveal} ${
+                  styles[`revealDelay${i + 1}` as keyof typeof styles] || ""
+                }`}
+              >
+                <div className={styles.valueIconWrap}>{value.icon}</div>
+                <h3 className={styles.valueCardTitle}>{value.title}</h3>
+                <p className={styles.valueCardDesc}>{value.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════════════
+          LEADERSHIP TEAM
+          ═══════════════════════════════════════════════════════ */}
+      <section className={styles.teamSection}>
+        <div className="container">
+          <div ref={addRevealRef} className={`${styles.teamHeader} ${styles.reveal}`}>
+            <span className={styles.teamTag}>Leadership Team</span>
+            <h2 className={styles.teamTitle}>
+              Meet the Minds Driving Your Growth
+            </h2>
+            <p className={styles.teamDesc}>
+              Senior performance marketers, search architects, and creative
+              directors committed to scaling your brand.
+            </p>
+          </div>
+
+          <div className={styles.teamGrid}>
+            {teamData.map((member, i) => (
               <div
                 key={member.name}
-                style={{
-                  background: "#ffffff",
-                  borderRadius: "14px",
-                  border: "1px solid var(--border-hairline)",
-                  overflow: "hidden",
-                  boxShadow: "0 4px 15px rgba(0, 0, 0, 0.04)",
-                  transition: "all 0.25s ease",
-                  display: "flex",
-                  flexDirection: "column",
-                }}
+                ref={addRevealRef}
+                className={`${styles.teamCard} ${styles.reveal} ${
+                  styles[`revealDelay${i + 1}` as keyof typeof styles] || ""
+                }`}
               >
-                <div style={{ height: "260px", overflow: "hidden", background: "#f1f5f9", position: "relative" }}>
+                <div className={styles.teamImageWrap}>
                   <Image
                     src={member.image}
                     alt={member.name}
                     width={400}
-                    height={260}
-                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                    height={300}
+                    className={styles.teamImage}
                   />
+                  <div className={styles.teamImageOverlay} />
                 </div>
-                <div style={{ padding: "26px", display: "flex", flexDirection: "column", flexGrow: 1 }}>
-                  <h3 style={{ fontSize: "1.25rem", fontWeight: 800, margin: "0 0 4px", color: "var(--text-heading)" }}>
-                    {member.name}
-                  </h3>
-                  <div style={{ fontSize: "0.88rem", color: "var(--primary)", fontWeight: 700, marginBottom: "12px" }}>
-                    {member.role}
-                  </div>
-                  <p style={{ color: "var(--text-body)", fontSize: "0.92rem", lineHeight: "1.6", margin: "0 0 18px", flexGrow: 1 }}>
-                    {member.bio}
-                  </p>
-                  <div style={{ display: "flex", flexWrap: "wrap", gap: "6px", borderTop: "1px solid #f1f5f9", paddingTop: "14px" }}>
+                <div className={styles.teamCardBody}>
+                  <h3 className={styles.teamName}>{member.name}</h3>
+                  <div className={styles.teamRole}>{member.role}</div>
+                  <p className={styles.teamBio}>{member.bio}</p>
+                  <div className={styles.teamTags}>
                     {member.expertise.map((skill) => (
-                      <span
-                        key={skill}
-                        style={{
-                          fontSize: "0.75rem",
-                          fontWeight: 700,
-                          padding: "3px 10px",
-                          borderRadius: "50px",
-                          background: "var(--primary-light)",
-                          color: "var(--primary)",
-                        }}
-                      >
+                      <span key={skill} className={styles.teamSkillTag}>
                         {skill}
                       </span>
                     ))}
@@ -218,53 +292,46 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Agency Milestones */}
-      <section className="section" style={{ background: "#ffffff", padding: "80px 0" }}>
+      {/* ═══════════════════════════════════════════════════════
+          JOURNEY / TIMELINE
+          ═══════════════════════════════════════════════════════ */}
+      <section className={styles.journeySection}>
         <div className="container">
-          <div className="section-header" style={{ textAlign: "center", maxWidth: "700px", margin: "0 auto 48px" }}>
-            <span className="section-tag">Our Journey</span>
-            <h2 className="section-title">A Decade of Measurable Results</h2>
-            <p className="section-desc">
-              From our first office in Vashi to managing multi-crore ad portfolios and high-converting Next.js platforms.
+          <div ref={addRevealRef} className={`${styles.journeyHeader} ${styles.reveal}`}>
+            <span className={styles.journeyTag}>Our Journey</span>
+            <h2 className={styles.journeyTitle}>
+              A Decade of Measurable Results
+            </h2>
+            <p className={styles.journeyDesc}>
+              From our first office in Vashi to managing multi-crore ad
+              portfolios and high-converting Next.js platforms.
             </p>
           </div>
 
-          <div style={{ maxWidth: "820px", margin: "0 auto", display: "flex", flexDirection: "column", gap: "20px" }}>
-            {milestonesData.map((m) => (
-              <div key={m.year} className="about-milestone-item">
-                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "6px", flexShrink: 0, minWidth: "75px" }}>
-                  <div
-                    style={{
-                      background: "linear-gradient(135deg, #f16334 0%, #ea580c 100%)",
-                      color: "#ffffff",
-                      fontWeight: 800,
-                      fontSize: "0.95rem",
-                      padding: "6px 14px",
-                      borderRadius: "6px",
-                      textAlign: "center",
-                      boxShadow: "0 2px 8px rgba(241, 99, 52, 0.3)",
-                    }}
-                  >
-                    {m.year}
+          <div className={styles.timeline}>
+            {milestonesData.map((m, i) => (
+              <div
+                key={m.year}
+                ref={addRevealRef}
+                className={`${styles.timelineItem} ${styles.reveal} ${
+                  styles[`revealDelay${i + 1}` as keyof typeof styles] || ""
+                }`}
+              >
+                <div className={styles.timelineDot} />
+                <div className={styles.timelineCard}>
+                  <div className={styles.timelineYearRow}>
+                    <span className={styles.timelineYear}>{m.year}</span>
+                    <span className={styles.timelineBadge}>{m.badge}</span>
                   </div>
-                  <span style={{ fontSize: "0.72rem", fontWeight: 800, color: "var(--text-muted)", textTransform: "uppercase" }}>
-                    {m.badge}
-                  </span>
-                </div>
-                <div>
-                  <h3 style={{ fontSize: "1.15rem", fontWeight: 700, color: "var(--text-heading)", margin: "0 0 6px" }}>
-                    {m.title}
-                  </h3>
-                  <p style={{ margin: 0, color: "var(--text-body)", fontSize: "0.94rem", lineHeight: "1.6" }}>
-                    {m.desc}
-                  </p>
+                  <h3 className={styles.timelineCardTitle}>{m.title}</h3>
+                  <p className={styles.timelineCardDesc}>{m.desc}</p>
                 </div>
               </div>
             ))}
           </div>
 
-          <div style={{ textAlign: "center", marginTop: "54px" }}>
-            <Link href="/services" className="btn-primary" style={{ padding: "14px 32px", fontSize: "1rem" }}>
+          <div className={styles.ctaCenter}>
+            <Link href="/services" className={styles.ctaButton}>
               <span>Explore All Capabilities</span>
               <ArrowRight size={16} />
             </Link>
