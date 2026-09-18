@@ -145,6 +145,22 @@ export async function PUT(
       updates.push('is_published = ?');
       values.push(isPublished ? 1 : 0);
     }
+    if (body.metaTitle !== undefined) {
+      updates.push('meta_title = ?');
+      values.push(body.metaTitle || null);
+    }
+    if (body.metaDescription !== undefined) {
+      updates.push('meta_description = ?');
+      values.push(body.metaDescription || null);
+    }
+    if (body.canonicalUrl !== undefined) {
+      updates.push('canonical_url = ?');
+      values.push(body.canonicalUrl || null);
+    }
+    if (body.focusKeywords !== undefined) {
+      updates.push('focus_keywords = ?');
+      values.push(body.focusKeywords || null);
+    }
 
     if (updates.length === 0) {
       return NextResponse.json(

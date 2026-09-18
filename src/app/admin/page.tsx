@@ -29,6 +29,9 @@ import {
   Phone,
   Clock,
   Layers,
+  Globe,
+  ArrowRightLeft,
+  Link2,
 } from 'lucide-react';
 import styles from './admin.module.css';
 import { compressImage } from '@/utils/imageCompressor';
@@ -56,8 +59,23 @@ interface BlogItem {
   cover_image: string;
   author_name: string;
   reading_time: string;
+  meta_title?: string;
+  meta_description?: string;
+  canonical_url?: string;
+  focus_keywords?: string;
   is_published: number;
   published_at: string;
+}
+
+interface RedirectItem {
+  id: number;
+  source_url: string;
+  destination_url: string;
+  status_code: number;
+  description?: string;
+  is_active: number;
+  hits: number;
+  created_at: string;
 }
 
 interface MediaItem {
@@ -71,7 +89,7 @@ interface MediaItem {
 
 export default function AdminPage() {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState<'articles' | 'careers' | 'applications' | 'media'>('articles');
+  const [activeTab, setActiveTab] = useState<'articles' | 'careers' | 'applications' | 'media' | 'redirects'>('articles');
   const [loggingOut, setLoggingOut] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
@@ -97,6 +115,26 @@ export default function AdminPage() {
   const [tags, setTags] = useState('Digital Marketing, Growth, SEO');
   const [content, setContent] = useState('');
   const [isPublished, setIsPublished] = useState(true);
+
+  // SEO Fields State
+  const [metaTitle, setMetaTitle] = useState('');
+  const [metaDescription, setMetaDescription] = useState('');
+  const [canonicalUrl, setCanonicalUrl] = useState('');
+  const [focusKeywords, setFocusKeywords] = useState('');
+
+  // ----------------------------------------------------
+  // 301 / 302 Redirects Manager State
+  // ----------------------------------------------------
+  const [redirects, setRedirects] = useState<RedirectItem[]>([]);
+  const [loadingRedirects, setLoadingRedirects] = useState(false);
+  const [redirectSearch, setRedirectSearch] = useState('');
+  const [submittingRedirect, setSubmittingRedirect] = useState(false);
+  const [redirectModalOpen, setRedirectModalOpen] = useState(false);
+  const [editingRedirectId, setEditingRedirectId] = useState<number | null>(null);
+  const [sourceUrl, setSourceUrl] = useState('');
+  const [destinationUrl, setDestinationUrl] = useState('');
+  const [statusCode, setStatusCode] = useState<number>(301);
+  const [redirectDescription, setRedirectDescription] = useState('');
 
   // ----------------------------------------------------
   // Careers & Job Openings State
@@ -221,8 +259,129 @@ export default function AdminPage() {
     if (activeTab === 'careers') loadJobs();
     if (activeTab === 'applications') loadApplications();
     if (activeTab === 'media') loadMedia();
+    if (activeTab === 'redirects') loadRedirects();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeTab]);
+
+  // ====================================================
+  // 301 / 302 Redirect Handlers
+  // ====================================================
+  const loadRedirects = async () => {
+    try {
+      setLoadingRedirects(true);
+      const res = await fetch('/api/redirects');
+      if (res.status === 401) {
+        router.push('/admin/login');
+        return;
+      }
+      const data = await res.json();
+      if (data.success) {
+        setRedirects(data.redirects || []);
+      }
+    } catch (err) {
+      console.error('Failed to load redirects:', err);
+    } finally {
+      setLoadingRedirects(false);
+    }
+  };
+
+  const handleOpenNewRedirect = () => {
+    setEditingRedirectId(null);
+    setSourceUrl('');
+    setDestinationUrl('');
+    setStatusCode(301);
+    setRedirectDescription('');
+    setRedirectModalOpen(true);
+  };
+
+  const handleEditRedirectClick = (r: RedirectItem) => {
+    setEditingRedirectId(r.id);
+    setSourceUrl(r.source_url);
+    setDestinationUrl(r.destination_url);
+    setStatusCode(r.status_code || 301);
+    setRedirectDescription(r.description || '');
+    setRedirectModalOpen(true);
+  };
+
+  const handleDeleteRedirect = async (id: number) => {
+    if (!confirm('Are you sure you want to delete this redirect rule?')) return;
+    try {
+      const res = await fetch(`/api/redirects/${id}`, { method: 'DELETE' });
+      const data = await res.json();
+      if (data.success) {
+        setSuccessMessage('Redirect rule removed successfully');
+        await loadRedirects();
+      } else {
+        alert(data.error || 'Failed to delete redirect rule');
+      }
+    } catch (err) {
+      console.error('Delete redirect error:', err);
+    }
+  };
+
+  const handleToggleRedirectActive = async (r: RedirectItem) => {
+    try {
+      const res = await fetch(`/api/redirects/${r.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ isActive: !r.is_active }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        await loadRedirects();
+      }
+    } catch (err) {
+      console.error('Toggle redirect error:', err);
+    }
+  };
+
+  const handleRedirectSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!sourceUrl.trim() || !destinationUrl.trim()) {
+      alert('Please fill in both Source URL and Destination URL.');
+      return;
+    }
+
+    try {
+      setSubmittingRedirect(true);
+      const payload = {
+        sourceUrl: sourceUrl.trim(),
+        destinationUrl: destinationUrl.trim(),
+        statusCode,
+        description: redirectDescription.trim(),
+      };
+
+      let res;
+      if (editingRedirectId) {
+        res = await fetch(`/api/redirects/${editingRedirectId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+      } else {
+        res = await fetch('/api/redirects', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+      }
+
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        alert(data.error || 'Failed to save redirect rule');
+        return;
+      }
+
+      setRedirectModalOpen(false);
+      setSuccessMessage(editingRedirectId ? 'Redirect updated' : 'Redirect created');
+      await loadRedirects();
+    } catch (err: any) {
+      console.error('Save redirect error:', err);
+      alert('Error saving redirect rule');
+    } finally {
+      setSubmittingRedirect(false);
+    }
+  };
 
   // ====================================================
   // Blog Handlers
@@ -268,6 +427,10 @@ export default function AdminPage() {
     setCoverImage('');
     setIsPublished(true);
     setTags('Digital Marketing, Growth, SEO');
+    setMetaTitle('');
+    setMetaDescription('');
+    setCanonicalUrl('');
+    setFocusKeywords('');
   };
 
   const handleEditBlogClick = async (blogItem: BlogItem) => {
@@ -279,12 +442,20 @@ export default function AdminPage() {
     setAuthorName(blogItem.author_name || 'Inventus Team');
     setExcerpt(blogItem.excerpt || '');
     setIsPublished(blogItem.is_published === 1);
+    setMetaTitle(blogItem.meta_title || '');
+    setMetaDescription(blogItem.meta_description || '');
+    setCanonicalUrl(blogItem.canonical_url || '');
+    setFocusKeywords(blogItem.focus_keywords || '');
 
     try {
       const res = await fetch(`/api/blogs/${blogItem.slug}`);
       const data = await res.json();
       if (data.success && data.blog) {
         setContent(data.blog.content || '');
+        if (data.blog.meta_title) setMetaTitle(data.blog.meta_title);
+        if (data.blog.meta_description) setMetaDescription(data.blog.meta_description);
+        if (data.blog.canonical_url) setCanonicalUrl(data.blog.canonical_url);
+        if (data.blog.focus_keywords) setFocusKeywords(data.blog.focus_keywords);
       }
     } catch (err) {
       console.error('Failed to fetch blog content:', err);
@@ -317,6 +488,10 @@ export default function AdminPage() {
         tags,
         content,
         isPublished: publishValue ? 1 : 0,
+        metaTitle: metaTitle.trim() || null,
+        metaDescription: metaDescription.trim() || null,
+        canonicalUrl: canonicalUrl.trim() || null,
+        focusKeywords: focusKeywords.trim() || null,
       };
 
       let res;
@@ -642,6 +817,15 @@ export default function AdminPage() {
           <span>Media Gallery</span>
           <span className={styles.tabBadge}>{mediaList.length}</span>
         </button>
+
+        <button
+          onClick={() => setActiveTab('redirects')}
+          className={`${styles.navTab} ${activeTab === 'redirects' ? styles.navTabActive : ''}`}
+        >
+          <ArrowRightLeft size={17} />
+          <span>301 Redirects</span>
+          <span className={styles.tabBadge}>{redirects.length}</span>
+        </button>
       </nav>
 
       {/* Alert Messages */}
@@ -873,6 +1057,87 @@ export default function AdminPage() {
                     placeholder="auto-generated-from-title"
                     value={slug}
                     onChange={(e) => setSlug(e.target.value)}
+                  />
+                </div>
+              </div>
+
+              {/* Card 4: Search Engine Optimization (SEO & Meta) */}
+              <div className={styles.sidebarCard}>
+                <div className={styles.sidebarCardHeader}>
+                  <h3 className={styles.sidebarCardTitle}>
+                    <Globe size={16} /> SEO &amp; Metadata
+                  </h3>
+                  <span style={{ fontSize: '0.72rem', background: '#e0f2fe', color: '#0369a1', padding: '2px 8px', borderRadius: '9999px', fontWeight: 700 }}>
+                    Google Ready
+                  </span>
+                </div>
+
+                {/* Live Google Search Preview Box */}
+                <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '12px', marginBottom: '14px' }}>
+                  <div style={{ fontSize: '0.74rem', color: '#475569', display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '4px' }}>
+                    <span style={{ fontWeight: 600 }}>inventusglobal.com</span>
+                    <span>›</span>
+                    <span style={{ color: '#64748b' }}>blog › {slug || 'article-slug'}</span>
+                  </div>
+                  <div style={{ fontSize: '0.94rem', fontWeight: 600, color: '#1a0dab', lineHeight: 1.25, marginBottom: '4px' }}>
+                    {metaTitle || title || 'Your Article Title | Inventus Global'}
+                  </div>
+                  <div style={{ fontSize: '0.78rem', color: '#4d5156', lineHeight: 1.4, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                    {metaDescription || excerpt || 'Enter meta description to optimize snippet on Google search results...'}
+                  </div>
+                </div>
+
+                <div className={styles.fieldGroup}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
+                    <label className={styles.label} style={{ margin: 0 }}>SEO Meta Title</label>
+                    <span style={{ fontSize: '0.72rem', color: (metaTitle || title).length > 60 ? '#ef4444' : '#64748b' }}>
+                      {(metaTitle || title).length}/60
+                    </span>
+                  </div>
+                  <input
+                    type="text"
+                    className={styles.input}
+                    placeholder="Custom Google title (defaults to Article Title)"
+                    value={metaTitle}
+                    onChange={(e) => setMetaTitle(e.target.value)}
+                  />
+                </div>
+
+                <div className={styles.fieldGroup}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
+                    <label className={styles.label} style={{ margin: 0 }}>SEO Meta Description</label>
+                    <span style={{ fontSize: '0.72rem', color: (metaDescription || excerpt).length > 160 ? '#ef4444' : '#64748b' }}>
+                      {(metaDescription || excerpt).length}/160
+                    </span>
+                  </div>
+                  <textarea
+                    className={styles.textarea}
+                    rows={3}
+                    placeholder="Brief 150-160 character description optimized for click-through rate..."
+                    value={metaDescription}
+                    onChange={(e) => setMetaDescription(e.target.value)}
+                  />
+                </div>
+
+                <div className={styles.fieldGroup}>
+                  <label className={styles.label}>Focus Keywords (Comma-separated)</label>
+                  <input
+                    type="text"
+                    className={styles.input}
+                    placeholder="e.g. PPC agency, Google ads Navi Mumbai"
+                    value={focusKeywords}
+                    onChange={(e) => setFocusKeywords(e.target.value)}
+                  />
+                </div>
+
+                <div className={styles.fieldGroup}>
+                  <label className={styles.label}>Canonical URL Override (Optional)</label>
+                  <input
+                    type="text"
+                    className={styles.input}
+                    placeholder="https://inventusglobal.com/blog/..."
+                    value={canonicalUrl}
+                    onChange={(e) => setCanonicalUrl(e.target.value)}
                   />
                 </div>
               </div>
@@ -1457,6 +1722,283 @@ export default function AdminPage() {
               ))}
             </div>
           )}
+        </div>
+      )}
+
+      {/* ==================================================== */}
+      {/* 5. 301 / 302 Redirections Manager Studio (SEO Migration) */}
+      {/* ==================================================== */}
+      {activeTab === 'redirects' && (
+        <div style={{ animation: 'fadeIn 0.3s ease' }}>
+          <div className={styles.tableCard} style={{ marginTop: 0 }}>
+            <div className={styles.tableHeaderRow}>
+              <div>
+                <h3 className={styles.tableTitle} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <ArrowRightLeft size={20} color="#f16334" />
+                  <span>301 / 302 URL Redirections Manager</span>
+                </h3>
+                <span style={{ fontSize: '0.84rem', color: '#64748b' }}>
+                  Manage legacy WordPress URLs, preserve Google search rankings, and prevent 404 broken links.
+                </span>
+              </div>
+
+              <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                <input
+                  type="text"
+                  placeholder="Search redirect rules..."
+                  value={redirectSearch}
+                  onChange={(e) => setRedirectSearch(e.target.value)}
+                  className={styles.input}
+                  style={{ width: '240px', padding: '8px 12px', fontSize: '0.85rem' }}
+                />
+
+                <button
+                  type="button"
+                  onClick={handleOpenNewRedirect}
+                  className={styles.btnPrimary}
+                  style={{ whiteSpace: 'nowrap' }}
+                >
+                  <PlusCircle size={16} />
+                  <span>Add Redirect Rule</span>
+                </button>
+              </div>
+            </div>
+
+            {loadingRedirects ? (
+              <div style={{ padding: '60px', textAlign: 'center', color: '#64748b' }}>
+                <Loader2 size={32} className="animate-spin" style={{ margin: '0 auto 12px' }} />
+                <p>Loading redirection rules from MySQL...</p>
+              </div>
+            ) : redirects.length === 0 ? (
+              <div style={{ padding: '60px 20px', textAlign: 'center', background: '#f8fafc', borderRadius: '12px', border: '1px dashed #cbd5e1' }}>
+                <Link2 size={36} color="#94a3b8" style={{ margin: '0 auto 12px' }} />
+                <h4 style={{ margin: '0 0 6px', color: '#0f172a', fontSize: '1.05rem' }}>No Redirect Rules Active</h4>
+                <p style={{ margin: '0 0 16px', color: '#64748b', fontSize: '0.88rem' }}>
+                  Add your first redirect rule to map any old WordPress URLs directly to new Next.js routes.
+                </p>
+                <button
+                  type="button"
+                  onClick={handleOpenNewRedirect}
+                  className={styles.btnPrimary}
+                >
+                  <PlusCircle size={16} />
+                  <span>Add First Redirect</span>
+                </button>
+              </div>
+            ) : (
+              <div className={styles.tableWrapper}>
+                <table className={styles.table}>
+                  <thead>
+                    <tr>
+                      <th style={{ width: '30%' }}>Old URL (Source)</th>
+                      <th style={{ width: '30%' }}>New URL (Destination)</th>
+                      <th style={{ width: '10%' }}>Type</th>
+                      <th style={{ width: '10%' }}>Hits</th>
+                      <th style={{ width: '10%' }}>Status</th>
+                      <th style={{ width: '10%', textAlign: 'right' }}>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {redirects
+                      .filter(
+                        (r) =>
+                          r.source_url.toLowerCase().includes(redirectSearch.toLowerCase()) ||
+                          r.destination_url.toLowerCase().includes(redirectSearch.toLowerCase()) ||
+                          (r.description && r.description.toLowerCase().includes(redirectSearch.toLowerCase()))
+                      )
+                      .map((r) => (
+                        <tr key={r.id}>
+                          <td>
+                            <code style={{ background: '#fee2e2', color: '#991b1b', padding: '3px 7px', borderRadius: '4px', fontSize: '0.82rem', fontWeight: 600 }}>
+                              {r.source_url}
+                            </code>
+                            {r.description && (
+                              <div style={{ fontSize: '0.74rem', color: '#64748b', marginTop: '4px' }}>
+                                {r.description}
+                              </div>
+                            )}
+                          </td>
+                          <td>
+                            <code style={{ background: '#dcfce7', color: '#166534', padding: '3px 7px', borderRadius: '4px', fontSize: '0.82rem', fontWeight: 600 }}>
+                              {r.destination_url}
+                            </code>
+                          </td>
+                          <td>
+                            <span
+                              style={{
+                                display: 'inline-block',
+                                padding: '2px 8px',
+                                borderRadius: '9999px',
+                                fontSize: '0.72rem',
+                                fontWeight: 700,
+                                background: r.status_code === 301 ? '#e0e7ff' : '#fef3c7',
+                                color: r.status_code === 301 ? '#3730a3' : '#92400e',
+                              }}
+                            >
+                              {r.status_code === 301 ? '301 Permanent' : '302 Temporary'}
+                            </span>
+                          </td>
+                          <td>
+                            <span style={{ fontSize: '0.84rem', fontWeight: 600, color: '#475569' }}>
+                              {r.hits || 0}
+                            </span>
+                          </td>
+                          <td>
+                            <button
+                              type="button"
+                              onClick={() => handleToggleRedirectActive(r)}
+                              className={r.is_active ? styles.badgeActive : styles.badgeDraft}
+                              style={{ border: 'none', cursor: 'pointer' }}
+                            >
+                              {r.is_active ? '● Active' : '○ Disabled'}
+                            </button>
+                          </td>
+                          <td style={{ textAlign: 'right' }}>
+                            <div style={{ display: 'inline-flex', gap: '6px' }}>
+                              <button
+                                type="button"
+                                onClick={() => handleEditRedirectClick(r)}
+                                className={styles.btnOutline}
+                                style={{ padding: '4px 8px' }}
+                                title="Edit rule"
+                              >
+                                <Edit size={13} />
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => handleDeleteRedirect(r.id)}
+                                className={styles.btnOutline}
+                                style={{ padding: '4px 8px', color: '#ef4444', borderColor: '#fca5a5' }}
+                                title="Delete rule"
+                              >
+                                <Trash2 size={13} />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Modal: Add/Edit 301 Redirect Rule */}
+      {redirectModalOpen && (
+        <div
+          style={{
+            position: 'fixed',
+            inset: 0,
+            background: 'rgba(15, 23, 42, 0.65)',
+            backdropFilter: 'blur(4px)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 99999,
+            padding: '20px',
+          }}
+        >
+          <div
+            style={{
+              background: '#ffffff',
+              borderRadius: '16px',
+              maxWidth: '540px',
+              width: '100%',
+              padding: '28px',
+              boxShadow: '0 20px 40px rgba(0, 0, 0, 0.2)',
+              position: 'relative',
+            }}
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px' }}>
+              <h3 style={{ margin: 0, fontSize: '1.2rem', fontWeight: 800, color: '#0f172a', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <ArrowRightLeft size={18} color="#f16334" />
+                <span>{editingRedirectId ? 'Edit Redirect Rule' : 'New 301 Redirect Rule'}</span>
+              </h3>
+              <button
+                type="button"
+                onClick={() => setRedirectModalOpen(false)}
+                style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#94a3b8' }}
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            <form onSubmit={handleRedirectSubmit}>
+              <div className={styles.fieldGroup} style={{ marginBottom: '14px' }}>
+                <label className={styles.label}>Old URL / Path (Source) *</label>
+                <input
+                  type="text"
+                  required
+                  className={styles.input}
+                  placeholder="/old-wordpress-slug or /services/old-name"
+                  value={sourceUrl}
+                  onChange={(e) => setSourceUrl(e.target.value)}
+                />
+                <span style={{ fontSize: '0.74rem', color: '#64748b' }}>
+                  Relative path (e.g. <code>/sample-post</code>) or full legacy URL.
+                </span>
+              </div>
+
+              <div className={styles.fieldGroup} style={{ marginBottom: '14px' }}>
+                <label className={styles.label}>New Destination URL *</label>
+                <input
+                  type="text"
+                  required
+                  className={styles.input}
+                  placeholder="/blog/new-slug or /services/google-ads-ppc"
+                  value={destinationUrl}
+                  onChange={(e) => setDestinationUrl(e.target.value)}
+                />
+                <span style={{ fontSize: '0.74rem', color: '#64748b' }}>
+                  Where the user and search engines should be redirected to.
+                </span>
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', marginBottom: '14px' }}>
+                <div className={styles.fieldGroup}>
+                  <label className={styles.label}>Redirect HTTP Code</label>
+                  <select
+                    className={styles.select}
+                    value={statusCode}
+                    onChange={(e) => setStatusCode(Number(e.target.value))}
+                  >
+                    <option value={301}>301 Permanent (SEO standard)</option>
+                    <option value={302}>302 Temporary</option>
+                  </select>
+                </div>
+
+                <div className={styles.fieldGroup}>
+                  <label className={styles.label}>Internal Note (Optional)</label>
+                  <input
+                    type="text"
+                    className={styles.input}
+                    placeholder="e.g. WP Migration"
+                    value={redirectDescription}
+                    onChange={(e) => setRedirectDescription(e.target.value)}
+                  />
+                </div>
+              </div>
+
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', marginTop: '24px' }}>
+                <button
+                  type="button"
+                  onClick={() => setRedirectModalOpen(false)}
+                  className={styles.btnOutline}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={submittingRedirect}
+                  className={styles.btnPrimary}
+                >
+                  {submittingRedirect ? 'Saving...' : editingRedirectId ? 'Update Rule' : 'Save Rule'}
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       )}
     </div>

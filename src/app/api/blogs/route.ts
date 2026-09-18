@@ -40,6 +40,7 @@ export async function GET(request: Request) {
       SELECT 
         id, slug, title, excerpt, cover_image, category, tags,
         author_name, author_role, author_avatar, reading_time,
+        meta_title, meta_description, canonical_url, focus_keywords,
         is_published, published_at, created_at, updated_at
       FROM \`blogs\`
     `;
@@ -95,6 +96,10 @@ export async function POST(request: Request) {
       authorRole = 'Growth Specialist',
       authorAvatar = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80',
       isPublished = 1,
+      metaTitle,
+      metaDescription,
+      canonicalUrl,
+      focusKeywords,
     } = body;
 
     if (!title || !content) {
@@ -128,8 +133,10 @@ export async function POST(request: Request) {
     const insertQuery = `
       INSERT INTO \`blogs\` (
         slug, title, excerpt, content, cover_image, category, tags,
-        author_name, author_role, author_avatar, reading_time, is_published
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        author_name, author_role, author_avatar, reading_time,
+        meta_title, meta_description, canonical_url, focus_keywords,
+        is_published
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
 
     const [result] = await pool.execute<ResultSetHeader>(insertQuery, [
@@ -144,6 +151,10 @@ export async function POST(request: Request) {
       authorRole,
       authorAvatar,
       readingTime,
+      metaTitle || null,
+      metaDescription || null,
+      canonicalUrl || null,
+      focusKeywords || null,
       isPublished ? 1 : 0,
     ]);
 
